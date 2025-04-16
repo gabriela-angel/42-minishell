@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:30:39 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/04/10 22:47:46 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/04/15 18:05:15 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 # include "../lib/libft/include/libft.h"
 # include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 // ERROR MACROS -----------
 
