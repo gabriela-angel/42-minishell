@@ -6,7 +6,7 @@
 #    By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/07 12:04:18 by gangel-a          #+#    #+#              #
-#    Updated: 2025/03/18 15:43:28 by gangel-a         ###   ########.fr        #
+#    Updated: 2025/04/19 19:07:16 by gangel-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ SRC = ft_atoi.c \
 		ft_isalnum.c \
 		ft_isascii.c \
 		ft_isprint.c \
+		ft_isspace.c \
 		ft_memset.c \
 		ft_memcpy.c \
 		ft_memmove.c \
@@ -39,6 +40,7 @@ SRC = ft_atoi.c \
 		ft_putendl_fd.c \
 		ft_putnbr_fd.c \
 		ft_putstr_fd.c \
+		ft_recalloc.c \
 		ft_split.c \
 		ft_striteri.c \
 		ft_strlcpy.c \
