@@ -12,6 +12,28 @@
 
 #include "lexer.h"
 
+void	set_redir_file(t_tk_list *node)
+{
+	t_tk_list	*redir;
+	t_tk_list	*file;
+
+	while (node)
+	{
+		if (ft_isredirector(node->token))
+		{
+			redir = node;
+			file = redir->next;
+			redir->token.file = &file->token;
+			redir->next = file->next;
+			if (file->next)
+				file->next->prev = redir;
+			file->next = NULL;
+			file->prev = NULL;
+		}
+		node = node->next;
+	}
+}
+
 static void	set_value(t_token *token)
 {
 	t_data	*data;
@@ -47,10 +69,10 @@ static t_value_type	get_type(char *input)
 	else if (*input == '>')
 		return (TK_REDIR_OUT);
 	else if (*input == '(')
-		return (TK_OPEN_BRACKET);
+		return (TK_OPEN_PARENTHESIS);
 	else if (*input == ')')
-		return (TK_CLOSE_BRACKET);
-	else if (*input == '\"' || *input == '\'' || ft_isalphanum(*input))
+		return (TK_CLOSE_PARENTHESIS);
+	else if (*input == '\"' || *input == '\'' || (!ft_isspace(*input) && !ft_isoperator(*input)))
 		return (TK_WORD);
 	else
 		return (TK_INVALID);
@@ -104,10 +126,9 @@ t_tk_list	*get_token_list(char *input)
 		input = tokenize(input, &current->token);
 		prev = current;
 	}
-	current->next = NULL;
 	if (current->token.data.error)
 		return (NULL);
 	// head = validate_tokens(head);
-	// assign_redirects(head);
+	set_redir_file(head);
 	return (head);
 }

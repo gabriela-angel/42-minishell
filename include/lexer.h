@@ -31,8 +31,8 @@ typedef enum e_value_type
 	TK_PIPE,
 	TK_REDIR_IN,
 	TK_REDIR_OUT,
-	TK_OPEN_BRACKET,
-	TK_CLOSE_BRACKET
+	TK_OPEN_PARENTHESIS,
+	TK_CLOSE_PARENTHESIS
 }						t_value_type;
 
 typedef struct s_value_part
@@ -51,7 +51,7 @@ typedef struct s_data
 typedef struct s_token
 {
 	t_value_type		type;
-	struct s_token		*file; //IDK WHY THIS IS USED YET
+	struct s_token		*file;
 	char				*value;
 	t_data				data;
 }						t_token;
@@ -66,5 +66,9 @@ typedef struct s_tk_list
 // FUNCTIONS -----------------
 t_tk_list	*get_token_list(char *input);
 char		*handle_word(char *input, t_token *token);
+
+// UTILS ------------------
+int			ft_isoperator(int c);
+int			ft_isredirector(t_token token);
 
 #endif

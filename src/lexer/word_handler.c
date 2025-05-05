@@ -12,13 +12,6 @@
 
 #include "lexer.h"
 
-static int	ft_isoperator(int c)
-{
-	if (c == '|' || c == '&' || c == '<' || c == '>' || c == '(' || c == ')')
-		return (1);
-	return (0);
-}
-
 static char	*handle_quotes(char *input, t_data	*data)
 {
 	char	quote;
