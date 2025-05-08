@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/14 11:45:43 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/07 13:20:27 by acesar-m         ###   ########.fr       */
+/*   Created: 2025/05/06 11:12:33 by acesar-m          #+#    #+#             */
+/*   Updated: 2025/05/06 11:12:34 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-int	ft_putstr_fd(char *s, int fd)
+int	ft_isoperator(int c)
 {
-	int	i;
+	if (c == '|' || c == '&' || c == '<' || c == '>' || c == '(' || c == ')')
+		return (1);
+	return (0);
+}
 
-	i = 0;
-	while (s[i])
-	{
-		ft_putchar_fd(s[i], fd);
-		i++;
-	}
-	return (i);
+int	ft_isredirector(t_token token)
+{
+	if (token.type == TK_REDIR_IN || token.type == TK_REDIR_OUT || token.type == TK_REDIR_OUT_APP || token.type == TK_REDIR_HDOC)
+		return (1);
+	return (0);
 }

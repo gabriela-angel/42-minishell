@@ -6,7 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 18:26:01 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/04/15 20:14:33 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/08 11:43:18 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	*ft_malloc(size_t size)
 	if (!ptr)
 		return (NULL);
 	mlc->ptr = ptr;
-	mlc->next = ft_calloc(1, sizeof(t_mlc));
+	mlc->next = ft_calloc(1, sizeof(t_malloc));
 	if (!mlc->next)
 	{
 		free(ptr);
@@ -43,8 +43,8 @@ void	*ft_malloc(size_t size)
 
 void	ft_gc_free(void *ptr)
 {
-	t_mlc	*mlc;
-	t_mlc	*tmp;
+	t_malloc	*mlc;
+	t_malloc	*tmp;
 
 	mlc = get_malloc_item();
 	while (mlc->next)
@@ -64,8 +64,8 @@ void	ft_gc_free(void *ptr)
 
 void	ft_gc_exit(void)
 {
-	t_mlc	*mlc;
-	t_mlc	*tmp;
+	t_malloc	*mlc;
+	t_malloc	*tmp;
 
 	mlc = get_malloc_item();
 	while (mlc->next)
@@ -82,7 +82,7 @@ void	ft_gc_exit(void)
 
 t_bool	ft_gc_add(void *ptr)
 {
-	t_mlc	*mlc;
+	t_malloc	*mlc;
 
 	mlc = get_malloc_item();
 	while (mlc->next)
@@ -91,7 +91,7 @@ t_bool	ft_gc_add(void *ptr)
 			return (TRUE);
 		mlc = mlc->next;
 	}
-	mlc->next = ft_calloc(1, sizeof(t_mlc));
+	mlc->next = ft_calloc(1, sizeof(t_malloc));
 	if (!mlc->next)
 		return (FALSE);
 	mlc->ptr = ptr;
