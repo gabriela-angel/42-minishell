@@ -1,7 +1,8 @@
-- misssing expander for variables
 - we should probably create a structure for the minishell
-- review the readline process
 - check headers organization
-- fix heredoc fun
+
+- misssing expander for variables
+- review the readline process
 - on lexer file: missing validator
 - on lexer file: check print function
+- tree->here_doc_fd = //func to create here doc (? missing)

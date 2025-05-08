@@ -43,7 +43,7 @@ t_tk_list	*ft_cpynode(t_tk_list *node)
 	return (new_node);
 }
 
-t_tk_list	ft_sublist(t_tk_list *list, t_tk_list *start, t_tk_list *end)
+t_tk_list	*ft_sublist(t_tk_list *list, t_tk_list *start, t_tk_list *end)
 {
 	t_tk_list	*sublist;
 	t_tk_list	*current;

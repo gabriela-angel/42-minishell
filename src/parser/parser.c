@@ -12,26 +12,27 @@
 
 #include "parser.h"
 
-//NOT DONE YET! NEEDS FIXING
+//FIXED< BUT CHECK HERE DOC FD SITUTATION
 void	handle_redir(t_tk_list *token_list, t_tree *tree)
 {
 	t_tk_list	*current;
 	t_tk_list	*redir;
+	t_tk_list	*cmd;
+	t_tk_list	*tmp;
 
 	current = token_list;
 	while (current)
 	{
+		tmp = ft_sublist(current, current, current->next);
+		tmp->next = NULL;
 		if (ft_isredirector(current->token.type))
-		{
-			redir = current;
-			if (redir->token.type == TK_REDIR_HDOC)
-				tree->here_doc_fd = //func to create here doc
-			else
-				tree->file = ft_sublist(redir, redir, redir->next); 
-			break ;
-		}
+			ft_lstadd_back(&redir, tmp);
+		else
+			ft_lstadd_back(&cmd, tmp);
 		current = current->next;
 	}
+	tree->command = cmd;
+	tree->file = redir;
 }
 
 static t_tk_list	*skip_subshell(t_tk_list *token_list, t_tree_branch branch)
@@ -124,9 +125,9 @@ t_tree	*get_tree(t_tk_list *token_list, t_tree_branch branch)
 	else if (ft_isredirector(priority->token.type)) //check if we want to use lexer utils or not
 		handle_redir(token_list, tree);
 	else
-		{
-			tree->left = get_tree(ft_sublist(token_list, token_list, priority), LEFT_BRANCH);
-			tree->right = get_tree(ft_sublist(token_list, priority->next, token_list), RIGHT_BRANCH);
-		}
+	{
+		tree->left = get_tree(ft_sublist(token_list, token_list, priority), LEFT_BRANCH);
+		tree->right = get_tree(ft_sublist(token_list, priority->next, token_list), RIGHT_BRANCH);
+	}
 	return (tree);
 }
