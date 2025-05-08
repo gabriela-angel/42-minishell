@@ -18,7 +18,7 @@ int	main(void)
 			continue;
 		add_history(input);
 		token_list = get_token_list(input);
-		tree = get_tree(token_list, BRANCH_ROOT);
+		tree = get_tree(token_list);
 		if (!tree)
 		{
 			ft_gc_exit();
@@ -28,6 +28,6 @@ int	main(void)
 		ft_gc_exit();
 	}
 	rl_clear_history();
-	
+
 	return (0);
 }

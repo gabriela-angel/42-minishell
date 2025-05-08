@@ -6,7 +6,7 @@
 #    By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/07 12:04:18 by gangel-a          #+#    #+#              #
-#    Updated: 2025/04/19 19:07:16 by gangel-a         ###   ########.fr        #
+#    Updated: 2025/05/08 13:11:15 by gangel-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,7 @@ SRC = ft_atoi.c \
 		ft_memchr.c \
 		ft_memcmp.c \
 		ft_num_abs.c \
+		ft_printf_fd.c \
 		ft_printf.c \
 		ft_printunbr.c \
 		ft_printf_utils.c \

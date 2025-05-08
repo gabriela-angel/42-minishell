@@ -12,42 +12,23 @@
 
 #include "lexer.h"
 
-void	set_redir_file(t_tk_list *node)
+static int		tk_len(char *input, t_value_type type)
 {
-	t_tk_list	*redir;
-	t_tk_list	*file;
+	int	len;
 
-	while (node)
-	{
-		if (ft_isredirector(node->token))
-		{
-			redir = node;
-			file = redir->next;
-			redir->token.file = &file->token;
-			redir->next = file->next;
-			if (file->next)
-				file->next->prev = redir;
-			file->next = NULL;
-			file->prev = NULL;
-		}
-		node = node->next;
-	}
-}
-
-static void	set_value(t_token *token)
-{
-	t_data	*data;
-	size_t	i;
-
-	data = &token->data;
 	len = 0;
-	while(i < data->item_no)
+	if (type == TK_WORD)
 	{
-		token->value = ft_strjoin(token->value, data->parts[i].str);
-		i++;
+		while (input[len] && !ft_isspace(input[len])
+			&& !ft_isoperator(input[len]))
+			len++;
 	}
-	ft_gc_free(token->value);
-	return ;
+	else if (type == TK_OR || type == TK_AND || type == TK_REDIR_HDOC
+		|| type == TK_REDIR_OUT_APP)
+		len = 2;
+	else
+		len = 1;
+	return (len);
 }
 
 static t_value_type	get_type(char *input)
@@ -72,37 +53,13 @@ static t_value_type	get_type(char *input)
 		return (TK_OPEN_PARENTHESIS);
 	else if (*input == ')')
 		return (TK_CLOSE_PARENTHESIS);
-	else if (*input == '\"' || *input == '\'' || (!ft_isspace(*input) && !ft_isoperator(*input)))
+	else if (*input == '\"' || *input == '\''
+		|| (!ft_isspace(*input) && !ft_isoperator(*input)))
 		return (TK_WORD);
 	else
 		return (TK_INVALID);
 }
 
-static char	*tokenize(char *input, t_token *token)
-{
-	t_value_type	type;
-
-	while (ft_isspace(*input))
-		input++;
-	type = get_type(input);
-	if (type == TK_INVALID)
-	{
-		token->type = TK_INVALID;
-		token->data.error = 1;
-		return (input + 1);
-	}
-	if (type != TK_WORD)
-	{
-		token->type = type;
-		if (type >= TK_OR && type <= TK_REDIR_OUT_APP)
-			return (input + 2);
-		return (input + 1);
-	}
-	input = handle_word(input, token);
-	if (token->data.error)
-		ft_printf_fd(2, QUOTE_ERROR, token->data.parts[token->data->size - 1].quote); //CHECK THIS
-	return (input);
-}
 
 t_tk_list	*get_token_list(char *input)
 {
@@ -110,25 +67,24 @@ t_tk_list	*get_token_list(char *input)
 	t_tk_list	*current;
 	t_tk_list	*prev;
 
-	if(!input)
+	if (!input || /*check if parenthesis, quotes close*/)
 		return (NULL);
 	head = NULL;
 	while (*input)
 	{
-		current = ft_malloc(sizeof(t_tk_list));
-		if (!head)
-			head = current;
+		if (ft_isspace(*input))
+			input++;
 		else
 		{
-			prev->next = current;
-			current->prev = prev;
+			current = ft_malloc(sizeof(t_tk_list));
+			current->type = get_type(input);
+			if (current->type == TK_INVALID)
+				return (ft_gc_free(current)); // CORRECT THIS WITH ERROR HANDLER
+			len = tk_len(input, current->type);
+			current->value = ft_substr(input, 0, len);
+			tk_lst_add_back(&head, current);
+			input += len;
 		}
-		input = tokenize(input, &current->token);
-		prev = current;
 	}
-	if (current->token.data.error)
-		return (NULL);
-	// head = validate_tokens(head);
-	set_redir_file(head);
 	return (head);
 }

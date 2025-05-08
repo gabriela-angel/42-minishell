@@ -62,7 +62,7 @@ static t_tk_list	*get_priority(t_tk_list *token_list, t_tree_branch branch)
 	t_tk_list	*priority;
 	t_tk_list	*current;
 
-	
+
 	priority = NULL;
 	if (branch == BRANCH_ROOT || branch == BRANCH_LEFT)
 		current = get_last_token(token_list);
@@ -122,7 +122,7 @@ t_tree	*get_tree(t_tk_list *token_list, t_tree_branch branch)
 	else if (tree->type == TREE_SUBSHELL)
 		tree->subshell = get_tree(ft_sublist(token_list, token_list->next,
 			get_last_token(token_list)), ROOT_BRANCH);
-	else if (ft_isredirector(priority->token.type)) //check if we want to use lexer utils or not
+	else if (ft_isredirector(priority->token.type))
 		handle_redir(token_list, tree);
 	else
 	{

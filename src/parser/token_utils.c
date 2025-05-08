@@ -10,14 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "minishell.h"
 
-t_tk_list	*get_next_token(t_tk_list *current, t_tree_branch branch)
+void	tk_lst_add_back(t_tk_list **head, t_tk_list *new_node)
 {
-	if (branch == BRANCH_ROOT || branch == BRANCH_LEFT)
-		return (current->prev);
+	t_tk_list	*last_node;
+
+	if (!new_node)
+		return ;
+	if (!(*head))
+		*head = new_node;
 	else
-		return (current->next);
+	{
+		last_node = get_last_token(head);
+		last_node->next = new_node;
+		new_node->prev = last_node;
+	}
 }
 
 t_tk_list	*get_last_token(t_tk_list *lst)
