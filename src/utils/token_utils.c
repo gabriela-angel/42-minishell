@@ -12,9 +12,9 @@
 
 #include "minishell.h"
 
-void	tk_lst_add_back(t_tk_list **head, t_tk_list *new_node)
+void	tk_lst_add_back(t_token **head, t_token *new_node)
 {
-	t_tk_list	*last_node;
+	t_token	*last_node;
 
 	if (!new_node)
 		return ;
@@ -28,7 +28,7 @@ void	tk_lst_add_back(t_tk_list **head, t_tk_list *new_node)
 	}
 }
 
-t_tk_list	*get_last_token(t_tk_list *lst)
+t_token	*get_last_token(t_token *lst)
 {
 	if (!lst)
 		return (NULL);
@@ -37,11 +37,11 @@ t_tk_list	*get_last_token(t_tk_list *lst)
 	return (lst);
 }
 
-t_tk_list	*ft_cpynode(t_tk_list *node)
+t_token	*ft_cpynode(t_token *node)
 {
-	t_tk_list	*new_node;
+	t_token	*new_node;
 
-	new_node = ft_malloc(sizeof(t_tk_list));
+	new_node = ft_malloc(sizeof(t_token));
 	if (!new_node)
 		return (NULL);
 	ft_memmove(&new_node->token, &node->token, sizeof(t_token));
@@ -51,11 +51,11 @@ t_tk_list	*ft_cpynode(t_tk_list *node)
 	return (new_node);
 }
 
-t_tk_list	*ft_sublist(t_tk_list *list, t_tk_list *start, t_tk_list *end)
+t_token	*ft_sublist(t_token *list, t_token *start, t_token *end)
 {
-	t_tk_list	*sublist;
-	t_tk_list	*current;
-	t_tk_list	*prev;
+	t_token	*sublist;
+	t_token	*current;
+	t_token	*prev;
 
 	sublist = NULL;
 

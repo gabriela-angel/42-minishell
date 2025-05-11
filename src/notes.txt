@@ -1,8 +1,4 @@
-- we should probably create a structure for the minishell
-- check headers organization
+- create exit functions for errors and error macros
 
 - misssing expander for variables
 - review the readline process
-- on lexer file: missing validator
-- on lexer file: check print function
-- tree->here_doc_fd = //func to create here doc (? missing)

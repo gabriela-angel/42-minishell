@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:30:39 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/08 15:51:49 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/10 21:34:30 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,39 +18,41 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+// MACROS ---------------
+# define SUCCESS 0
+
 // ERROR MACROS -----------
 
 
 // STRUCTS ----------------
 
-typedef struct s_tk_list
+typedef struct s_token
 {
-	int					type;
+	t_value_type		type;
 	char				*value;
-	struct s_tk_list	*prev;
-	struct s_tk_list	*next;
-}						t_tk_list;
+	struct s_token	*prev;
+	struct s_token	*next;
+}						t_token;
 
 typedef struct s_tree
 {
-	t_tk_list		*token;
+	t_token		*token;
 	struct s_tree	*left;
 	struct s_tree	*right;
 }						t_tree;
 
 typedef enum e_value_type
 {
-	TK_OR = 1,
-	TK_AND,
+	TK_AND = 1,
+	TK_OR,
 	TK_PIPE,
 	TK_OPEN_PARENTHESIS,
 	TK_CLOSE_PARENTHESIS,
+	TK_REDIR_OUT_APP,
+	TK_REDIR_HDOC,
 	TK_REDIR_IN,
 	TK_REDIR_OUT,
-	TK_REDIR_HDOC,
-	TK_REDIR_OUT_APP,
-	TK_WORD,
-	TK_INVALID
+	TK_WORD
 }						t_value_type;
 
 typedef enum e_bool

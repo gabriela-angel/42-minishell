@@ -10,25 +10,42 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "minishell.h"
 
-static int		tk_len(char *input, t_value_type type)
+static int	word_len(char *input)
 {
 	int	len;
 
 	len = 0;
-	if (type == TK_WORD)
+	while (input[len] && get_type(input + len) == TK_WORD
+	&& !ft_isspace(input[len]))
 	{
-		while (input[len] && !ft_isspace(input[len])
-			&& !ft_isoperator(input[len]))
+		if (str[len] == '\'')
+		{
 			len++;
+			while (str[len] != '\'')
+				len++;
+		}
+		if (str[len] == '\"')
+		{
+			len++;
+			while (str[len] != '\"')
+				len++;
+		}
+		len++;
 	}
+	return (len);
+}
+
+static int	tk_len(char *input, t_value_type type)
+{
+	if (type == TK_WORD)
+		return (word_len(input));
 	else if (type == TK_OR || type == TK_AND || type == TK_REDIR_HDOC
 		|| type == TK_REDIR_OUT_APP)
-		len = 2;
+		return (2);
 	else
-		len = 1;
-	return (len);
+		return (1);
 }
 
 static t_value_type	get_type(char *input)
@@ -39,8 +56,6 @@ static t_value_type	get_type(char *input)
 		return (TK_PIPE);
 	else if (*input == '&' && *(input + 1) == '&')
 		return (TK_AND);
-	else if (*input == '&')
-		return (TK_INVALID);
 	else if (*input == '<' && *(input + 1) == '<')
 		return (TK_REDIR_HDOC);
 	else if (*input == '<')
@@ -53,22 +68,19 @@ static t_value_type	get_type(char *input)
 		return (TK_OPEN_PARENTHESIS);
 	else if (*input == ')')
 		return (TK_CLOSE_PARENTHESIS);
-	else if (*input == '\"' || *input == '\''
-		|| (!ft_isspace(*input) && !ft_isoperator(*input)))
-		return (TK_WORD);
 	else
-		return (TK_INVALID);
+		return (TK_WORD);
 }
 
 
-t_tk_list	*get_token_list(char *input)
+t_token	*get_token_list(char *input)
 {
-	t_tk_list	*head;
-	t_tk_list	*current;
-	t_tk_list	*prev;
+	t_token	*head;
+	t_token	*current;
+	int			len;
 
-	if (!input || /*check if parenthesis, quotes close*/)
-		return (NULL);
+	if (!input || validate_input(input))
+		return (NULL); //create a function to set exit status to SYNTAX ERROR
 	head = NULL;
 	while (*input)
 	{
@@ -76,10 +88,8 @@ t_tk_list	*get_token_list(char *input)
 			input++;
 		else
 		{
-			current = ft_malloc(sizeof(t_tk_list));
+			current = ft_malloc(sizeof(t_token));
 			current->type = get_type(input);
-			if (current->type == TK_INVALID)
-				return (ft_gc_free(current)); // CORRECT THIS WITH ERROR HANDLER
 			len = tk_len(input, current->type);
 			current->value = ft_substr(input, 0, len);
 			tk_lst_add_back(&head, current);
