@@ -37,44 +37,80 @@ t_token	*get_last_token(t_token *lst)
 	return (lst);
 }
 
-t_token	*ft_cpynode(t_token *node)
-{
-	t_token	*new_node;
-
-	new_node = ft_malloc(sizeof(t_token));
-	if (!new_node)
-		return (NULL);
-	ft_memmove(&new_node->token, &node->token, sizeof(t_token));
-	if (node->token.value)
-		new_node->token.value = ft_strdup(node->token.value);
-	ft_gc_add(new_node->token.value);
-	return (new_node);
-}
-
-t_token	*ft_sublist(t_token *list, t_token *start, t_token *end)
+t_token	*ft_cutlist(t_token *start, t_token *end)
 {
 	t_token	*sublist;
 	t_token	*current;
-	t_token	*prev;
 
-	sublist = NULL;
-
-	while (list && list != start)
-		list = list->next;
-	while (list && list != end)
+	if (!token_list || !start)
+		return (NULL);
+	sublist = start;
+	if (sublist->prev)
 	{
-		current = ft_cpynode(list);
-		if (!current)
-			return (NULL);
-		if (!sublist)
-			sublist = current;
-		else
+		sublist->prev->next = NULL;
+		sublist->prev = NULL;
+	}
+	current = start;
+	while (current && current != end)
+	{
+		if (current->next == end && end)
 		{
-			prev->next = current;
-			current->prev = prev;
+			current->next = NULL;
+			break ;
 		}
-		prev = current;
-		list = list->next;
+		current = current->next;
 	}
 	return (sublist);
+}
+
+t_token	*search_token_rev(t_token *token_list, t_value_type start_type, t_value_type end_type)
+{
+	t_token	*current;
+	int		parenthesis;
+
+	current = get_last_token(token_list);
+	while (current)
+	{
+		if (current->type >= start_type && current->type <= end_type)
+			return (current);
+		if (current->type == TK_CLOSE_PARENTHESIS)
+		{
+			parenthesis = 1;
+			while (parenthesis)
+			{
+				current = current->prev;
+				if (current->type == TK_OPEN_PARENTHESIS)
+					parenthesis--;
+				else if (current->type == TK_CLOSE_PARENTHESIS)
+					parenthesis++;
+			}
+		}
+		current = current->prev;
+	}
+}
+
+t_token	*search_token(t_token *token_list, t_value_type start_type, t_value_type end_type)
+{
+	t_token	*current;
+	int		parenthesis;
+
+	current = token_list;
+	while (current)
+	{
+		if (current->type >= start_type && current->type <= end_type)
+			return (current);
+		if (current->type == TK_OPEN_PARENTHESIS)
+		{
+			parenthesis = 1;
+			while (parenthesis)
+			{
+				current = current->next;
+				if (current->type == TK_CLOSE_PARENTHESIS)
+					parenthesis--;
+				else if (current->type == TK_OPEN_PARENTHESIS)
+					parenthesis++;
+			}
+		}
+		current = current->next;
+	}
 }

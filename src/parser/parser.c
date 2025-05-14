@@ -12,32 +12,44 @@
 
 #include "minishell.h"
 
-t_token	*search_token_rev(t_token *token_list, t_value_type start_type, t_value_type end_type)
+static void	split_redir(t_tree *tree, t_token *list,	t_token *tk_to_cut)
 {
-	t_token	*current;
-	int		parenthesis;
-
-	current = get_last_token(token_list);
-	while (current)
+	if (!tree || !list || !tk_to_cut)
+		return ;
+	tree->token = tk_to_cut;
+	if (list == tk_to_cut)
+		list = ft_cutlist(list->next->next, NULL);
+	else
 	{
-		if (current->type >= start_type && current->type <= end_type)
-			return (current);
-		if (current->type == TK_CLOSE_PARENTHESIS)
-		{
-			parenthesis = 1;
-			while (parenthesis)
-			{
-				current = current->prev;
-				if (current->type == TK_OPEN_PARENTHESIS)
-					parenthesis--;
-				else if (current->type == TK_CLOSE_PARENTHESIS)
-					parenthesis++;
-			}
-		}
-		current = current->prev;
+		tk_to_cut->prev->next = tk_to_cut->next->next;
+		if (tk_to_cut->next->next)
+			tk_to_cut->next->next->prev = tk_to_cut->prev;
+		tk_to_cut->next->next = NULL;
 	}
+	tk_to_cut->prev = NULL;
+	tk_to_cut->next->prev = NULL;
+	tree->right = build_tree(tk_to_cut->next);
+	tree->left = build_tree(list);
 }
 
+static void	split_list(t_tree *tree, t_token *list, t_token *tk_to_cut)
+{
+	t_token	*sublist;
+
+	if (!tree || !list || !tk_to_cut)
+		return ;
+	sublist = NULL;
+	tree->token = tk_to_cut;
+	list = ft_cutlist(list, tk_to_cut);
+	if (!list)
+		return ; //CREATE ERROR FUNC TO PRINT ERROR MSG "FAILED TO BUILD SYNTAX TREE"
+	sublist = ft_cutlist(tk_to_cut->next, NULL);
+	if (!sublist)
+		return ; //CREATE ERROR FUNC TO PRINT ERROR MSG "FAILED TO BUILD SYNTAX TREE"
+	tk_to_cut->prev = NULL;
+	tree->left = build_tree(list);
+	tree->right = build_tree(sublist);
+}
 
 static void	branch_tree(t_tree *tree, t_token *token_list)
 {
@@ -47,13 +59,13 @@ static void	branch_tree(t_tree *tree, t_token *token_list)
 
 	is_and_or = search_token_rev(token_list, TK_AND, TK_OR);
 	if (is_and_or)
-		return (ft_sublist()); //we gotta alter this function a bit
+		return (split_list(tree, token_list, is_and_or));
 	is_pipe = search_token_rev(token_list, TK_PIPE, TK_PIPE);
 	if (is_pipe)
-		return (ft_sublist()); //we gotta alter this function a bit
-	is_redir = search_token(token_list, TK_REDIR_OUT_APP, TK_REDIR_OUT); // actually, the search for the redirect goes a bit different, so we need another function for that
+		return (split_list(tree, token_list, is_pipe));
+	is_redir = search_token(token_list, TK_REDIR_OUT_APP, TK_REDIR_OUT);
 	if (is_redir)
-		return (ft_sublist()); //we gotta alter this function a bit
+		return (split_redir(tree, token_list, is_redir));
 	else
 		tree->token = token_list;
 }
