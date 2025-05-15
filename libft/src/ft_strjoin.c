@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 13:46:31 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/02/16 19:20:03 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/14 23:29:26 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,5 @@ char	*ft_strjoin(char *s1, char *s2)
 	while (s2[i])
 		ptr[j++] = s2[i++];
 	ptr[j] = '\0';
-	free((char *)s1);
 	return (ptr);
 }

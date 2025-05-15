@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 12:05:54 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/08 13:10:10 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/14 23:49:41 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,11 @@ void			ft_putstr_fd(char *s, int fd);
 void			*ft_recalloc(void *ptr, size_t new_size, size_t old_size);
 char			**ft_split(char const *s, char c);
 char			*ft_strchr(const char *s, int c);
+int				ft_strcmp(const char *s1, const char *s2)
 char			*ft_strdup(const char *s);
 void			ft_striteri(char *s, void (*f)(unsigned int, char*));
 char			*ft_strjoin(char *s1, char *s2);
+char			*ft_strjoin_free(char *s1, char *s2);
 size_t			ft_strlcat(char *dst, const char *src, size_t size);
 size_t			ft_strlcpy(char *dst, const char *src, size_t size);
 size_t			ft_strlen(const char *s);

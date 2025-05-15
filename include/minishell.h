@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:30:39 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/10 21:34:30 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/14 22:01:09 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,14 @@
 # define MINISHELL_H
 
 # include "../libft/include/libft.h"
+# include <unistd.h>
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
 // MACROS ---------------
 # define SUCCESS 0
+# define FAILURE 1
 
 // ERROR MACROS -----------
 

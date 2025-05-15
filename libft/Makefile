@@ -6,7 +6,7 @@
 #    By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/07 12:04:18 by gangel-a          #+#    #+#              #
-#    Updated: 2025/05/08 13:11:15 by gangel-a         ###   ########.fr        #
+#    Updated: 2025/05/14 23:50:02 by gangel-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,8 +47,10 @@ SRC = ft_atoi.c \
 		ft_strlcpy.c \
 		ft_strlcat.c \
 		ft_strchr.c \
+		ft_strcmp.c \
 		ft_strdup.c \
 		ft_strjoin.c \
+		ft_strjoin_free.c \
 		ft_strrchr.c \
 		ft_strncmp.c \
 		ft_strnstr.c \
