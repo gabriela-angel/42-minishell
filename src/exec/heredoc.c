@@ -6,7 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 11:01:13 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/15 17:09:50 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/15 18:03:04 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,8 @@ static int	write_heredoc(const char *delimiter, int write_fd)
 			return (1);
 		}
 		if (ft_strcmp(line, delimiter) == 0)
-			break;
-		write(write_fd, line, ft_strlen(line));
-		write(write_fd, "\n", 1);
+		break;
+		ft_printf_fd(write_fd, "%s\n", line);
 		ft_gc_free(line);
 	}
 	ft_gc_free(line);
