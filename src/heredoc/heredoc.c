@@ -26,8 +26,7 @@ int	handle_heredoc(t_token *token)
 		return (signal_error());
 	//--------------------------------------------------------
 
-	if (init_heredoc(token, &fd, &file_name,
-			&is_expandable) != SUCCESS)
+	if (init_heredoc(token, &fd, &file_name, &is_expandable) != SUCCESS)
 		return (set_exit_status(handle_error("failed to create heredoc"))); //create a function to set exit status
 	while (42)
 		if (write_to_heredoc(fd, token->value, is_expandable) == SUCCESS)

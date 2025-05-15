@@ -18,7 +18,7 @@ static int	word_len(char *input)
 
 	len = 0;
 	while (input[len] && get_type(input + len) == TK_WORD
-	&& !ft_isspace(input[len]))
+		&& !ft_isspace(input[len]))
 	{
 		if (str[len] == '\'')
 		{
@@ -72,11 +72,10 @@ static t_value_type	get_type(char *input)
 		return (TK_WORD);
 }
 
-
 t_token	*get_token_list(char *input)
 {
-	t_token	*head;
-	t_token	*current;
+	t_token		*head;
+	t_token		*current;
 	int			len;
 
 	if (!input || validate_input(input))

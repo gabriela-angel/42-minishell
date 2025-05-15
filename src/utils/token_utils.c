@@ -63,12 +63,12 @@ t_token	*ft_cutlist(t_token *start, t_token *end)
 	return (sublist);
 }
 
-t_token	*search_token_rev(t_token *token_list, t_value_type start_type, t_value_type end_type)
+t_token	*search_token_rev(t_token *tk_lst, t_value_type start_type, t_value_type end_type)
 {
 	t_token	*current;
 	int		parenthesis;
 
-	current = get_last_token(token_list);
+	current = get_last_token(tk_lst);
 	while (current)
 	{
 		if (current->type >= start_type && current->type <= end_type)
@@ -89,12 +89,12 @@ t_token	*search_token_rev(t_token *token_list, t_value_type start_type, t_value_
 	}
 }
 
-t_token	*search_token(t_token *token_list, t_value_type start_type, t_value_type end_type)
+t_token	*search_token(t_token *tk_lst, t_value_type start_type, t_value_type end_type)
 {
 	t_token	*current;
 	int		parenthesis;
 
-	current = token_list;
+	current = tk_lst;
 	while (current)
 	{
 		if (current->type >= start_type && current->type <= end_type)

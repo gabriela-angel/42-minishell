@@ -12,25 +12,25 @@
 
 #include "minishell.h"
 
-static void	check_quotes(char *input, int *i, int *single_quotes, int *double_quotes)
+static void	check_quotes(char *input, int *i, int *single_qts, int *double_qts)
 {
 	if (input[*i] == '\'')
 	{
-		(*single_quotes)++;
+		(*single_qts)++;
 		(*i)++;
 		while (input[*i] && input[*i] != '\'')
 			(*i)++;
 		if (input[*i] == '\'')
-			(*single_quotes)--;
+			(*single_qts)--;
 	}
 	if (input[*i] == '\"')
 	{
-		(*double_quotes)++;
+		(*double_qts)++;
 		(*i)++;
 		while (input[*i] && input[*i] != '\"')
 			(*i)++;
 		if (input[*i] == '\"')
-			(*double_quotes)--;
+			(*double_qts)--;
 	}
 }
 
@@ -38,24 +38,24 @@ int	validate_input(char *input)
 {
 	int	i;
 	int	parenthesis;
-	int	single_quotes;
-	int	double_quotes;
+	int	single_qts;
+	int	double_qts;
 
 	i = 0;
 	parenthesis = 0;
-	single_quotes = 0;
-	double_quotes = 0;
+	single_qts = 0;
+	double_qts = 0;
 	while (input[i])
 	{
 		if (input[i] == '\'' || input[i] == '\"')
-			check_quotes(input, &i, &single_quotes, &double_quotes);
+			check_qts(input, &i, &single_qts, &double_qts);
 		if (input[i] == '(')
 			parenthesis++;
 		else if (input[i] == ')')
 			parenthesis--;
 		i++;
 	}
-	if (parenthesis != 0 || single_quotes != 0 || double_quotes != 0)
+	if (parenthesis != 0 || single_qts != 0 || double_qts != 0)
 		return (); //create a function to set exit status to SYNTAX ERROR
 	return (SUCCESS);
 }
