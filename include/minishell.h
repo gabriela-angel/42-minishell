@@ -6,7 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:30:39 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/15 11:14:29 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:26:29 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define ERROR 1
 
 // ERROR MACROS -----------
-
+extern int	g_exit_status;
 
 // STRUCTS ----------------
 typedef enum e_value_type
@@ -100,8 +100,8 @@ int		handle_heredocs(t_token *token);
 char	**convert_token_to_argv(t_token *token);
 
 // BUILTINS
-t_bool	is_builtin(t_token *tokens);
-int		exec_builtin(t_token *tokens, char ***env, int last_status);
+t_bool	is_builtin(const char *cmd);
+int		exec_builtin(char **args, char ***env, int last_status);
 int		exec_echo(char **args);
 int		exec_cd(char **args);
 int		exec_pwd(char **args);
@@ -122,5 +122,6 @@ t_tree	*get_tree(t_token *token_list);
 void	handle_sigint(int signum);
 void	setup_signals_prompt(void);
 void	setup_signals_child(void);
+void	handle_heredoc_sigint(int sig);
 
 #endif

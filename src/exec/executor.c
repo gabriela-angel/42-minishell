@@ -6,7 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:33:24 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/15 13:54:36 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:27:56 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,23 @@ extern int	g_exit_status;
 
 void	exec_simple_command(t_token *token, char ***env)
 {
-	char **argv;
+	char	**argv;
 
+	if (handle_heredocs(token))
+	{
+		g_exit_status = 130;
+		return ;
+	}
+	if (apply_redirections(token))
+		return ;
 	argv = convert_token_to_argv(token);
-	if (!argv)
-		return;
-	ft_printf_fd(1, "Executing command: %s\n", argv[0]); // Depuração
-	if (is_builtin(token))
-		g_exit_status = exec_builtin(token, env, g_exit_status);
+	if (!argv || !argv[0])
+	{
+		ft_free_split(argv);
+		return ;
+	}
+	if (is_builtin(argv[0]))
+		g_exit_status = exec_builtin(argv, env, g_exit_status);
 	else
 		g_exit_status = exec_external(argv, *env);
 	ft_free_split(argv);

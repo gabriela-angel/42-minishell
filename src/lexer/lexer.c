@@ -97,7 +97,6 @@ t_token	*get_token_list(char *input)
 			current->type = get_type(input);
 			len = tk_len(input, current->type);
 			current->value = ft_substr(input, 0, len);
-			ft_printf_fd(1, "Token: %s, Type: %d\n", current->value, current->type); // Depuração
 			tk_lst_add_back(&head, current);
 			input += len;
 		}
