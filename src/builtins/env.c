@@ -1,34 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/15 11:13:30 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/15 14:02:46 by acesar-m         ###   ########.fr       */
+/*   Created: 2025/05/13 15:28:47 by acesar-m          #+#    #+#             */
+/*   Updated: 2025/05/14 18:25:50 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "minishell.h"
 
-void	handle_sigint(int signum)
+/**
+ * Imprime as variáveis de ambiente com '='.
+ */
+int	exec_env(char **args, char **env)
 {
-	(void)signum;
-	ft_printf("\n");
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-}
+	int	i;
 
-void	setup_signals_prompt(void)
-{
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-void	setup_signals_child(void)
-{
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	if (args[1])
+	{
+		write(2, "env: too many arguments\n", 25);
+		return (1);
+	}
+	i = 0;
+	while (env[i])
+	{
+		if (ft_strchr(env[i], '='))
+		{
+			write(1, env[i], ft_strlen(env[i]));
+			write(1, "\n", 1);
+		}
+		i++;
+	}
+	return (0);
 }

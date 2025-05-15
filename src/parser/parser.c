@@ -5,126 +5,105 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/06 11:13:13 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/06 15:01:33 by acesar-m         ###   ########.fr       */
+/*   Created: 2025/04/25 18:44:05 by gangel-a          #+#    #+#             */
+/*   Updated: 2025/05/15 13:53:46 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handle_redir(t_tk_list *token_list, t_tree *tree)
-{
-    t_tk_list	*current;
-    t_tk_list	*redir;
+static void split_list(t_tree *tree, t_token *list, t_token *tk_to_cut);
+static void split_redir(t_tree *tree, t_token *list, t_token *tk_to_cut);
 
-    current = token_list;
-    while (current)
-    {
-        if (ft_isredirector(current->token))
-        {
-            redir = current;
-            if (redir->token.type == TK_REDIR_HDOC)
-                tree->here_doc_fd = create_heredoc(redir->next->token.value);
-            else
-                tree->file = ft_sublist(redir, redir, redir->next); 
-            break ;
-        }
-        current = current->next;
-    }
+static void	branch_tree(t_tree *tree, t_token *token_list)
+{
+	t_token	*is_and_or;
+	t_token	*is_pipe;
+	t_token	*is_redir;
+
+	is_and_or = search_token_rev(token_list, TK_AND, TK_OR);
+	if (is_and_or)
+		return (split_list(tree, token_list, is_and_or));
+	is_pipe = search_token_rev(token_list, TK_PIPE, TK_PIPE);
+	if (is_pipe)
+		return (split_list(tree, token_list, is_pipe));
+	is_redir = search_token(token_list, TK_REDIR_OUT_APP, TK_REDIR_OUT);
+	if (is_redir)
+		return (split_redir(tree, token_list, is_redir));
+	else
+		tree->token = token_list;
 }
 
-static t_tk_list	*skip_subshell(t_tk_list *token_list, t_tree_branch branch)
+static t_tree	*build_tree(t_token *token_list)
 {
-    t_tk_list	*current;
-    int			open_parenthesis;
-    int			close_parenthesis;
+	t_tree	*tree;
 
-    current = token_list;
-    open_parenthesis = 0;
-    close_parenthesis = 0;
-    while (current)
-    {
-        if (current->token.type == TK_OPEN_PARENTHESIS)
-            open_parenthesis++;
-        else if (current->token.type == TK_CLOSE_PARENTHESIS)
-            close_parenthesis++;
-        if (open_parenthesis == close_parenthesis && open_parenthesis != 0)
-            return (get_next_token(current, branch));
-        current = get_next_token(current, branch);
-    }
-    return (current);
+	tree = ft_malloc(sizeof(t_tree));
+	if (!tree)
+		return (NULL); // Handle error fail to build syntax tree
+	branch_tree(tree, token_list);
+	return (tree);
 }
 
-static t_tk_list	*get_priority(t_tk_list *token_list, t_tree_branch branch)
+static void	split_redir(t_tree *tree, t_token *list,	t_token *tk_to_cut)
 {
-    t_tk_list	*priority;
-    t_tk_list	*current;
-
-    priority = NULL;
-    if (branch == BRANCH_ROOT || branch == BRANCH_LEFT)
-        current = get_last_token(token_list);
-    else
-        current = token_list;
-    if (is_subshell(current, branch))
-        return (current);
-    while (current)
-    {
-        if (current->token.type == TK_OPEN_PARENTHESIS || current->token.type == TK_CLOSE_PARENTHESIS)
-            current = skip_subshell(current, branch);
-        if (current->token.type == TK_AND || current->token.type == TK_OR)
-            return (current);
-        if (!priority || compare_priority(current->token.type, priority->token.type) == 1)
-            priority = current;
-        current = get_next_token(current, branch);
-    }
-    return (priority);
+	if (!tree || !list || !tk_to_cut)
+		return ;
+	tree->token = tk_to_cut;
+	if (list == tk_to_cut)
+		list = ft_cutlist(list->next->next, NULL);
+	else
+	{
+		tk_to_cut->prev->next = tk_to_cut->next->next;
+		if (tk_to_cut->next->next)
+			tk_to_cut->next->next->prev = tk_to_cut->prev;
+		tk_to_cut->next->next = NULL;
+	}
+	tk_to_cut->prev = NULL;
+	tk_to_cut->next->prev = NULL;
+	tree->right = build_tree(tk_to_cut->next);
+	tree->left = build_tree(list);
 }
 
-static t_tree_type	get_tree_type(t_value_type type)
+static void	split_list(t_tree *tree, t_token *list, t_token *tk_to_cut)
 {
-    if (type == TK_PIPE)
-        return (TREE_PIPE);
-    else if (type == TK_AND)
-        return (TREE_AND);
-    else if (type == TK_OR)
-        return (TREE_OR);
-    else if (type == TK_REDIR_IN)
-        return (TREE_REDIR_IN);
-    else if (type == TK_REDIR_OUT)
-        return (TREE_REDIR_OUT);
-    else if (type == TK_REDIR_OUT_APP)
-        return (TREE_REDIR_OUT_APP);
-    else if (type == TK_REDIR_HDOC)
-        return (TREE_REDIR_HDOC);
-    else if (type == TK_OPEN_PARENTHESIS || type == TK_CLOSE_PARENTHESIS)
-        return (TREE_SUBSHELL);
-    else
-        return (TREE_CMD);
+	t_token	*sublist;
+
+	if (!tree || !list || !tk_to_cut)
+		return ;
+	sublist = NULL;
+	tree->token = tk_to_cut;
+	list = ft_cutlist(list, tk_to_cut);
+	if (!list)
+		return ; //CREATE ERROR FUNC TO PRINT ERROR MSG "FAILED TO BUILD SYNTAX TREE"
+	sublist = ft_cutlist(tk_to_cut->next, NULL);
+	if (!sublist)
+		return ; //CREATE ERROR FUNC TO PRINT ERROR MSG "FAILED TO BUILD SYNTAX TREE"
+	tk_to_cut->prev = NULL;
+	tree->left = build_tree(list);
+	tree->right = build_tree(sublist);
 }
 
-t_tree	*get_tree(t_tk_list *token_list, t_tree_branch branch)
-{
-    t_tree		*tree;
-    t_tk_list	*priority;
 
-    if (!token_list)
-        return (NULL);
-    tree = ft_malloc(sizeof(t_tree));
-    if (!tree)
-        return (NULL);
-    priority = get_priority(token_list, branch);
-    tree->type = get_tree_type(priority->token.type);
-    if (tree->type == TREE_CMD)
-        tree->command = ft_sublist(token_list, token_list, NULL);
-    else if (tree->type == TREE_SUBSHELL)
-        tree->subshell = get_tree(ft_sublist(token_list, token_list->next,
-            get_last_token(token_list)), BRANCH_ROOT);
-    else if (ft_isredirector(priority->token))
-        handle_redir(token_list, tree);
-    else
-    {
-        tree->left = get_tree(ft_sublist(token_list, token_list, priority), BRANCH_LEFT);
-        tree->right = get_tree(ft_sublist(token_list, priority->next, token_list), BRANCH_RIGHT);
-    }
-    return (tree);
+t_tree	*get_tree(t_token *token_list)
+{
+	t_tree	*tree;
+	t_token	*current;
+
+	if (!token_list)
+		return (NULL);
+	current = token_list;
+	while (current)
+	{
+		if (validate_tokens(current) != SUCCESS)
+		{
+			ft_printf_fd(2, "Syntax error in tokens\n"); // Depuração
+			return (NULL);
+		}
+		current = current->next;
+	}
+	tree = build_tree(token_list);
+	if (!tree)
+		ft_printf_fd(2, "Failed to build syntax tree\n"); // Depuração
+	return (tree);
 }

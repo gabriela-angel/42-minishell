@@ -5,17 +5,24 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/28 18:26:01 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/08 11:43:18 by acesar-m         ###   ########.fr       */
+/*   Created: 2025/05/13 13:52:06 by acesar-m          #+#    #+#             */
+/*   Updated: 2025/05/14 17:24:32 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+# include "minishell.h"
 
 static t_malloc	*get_malloc_item(void)
 {
 	static t_malloc	mlc;
+	static int		is_initialized = 0;
 
+	if (!is_initialized)
+	{
+		mlc.ptr = NULL;
+		mlc.next = NULL;
+		is_initialized = 1;
+	}
 	return (&mlc);
 }
 
@@ -46,6 +53,8 @@ void	ft_gc_free(void *ptr)
 	t_malloc	*mlc;
 	t_malloc	*tmp;
 
+	if (!ptr)
+		return ;
 	mlc = get_malloc_item();
 	while (mlc->next)
 	{
@@ -70,20 +79,23 @@ void	ft_gc_exit(void)
 	mlc = get_malloc_item();
 	while (mlc->next)
 	{
-		free(mlc->ptr);
+		if (mlc->ptr)
+			free(mlc->ptr);
 		tmp = mlc->next;
 		mlc->ptr = tmp->ptr;
 		mlc->next = tmp->next;
 		free(tmp);
 	}
-	get_malloc_item()->ptr = NULL;
-	get_malloc_item()->next = NULL;
+	mlc->ptr = NULL;
+	mlc->next = NULL;
 }
 
 t_bool	ft_gc_add(void *ptr)
 {
 	t_malloc	*mlc;
 
+	if (!ptr)
+		return (FALSE);
 	mlc = get_malloc_item();
 	while (mlc->next)
 	{

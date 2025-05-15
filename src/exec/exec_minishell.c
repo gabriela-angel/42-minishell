@@ -1,34 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   exec_minishell.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/15 11:13:30 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/15 14:02:46 by acesar-m         ###   ########.fr       */
+/*   Created: 2025/05/14 11:20:26 by acesar-m          #+#    #+#             */
+/*   Updated: 2025/05/15 13:54:07 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "minishell.h"
 
-void	handle_sigint(int signum)
+int	minishell_exec(t_tree *tree, char ***env)
 {
-	(void)signum;
-	ft_printf("\n");
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-}
-
-void	setup_signals_prompt(void)
-{
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-void	setup_signals_child(void)
-{
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	if (!tree)
+		return (1);
+	ft_printf_fd(1, "Executing command tree...\n"); // Depuração
+	execute_tree(tree, env);
+	return (0);
 }

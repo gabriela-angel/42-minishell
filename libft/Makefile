@@ -6,7 +6,7 @@
 #    By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/07 12:04:18 by gangel-a          #+#    #+#              #
-#    Updated: 2025/05/07 17:22:08 by acesar-m         ###   ########.fr        #
+#    Updated: 2025/05/13 14:48:11 by acesar-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,6 +49,7 @@ SRC = ft_atoi.c \
 		ft_strlcat.c \
 		ft_strchr.c \
 		ft_strdup.c \
+		ft_strdup_split.c \
 		ft_strjoin.c \
 		ft_strrchr.c \
 		ft_strncmp.c \
