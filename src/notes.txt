@@ -2,3 +2,7 @@
 
 - misssing expander for variables
 - review the readline process
+
+
+
+- check change main

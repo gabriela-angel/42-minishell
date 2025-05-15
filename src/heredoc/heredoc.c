@@ -17,7 +17,7 @@ int	handle_heredoc(t_token *token)
 	int		default_stdin;
 	int		fd;
 	char	*file_name;
-	bool	is_expandable;
+	t_bool	is_expandable;
 
 	default_stdin = dup(STDIN_FILENO);
 
@@ -45,7 +45,7 @@ int	handle_heredoc(t_token *token)
 }
 
 int	init_heredoc(t_token *token, int *fd, char **file_name,
-		bool *is_expandable)
+		t_bool *is_expandable)
 {
 	int		*heredoc_counter;
 

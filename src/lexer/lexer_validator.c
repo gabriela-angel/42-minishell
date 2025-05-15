@@ -56,6 +56,6 @@ int	validate_input(char *input)
 		i++;
 	}
 	if (parenthesis != 0 || single_qts != 0 || double_qts != 0)
-		return (); //create a function to set exit status to SYNTAX ERROR
+		return (FAILURE); //create a function to set exit status to SYNTAX ERROR
 	return (SUCCESS);
 }

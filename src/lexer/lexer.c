@@ -12,42 +12,6 @@
 
 #include "minishell.h"
 
-static int	word_len(char *input)
-{
-	int	len;
-
-	len = 0;
-	while (input[len] && get_type(input + len) == TK_WORD
-		&& !ft_isspace(input[len]))
-	{
-		if (str[len] == '\'')
-		{
-			len++;
-			while (str[len] != '\'')
-				len++;
-		}
-		if (str[len] == '\"')
-		{
-			len++;
-			while (str[len] != '\"')
-				len++;
-		}
-		len++;
-	}
-	return (len);
-}
-
-static int	tk_len(char *input, t_value_type type)
-{
-	if (type == TK_WORD)
-		return (word_len(input));
-	else if (type == TK_OR || type == TK_AND || type == TK_REDIR_HDOC
-		|| type == TK_REDIR_OUT_APP)
-		return (2);
-	else
-		return (1);
-}
-
 static t_value_type	get_type(char *input)
 {
 	if (*input == '|' && *(input + 1) == '|')
@@ -70,6 +34,42 @@ static t_value_type	get_type(char *input)
 		return (TK_CLOSE_PARENTHESIS);
 	else
 		return (TK_WORD);
+}
+
+static int	word_len(char *input)
+{
+	int	len;
+
+	len = 0;
+	while (input[len] && get_type(input + len) == TK_WORD
+		&& !ft_isspace(input[len]))
+	{
+		if (input[len] == '\'')
+		{
+			len++;
+			while (input[len] != '\'')
+				len++;
+		}
+		if (input[len] == '\"')
+		{
+			len++;
+			while (input[len] != '\"')
+				len++;
+		}
+		len++;
+	}
+	return (len);
+}
+
+static int	tk_len(char *input, t_value_type type)
+{
+	if (type == TK_WORD)
+		return (word_len(input));
+	else if (type == TK_OR || type == TK_AND || type == TK_REDIR_HDOC
+		|| type == TK_REDIR_OUT_APP)
+		return (2);
+	else
+		return (1);
 }
 
 t_token	*get_token_list(char *input)
