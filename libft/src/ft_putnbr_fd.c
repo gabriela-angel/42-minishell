@@ -3,26 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 11:53:33 by gangel-a          #+#    #+#             */
-/*   Updated: 2024/10/31 18:09:46 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/07 13:08:02 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putnbr_fd(int n, int fd)
+int	ft_putnbr_fd(long nbr, int fd)
 {
-	long	nbr;
+	int		counter;
 
-	nbr = n;
+	counter = 0;
 	if (nbr < 0)
 	{
-		ft_putchar_fd('-', fd);
+		counter += ft_putchar_fd('-', fd);
 		nbr = nbr * -1;
 	}
 	if (nbr > 9)
-		ft_putnbr_fd(nbr / 10, fd);
-	ft_putchar_fd((nbr % 10) + 48, fd);
+		counter += ft_putnbr_fd(nbr / 10, fd);
+	counter += ft_putchar_fd(nbr % 10 + '0', fd);
+	return (counter);
 }

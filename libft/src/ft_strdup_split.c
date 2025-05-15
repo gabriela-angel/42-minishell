@@ -1,26 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_strdup_split.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/14 11:45:43 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/07 13:20:27 by acesar-m         ###   ########.fr       */
+/*   Created: 2025/05/13 14:47:07 by acesar-m          #+#    #+#             */
+/*   Updated: 2025/05/14 18:47:41 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+# include "libft.h"
 
-int	ft_putstr_fd(char *s, int fd)
+char	**ft_strdup_split(char **envp)
 {
-	int	i;
+	int		i;
+	int		count;
+	char	**copy;
 
+	if (!envp)
+		return (NULL);
+	count = 0;
+	while (envp[count])
+		count++;
+	copy = (char **)malloc(sizeof(char *) * (count + 1));
+	if (!copy)
+		return (NULL);
 	i = 0;
-	while (s[i])
+	while (i < count)
 	{
-		ft_putchar_fd(s[i], fd);
+		copy[i] = ft_strdup(envp[i]);
+		if (!copy[i])
+			return (NULL);
 		i++;
 	}
-	return (i);
+	copy[i] = NULL;
+	return (copy);
 }

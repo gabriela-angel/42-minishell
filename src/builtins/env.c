@@ -1,26 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/14 11:45:43 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/07 13:20:27 by acesar-m         ###   ########.fr       */
+/*   Created: 2025/05/13 15:28:47 by acesar-m          #+#    #+#             */
+/*   Updated: 2025/05/14 18:25:50 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+# include "minishell.h"
 
-int	ft_putstr_fd(char *s, int fd)
+/**
+ * Imprime as variáveis de ambiente com '='.
+ */
+int	exec_env(char **args, char **env)
 {
 	int	i;
 
-	i = 0;
-	while (s[i])
+	if (args[1])
 	{
-		ft_putchar_fd(s[i], fd);
+		write(2, "env: too many arguments\n", 25);
+		return (1);
+	}
+	i = 0;
+	while (env[i])
+	{
+		if (ft_strchr(env[i], '='))
+		{
+			write(1, env[i], ft_strlen(env[i]));
+			write(1, "\n", 1);
+		}
 		i++;
 	}
-	return (i);
+	return (0);
 }
