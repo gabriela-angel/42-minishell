@@ -6,7 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:13:30 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/15 14:02:46 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:21:10 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,11 @@ void	setup_signals_child(void)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
+}
+
+void	handle_heredoc_sigint(int sig)
+{
+	(void)sig;
+	ft_printf_fd(1, "\n");
+	_exit(1);
 }

@@ -6,43 +6,39 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:46:39 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/14 18:30:14 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:27:01 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "minishell.h"
 
-t_bool	is_builtin(t_token *tokens)
+t_bool	is_builtin(const char *cmd)
 {
-	if (!ft_strcmp(tokens->value, "cd") || !ft_strcmp(tokens->value, "echo")
-		|| !ft_strcmp(tokens->value, "env") || !ft_strcmp(tokens->value, "exit")
-		|| !ft_strcmp(tokens->value, "export") || !ft_strcmp(tokens->value,
-			"pwd") || !ft_strcmp(tokens->value, "unset"))
+	if (!ft_strcmp(cmd, "cd") || !ft_strcmp(cmd, "echo")
+		|| !ft_strcmp(cmd, "env") || !ft_strcmp(cmd, "exit")
+		|| !ft_strcmp(cmd, "export") || !ft_strcmp(cmd, "pwd")
+		|| !ft_strcmp(cmd, "unset"))
 		return (TRUE);
 	return (FALSE);
 }
 
-int	exec_builtin(t_token *tokens, char ***env, int last_status)
+int	exec_builtin(char **args, char ***env, int last_status)
 {
-	char	**args;
-
-	args = convert_token_to_argv(tokens);
-	if (!args)
+	if (!args || !args[0])
 		return (1);
-	if (!ft_strcmp(tokens->value, "cd"))
+	if (!ft_strcmp(args[0], "cd"))
 		return (exec_cd(args));
-	if (!ft_strcmp(tokens->value, "echo"))
+	if (!ft_strcmp(args[0], "echo"))
 		return (exec_echo(args));
-	if (!ft_strcmp(tokens->value, "env"))
+	if (!ft_strcmp(args[0], "env"))
 		return (exec_env(args, *env));
-	if (!ft_strcmp(tokens->value, "exit"))
+	if (!ft_strcmp(args[0], "exit"))
 		return (exec_exit(args, last_status));
-	if (!ft_strcmp(tokens->value, "export"))
+	if (!ft_strcmp(args[0], "export"))
 		return (exec_export(args, env));
-	if (!ft_strcmp(tokens->value, "pwd"))
+	if (!ft_strcmp(args[0], "pwd"))
 		return (exec_pwd(args));
-	if (!ft_strcmp(tokens->value, "unset"))
+	if (!ft_strcmp(args[0], "unset"))
 		return (exec_unset(args, env));
-	ft_free_split(args);
 	return (handle_error("error executing builtin"));
 }
