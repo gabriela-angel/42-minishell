@@ -48,7 +48,7 @@ int	validate_input(char *input)
 	while (input[i])
 	{
 		if (input[i] == '\'' || input[i] == '\"')
-			check_qts(input, &i, &single_qts, &double_qts);
+			check_quotes(input, &i, &single_qts, &double_qts);
 		if (input[i] == '(')
 			parenthesis++;
 		else if (input[i] == ')')

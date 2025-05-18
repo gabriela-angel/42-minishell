@@ -22,7 +22,7 @@ void	tk_lst_add_back(t_token **head, t_token *new_node)
 		*head = new_node;
 	else
 	{
-		last_node = get_last_token(head);
+		last_node = get_last_token(*head);
 		last_node->next = new_node;
 		new_node->prev = last_node;
 	}
@@ -42,7 +42,7 @@ t_token	*ft_cutlist(t_token *start, t_token *end)
 	t_token	*sublist;
 	t_token	*current;
 
-	if (!token_list || !start)
+	if (!start)
 		return (NULL);
 	sublist = start;
 	if (sublist->prev)
@@ -87,6 +87,7 @@ t_token	*search_token_rev(t_token *tk_lst, t_value_type start_type, t_value_type
 		}
 		current = current->prev;
 	}
+	return (NULL);
 }
 
 t_token	*search_token(t_token *tk_lst, t_value_type start_type, t_value_type end_type)
@@ -113,4 +114,5 @@ t_token	*search_token(t_token *tk_lst, t_value_type start_type, t_value_type end
 		}
 		current = current->next;
 	}
+	return (NULL);
 }

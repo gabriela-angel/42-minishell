@@ -36,11 +36,11 @@ static t_bool	**init_match_table(char *str, int *str_len, char *pattern, int *pa
 
 	*str_len = ft_strlen(str);
 	*pat_len = ft_strlen(pattern);
-	match = (t_bool **)ft_calloc((*str_len + 1) * sizeof(t_bool *));
+	match = (t_bool **)ft_calloc((*str_len + 1), sizeof(t_bool *));
 	row_str = 0;
 	while (row_str <= *str_len)
 	{
-		match[row_str] = (t_bool *)ft_calloc((*pat_len + 1) * sizeof(t_bool));
+		match[row_str] = (t_bool *)ft_calloc((*pat_len + 1), sizeof(t_bool));
 		row_str++;
 	}
 	match[0][0] = TRUE;
@@ -80,7 +80,7 @@ static t_bool	is_match(char *str, char *pattern)
 	return (match_and_free(match, str_len, pat_len));
 }
 
-void	expand_wildcard(t_token **token, t_tree *tree)
+void	expand_wildcard(t_token **token, t_tree **tree)
 {
 	DIR	*dir;
 	struct dirent	*entry;

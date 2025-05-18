@@ -12,21 +12,21 @@ INCLUDES = -Iinclude
 LIB_PATHS = -L$(LIBFT_DIR) -lft -lreadline
 
 # PATHS
-SRCDIR = src/
-OBJDIR = obj/
+SRC_DIR = src/
+OBJ_DIR = obj/
 
 # FILES AND OBJECTS
-SRC := $(wildcard $(SRCDIR)*.c) \
-		$(wildcard $(SRCDIR)builtins/*.c) \
-		$(wildcard $(SRCDIR)exec/*.c) \
-		$(wildcard $(SRCDIR)expansion/*.c) \
-		$(wildcard $(SRCDIR)heredoc/*.c) \
-		$(wildcard $(SRCDIR)lexer/*.c) \
-		$(wildcard $(SRCDIR)parser/*.c) \
-		$(wildcard $(SRCDIR)signals/*.c)
-		$(wildcard $(SRCDIR)utils/*.c) \
+SRC := $(wildcard $(SRC_DIR)*.c) \
+		$(wildcard $(SRC_DIR)builtins/*.c) \
+		$(wildcard $(SRC_DIR)exec/*.c) \
+		$(wildcard $(SRC_DIR)expansion/*.c) \
+		$(wildcard $(SRC_DIR)heredoc/*.c) \
+		$(wildcard $(SRC_DIR)lexer/*.c) \
+		$(wildcard $(SRC_DIR)parser/*.c) \
+		$(wildcard $(SRC_DIR)signals/*.c) \
+		$(wildcard $(SRC_DIR)utils/*.c)
 
-OBJ = $(addprefix $(OBJ_DIR), $(notdir $(SRC:%.c=%.o)))
+OBJ := $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
 
 # ------------------------------ COLORS ------------------------------
 
@@ -54,6 +54,7 @@ $(OBJ_DIR):
 	@mkdir -p $@
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJ_DIR)
+	@mkdir -p $(dir $@)
 	@printf "$(BLUE)$@: $(RESET)\n"
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 	@printf "$(GREEN_BOLD)Object compiled.$(RESET)\n"
@@ -61,7 +62,7 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJ_DIR)
 $(NAME): $(OBJ) $(LIBFT)
 	@printf "$(GREEN_BOLD) => 100%%$(RESET)\n"
 	@printf "$(MAGENTA_BOLD)[minishell]:\t$(RESET)"
-	$(CC) $(CFLAGS) $(OBJ) $(LIB_PATHS) -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) $(OBJ) $(LIB_PATHS) -o $@
 	@printf "$(GREEN_BOLD) => Success!$(RESET)\n"
 
 norm:

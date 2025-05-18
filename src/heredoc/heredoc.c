@@ -15,7 +15,8 @@
 static int	write_to_heredoc(int fd, char *end_condition, int is_expandable)
 {
 	char	*line;
-	char *expanded; 
+	char	*expanded_line;
+
 	line = readline("> ");
 	if (!line)
 	{
@@ -27,7 +28,11 @@ static int	write_to_heredoc(int fd, char *end_condition, int is_expandable)
 	if (ft_strcmp(line, end_condition) == SUCCESS)
 		return (SUCCESS);
 	if (is_expandable)
-		line = expand_var(line);
+	{
+		expanded_line = expand_var(line);
+		ft_gc_free(line);
+		line = expanded_line;
+	}
 	write(fd, line, ft_strlen(line));
 	write(fd, "\n", 1);
 	return (FAILURE);
@@ -37,15 +42,19 @@ static int	init_heredoc(t_token *token, int *fd, char **file_name,
 		t_bool *is_expandable)
 {
 	int		*heredoc_counter;
+	char	*suffix;
 
-	*is_expandable = false;
+	*is_expandable = FALSE;
 	heredoc_counter = get_heredoc_counter();
-	*file_name = ft_strjoin("/tmp/.heredoc", ft_itoa((*heredoc_counter)++));
+	suffix = ft_itoa((*heredoc_counter)++);
+	*file_name = ft_strjoin("/tmp/.heredoc", suffix);
+	free(suffix);
+	ft_gc_add(*file_name);
 	*fd = open(*file_name, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (*fd < 0)
 		return (FAILURE);
 	if (!ft_strchr(token->value, '\"') && !ft_strchr(token->value, '\''))
-		*is_expandable = true;
+		*is_expandable = TRUE;
 	else
 		token->value = remove_quotes(token->value);
 	return (SUCCESS);
@@ -72,15 +81,18 @@ static int	heredoc_child(t_token *token, int *pipe_fd)
 	{
 		bytes_read = 1;
 		while (bytes_read > 0)
+		{
 			bytes_read = read(fd, buffer, 1024);
-			write(pipe_fd[1], buffer, bytes_read);
+			if (bytes_read > 0)
+				write(pipe_fd[1], buffer, bytes_read);
+		}
 		close(fd);
 	}
 	close(pipe_fd[1]);
 	_exit(SUCCESS);
 }
 
-static int	finish_heredoc_parent(int *pipe_fd, pid_t pid)
+static int	finish_heredoc_parent(int default_stdin, int *pipe_fd, pid_t pid)
 {
 	int	status;
 
@@ -116,7 +128,7 @@ int	handle_heredoc(t_token *token)
 		return (FAILURE);
 	if (pid == 0)
 		heredoc_child(token, pipe_fd);
-	if (finish_heredoc_parent(pipe_fd, pid))
+	if (finish_heredoc_parent(default_stdin, pipe_fd, pid))
 		return (FAILURE);
 	return (SUCCESS);
 }

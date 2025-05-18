@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 12:05:54 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/18 19:13:55 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/18 20:14:01 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,15 @@ void			*ft_memset(void *s, int c, size_t n);
 int				ft_num_abs(int nb);
 int				ft_printf_fd(const int fd, const char *str, ...);
 int				ft_putbase_fd(long nb, char *base, int fd);
-void			ft_putchar_fd(char c, int fd);
+int				ft_putchar_fd(char c, int fd);
 void			ft_putendl_fd(char *s, int fd);
-void			ft_putnbr_fd(int n, int fd);
+int				ft_putnbr_fd(int n, int fd);
 int				ft_putptr_fd(unsigned long nbr, int fd);
-void			ft_putstr_fd(char *s, int fd);
+int				ft_putstr_fd(char *s, int fd);
 void			*ft_recalloc(void *ptr, size_t new_size, size_t old_size);
 char			**ft_split(char const *s, char c);
 char			*ft_strchr(const char *s, int c);
-int				ft_strcmp(const char *s1, const char *s2)
+int				ft_strcmp(const char *s1, const char *s2);
 char			*ft_strdup(const char *s);
 void			ft_striteri(char *s, void (*f)(unsigned int, char*));
 char			*ft_strjoin(char *s1, char *s2);

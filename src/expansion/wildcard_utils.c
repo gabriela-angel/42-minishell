@@ -63,7 +63,7 @@ void	create_match_lst(t_token **head, char *data)
 		*head = new_node;
 	else
 	{
-		last_node = get_last_token(head);
+		last_node = get_last_token(*head);
 		last_node->next = new_node;
 		new_node->prev = last_node;
 	}

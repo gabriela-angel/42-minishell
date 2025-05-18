@@ -20,13 +20,16 @@ static char	*handle_special_cases(char *dollar, char **str, char **after_var,
 {
 	if (*(dollar + 1) == '?')
 	{
-		*expanded_var = ft_itoa(*get_exit_status());
+		// *expanded_var = ft_itoa(*get_exit_status()); WE HAVE TO MAKE THIS FUNC
+		*expanded_var = ft_strdup("NOT FIXED!");
+		ft_gc_add(*expanded_var);
 		*after_var = ++(*str);
 	}
 	else if (*(dollar + 1) == '\'' || *(dollar + 1) == '\"')
 	{
 		*after_var = *str;
 		*expanded_var = ft_strdup("");
+		ft_gc_add(*expanded_var);
 	}
 	else
 		return (NULL);
@@ -97,7 +100,7 @@ void	expand_tokens(t_tree *tree)
 		if (!(current->value))
 			handle_empty_value(&current, &tree);
 		if (ft_strchr_quote_aware(current->value, '*'))
-			expand_wildcards(&current, &tree);
+			expand_wildcard(&current, &tree);
 		if (ft_strchr_quote_aware(current->value, ' '))
 			retokenize(&current);
 		current->value = remove_quotes(current->value);

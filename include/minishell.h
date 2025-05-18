@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:30:39 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/18 19:02:21 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/18 20:00:02 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <limits.h>
+# include <dirent.h>
 # include <sys/wait.h>
 # include <fcntl.h>
 # include <readline/readline.h>
@@ -32,21 +33,6 @@ extern int	g_exit_status;
 
 // STRUCTS ----------------
 
-typedef struct s_token
-{
-	t_value_type		type;
-	char				*value;
-	struct s_token	*prev;
-	struct s_token	*next;
-}						t_token;
-
-typedef struct s_tree
-{
-	t_token		*token;
-	struct s_tree	*left;
-	struct s_tree	*right;
-}						t_tree;
-
 typedef enum e_value_type
 {
 	TK_AND = 1,
@@ -59,7 +45,22 @@ typedef enum e_value_type
 	TK_REDIR_IN,
 	TK_REDIR_OUT,
 	TK_WORD
-}						t_value_type;
+}	t_value_type;
+
+typedef struct s_token
+{
+	t_value_type		type;
+	char				*value;
+	struct s_token	*prev;
+	struct s_token	*next;
+}	t_token;
+
+typedef struct s_tree
+{
+	t_token		*token;
+	struct s_tree	*left;
+	struct s_tree	*right;
+}	t_tree;
 
 typedef enum e_bool
 {
@@ -70,7 +71,7 @@ typedef enum e_bool
 typedef struct s_malloc
 {
 	void			*ptr;
-	struct t_malloc	*next;
+	struct s_malloc	*next;
 }	t_malloc;
 
 // BUILTINS -------------
@@ -102,7 +103,7 @@ char	*ft_strchr_quote_aware(const char *s, int c);
 void	retokenize(t_token **token);
 
 // WILDCARD -------------
-void	expand_wildcard(t_token **token, t_tree *tree);
+void	expand_wildcard(t_token **token, t_tree **tree);
 void	alpha_sort_lst(t_token **head);
 void	update_tk_lst(t_token **token, t_token *match_lst);
 void	create_match_lst(t_token **head, char *data);

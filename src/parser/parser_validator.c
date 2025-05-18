@@ -16,17 +16,17 @@ static int	check_control_operator(t_token *current)
 {
 	if (current->prev == NULL || current->prev->type <= TK_PIPE
 		|| current->prev->type == TK_OPEN_PARENTHESIS || (current->prev->type <= TK_REDIR_OUT && current->prev->type >= TK_REDIR_OUT_APP))
-		return (ERROR);//create a function to set exit status to SYNTAX ERROR
+		return (FAILURE);//create a function to set exit status to SYNTAX ERROR
 	if (current->next == NULL || current->next->type <= TK_PIPE
 		|| current->next->type == TK_CLOSE_PARENTHESIS || (current->next->type <= TK_REDIR_OUT && current->next->type >= TK_REDIR_OUT_APP))
-		return (ERROR);//create a function to set exit status to SYNTAX ERROR
+		return (FAILURE);//create a function to set exit status to SYNTAX ERROR
 	return (SUCCESS);
 }
 
 static int	check_redirector(t_token *current)
 {
 	if (current->next == NULL || current->next->type != TK_WORD)
-		return (ERROR);//create a function to set exit status to SYNTAX ERROR
+		return (FAILURE);//create a function to set exit status to SYNTAX ERROR
 	return (SUCCESS);
 }
 
@@ -34,17 +34,17 @@ static int	check_parenthesis(t_token *current)
 {
 	if (current->type == TK_OPEN_PARENTHESIS)
 	{
-		if (current->prev != NULL && token->prev->type > TK_OPEN_PARENTHESIS)
-			return (ERROR);//create a function to set exit status to SYNTAX ERROR
+		if (current->prev != NULL && current->prev->type > TK_OPEN_PARENTHESIS)
+			return (FAILURE);//create a function to set exit status to SYNTAX ERROR
 		if (current->next == NULL || current->next->type <= TK_PIPE)
-			return (ERROR);//create a function to set exit status to SYNTAX ERROR
+			return (FAILURE);//create a function to set exit status to SYNTAX ERROR
 	}
 	else if (current->type == TK_CLOSE_PARENTHESIS)
 	{
 		if (current->prev == NULL || (current->prev->type != TK_WORD && current->prev->type != TK_CLOSE_PARENTHESIS))
-			return (ERROR);//create a function to set exit status to SYNTAX ERROR
+			return (FAILURE);//create a function to set exit status to SYNTAX ERROR
 		if (current->next != NULL && (current->next->type == TK_WORD))
-			return (ERROR);//create a function to set exit status to SYNTAX ERROR
+			return (FAILURE);//create a function to set exit status to SYNTAX ERROR
 	}
 	return (SUCCESS);
 }
