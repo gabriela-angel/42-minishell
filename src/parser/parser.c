@@ -97,7 +97,7 @@ t_tree	*get_tree(t_token *token_list)
 			return (NULL); //create a function to set exit status to SYNTAX ERROR
 		if (current->type == TK_REDIR_HEREDOC && current->next->type == TK_WORD)
 			if (handle_heredoc(current->next) != SUCCESS)
-				return (*get_exit_status()); //create a function to set exit status
+				return (NULL); //create a function to set exit status
 		current = current->next;
 	}
 	tree = build_tree(token_list);

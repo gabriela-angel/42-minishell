@@ -45,6 +45,7 @@ int	main(int argc, char **argv, char **envp)
 		ft_gc_free(input);
 		ft_gc_exit();
 	}
+	delete_heredoc();
 	ft_free_split(env);
 	rl_clear_history();
 	return (0);
