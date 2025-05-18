@@ -39,17 +39,17 @@ char	*remove_quotes(char *str)
 	return (new_str);
 }
 
-void	handle_empty_value(t_token **current, t_tree_node **cmd_node)
+void	handle_empty_value(t_token **current, t_tree **tree)
 {
 	if ((*current)->prev)
 		(*current)->prev->next = (*current)->next;
 	if ((*current)->next)
 		(*current)->next->prev = (*current)->prev;
-	if (*((*cmd_node)->tokens->value) == '\0')
+	if (*((*tree)->token->value) == '\0')
 	{
-		(*cmd_node)->tokens = (*cmd_node)->tokens->next;
-		if ((*cmd_node)->tokens)
-			(*cmd_node)->tokens->prev = NULL;
+		(*tree)->token = (*tree)->token->next;
+		if ((*tree)->token)
+			(*tree)->token->prev = NULL;
 	}
 }
 

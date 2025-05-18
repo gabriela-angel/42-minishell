@@ -15,7 +15,7 @@
 //get_exit_status
 
 // Handles special cases for variable expansion such as : $? (last exit status) and quotes
-char	*handle_special_cases(char *dollar, char **str, char **after_var,
+static char	*handle_special_cases(char *dollar, char **str, char **after_var,
 		char **expanded_var)
 {
 	if (*(dollar + 1) == '?')
@@ -33,7 +33,7 @@ char	*handle_special_cases(char *dollar, char **str, char **after_var,
 	return (*expanded_var);
 }
 
-char	*handle_dollar(char *init_value, char **str)
+static char	*handle_dollar(char *init_value, char **str)
 {
 	char	*dollar;
 	char	*before_var;

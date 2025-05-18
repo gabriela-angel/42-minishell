@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 12:05:54 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/14 23:49:41 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/18 19:13:55 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,11 @@ void			*ft_memmove(void *dest, const void *src, size_t n);
 void			*ft_memset(void *s, int c, size_t n);
 int				ft_num_abs(int nb);
 int				ft_printf_fd(const int fd, const char *str, ...);
+int				ft_putbase_fd(long nb, char *base, int fd);
 void			ft_putchar_fd(char c, int fd);
 void			ft_putendl_fd(char *s, int fd);
 void			ft_putnbr_fd(int n, int fd);
+int				ft_putptr_fd(unsigned long nbr, int fd);
 void			ft_putstr_fd(char *s, int fd);
 void			*ft_recalloc(void *ptr, size_t new_size, size_t old_size);
 char			**ft_split(char const *s, char c);
@@ -60,6 +62,7 @@ size_t			ft_strlcat(char *dst, const char *src, size_t size);
 size_t			ft_strlcpy(char *dst, const char *src, size_t size);
 size_t			ft_strlen(const char *s);
 int				ft_strncmp(const char *s1, const char *s2, size_t n);
+char			**ft_strdup_split(char **envp);
 char			*ft_strnstr(const char *big, const char *little, size_t len);
 char			*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char			*ft_strrchr(const char *s, int c);

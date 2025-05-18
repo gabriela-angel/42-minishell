@@ -1,23 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   ft_strdup_split.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 23:48:58 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/14 23:48:58 by gangel-a         ###   ########.fr       */
+/*   Created: 2025/05/18 19:13:12 by gangel-a          #+#    #+#             */
+/*   Updated: 2025/05/18 19:13:12 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+# include "libft.h"
 
-int	ft_strcmp(const char *s1, const char *s2)
+char	**ft_strdup_split(char **envp)
 {
-	size_t	i;
+	int		i;
+	int		count;
+	char	**copy;
 
+	if (!envp)
+		return (NULL);
+	count = 0;
+	while (envp[count])
+		count++;
+	copy = (char **)malloc(sizeof(char *) * (count + 1));
+	if (!copy)
+		return (NULL);
 	i = 0;
-	while (s1[i] && s2[i] && s1[i] == s2[i])
+	while (i < count)
+	{
+		copy[i] = ft_strdup(envp[i]);
+		if (!copy[i])
+			return (NULL);
 		i++;
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+	}
+	copy[i] = NULL;
+	return (copy);
 }

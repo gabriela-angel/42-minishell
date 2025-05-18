@@ -12,7 +12,7 @@
 
 # include "minishell.h"
 
-int	write_to_heredoc(int fd, char *end_condition, int is_expandable)
+static int	write_to_heredoc(int fd, char *end_condition, int is_expandable)
 {
 	char	*line;
 	char *expanded; 
@@ -33,7 +33,7 @@ int	write_to_heredoc(int fd, char *end_condition, int is_expandable)
 	return (FAILURE);
 }
 
-int	init_heredoc(t_token *token, int *fd, char **file_name,
+static int	init_heredoc(t_token *token, int *fd, char **file_name,
 		t_bool *is_expandable)
 {
 	int		*heredoc_counter;

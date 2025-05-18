@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-t_bool	match_and_free(t_bool **match, int str_len, int pat_len)
+static t_bool	match_and_free(t_bool **match, int str_len, int pat_len)
 {
 	t_bool	match_found;
 	int	i;
@@ -28,7 +28,7 @@ t_bool	match_and_free(t_bool **match, int str_len, int pat_len)
 	return (match_found);
 }
 
-t_bool	**init_match_table(char *str, int *str_len, char *pattern, int *pat_len)
+static t_bool	**init_match_table(char *str, int *str_len, char *pattern, int *pat_len)
 {
 	int	row_str;
 	int	col_pat;
@@ -54,7 +54,7 @@ t_bool	**init_match_table(char *str, int *str_len, char *pattern, int *pat_len)
 	return (match);
 }
 
-t_bool	is_match(char *str, char *pattern)
+static t_bool	is_match(char *str, char *pattern)
 {
 	int	row_str;
 	int	col_pat;

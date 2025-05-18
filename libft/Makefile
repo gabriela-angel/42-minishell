@@ -6,7 +6,7 @@
 #    By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/07 12:04:18 by gangel-a          #+#    #+#              #
-#    Updated: 2025/05/14 23:50:02 by gangel-a         ###   ########.fr        #
+#    Updated: 2025/05/18 19:13:59 by gangel-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,8 @@ SRC = ft_atoi.c \
 		ft_putendl_fd.c \
 		ft_putnbr_fd.c \
 		ft_putstr_fd.c \
+		ft_putptr_fd.c \
+		ft_putbase_fd.c \
 		ft_recalloc.c \
 		ft_split.c \
 		ft_striteri.c \
@@ -49,6 +51,7 @@ SRC = ft_atoi.c \
 		ft_strchr.c \
 		ft_strcmp.c \
 		ft_strdup.c \
+		ft_strdup_split.c \
 		ft_strjoin.c \
 		ft_strjoin_free.c \
 		ft_strrchr.c \
