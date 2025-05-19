@@ -6,7 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:49:54 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/19 11:57:32 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/19 16:01:51 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,4 +124,13 @@ int handle_error(const char *msg)
 {
 	ft_printf_fd(2, "minishell: %s\n", msg);
 	return (1);
+}
+
+int	exit_status(int set)
+{
+	static int	status = 0;
+
+	if (set != -1)
+		status = set;
+	return status;
 }

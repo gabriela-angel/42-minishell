@@ -6,23 +6,12 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 11:53:33 by gangel-a          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/05/07 13:08:02 by acesar-m         ###   ########.fr       */
-=======
-/*   Updated: 2025/05/18 20:15:02 by gangel-a         ###   ########.fr       */
->>>>>>> origin/gabi
+/*   Updated: 2025/05/19 13:40:38 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-<<<<<<< HEAD
-int	ft_putnbr_fd(long nbr, int fd)
-{
-	int		counter;
-
-	counter = 0;
-=======
 int	ft_putnbr_fd(int n, int fd)
 {
 	long	nbr;
@@ -30,7 +19,6 @@ int	ft_putnbr_fd(int n, int fd)
 
 	counter = 0;
 	nbr = n;
->>>>>>> origin/gabi
 	if (nbr < 0)
 	{
 		counter += ft_putchar_fd('-', fd);

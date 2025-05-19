@@ -6,36 +6,47 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:33:24 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/19 11:50:11 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/19 16:49:26 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "minishell.h"
 
-extern int	g_exit_status;
-
 void	exec_simple_command(t_token *token, char ***env)
 {
 	char	**argv;
+	int		saved_stdin;
 
-	if (handle_heredocs(token))
+	saved_stdin = dup(STDIN_FILENO);
+	if (handle_heredoc(token))
 	{
-		g_exit_status = 130;
+		exit_status(130);
+		dup2(saved_stdin, STDIN_FILENO);
+		close(saved_stdin);
 		return ;
 	}
 	if (apply_redirections(token))
+	{
+		dup2(saved_stdin, STDIN_FILENO);
+		close(saved_stdin);
 		return ;
+	}
 	argv = convert_token_to_argv(token);
 	if (!argv || !argv[0])
 	{
 		ft_free_split(argv);
+		dup2(saved_stdin, STDIN_FILENO);
+		close(saved_stdin);
 		return ;
 	}
 	if (is_builtin(argv[0]))
-		g_exit_status = exec_builtin(argv, env, g_exit_status);
+		exit_status(exec_builtin(argv, env, exit_status(-1)));
 	else
-		g_exit_status = exec_external(argv, *env);
+		exit_status(exec_external(argv, *env));
+
 	ft_free_split(argv);
+	dup2(saved_stdin, STDIN_FILENO);
+	close(saved_stdin);
 }
 
 void	exec_child_left(t_tree *left, char ***env, int *fd)

@@ -67,16 +67,18 @@ static int	heredoc_child(t_token *token, int *pipe_fd)
 	char	buffer[1024];
 	ssize_t	bytes_read;
 	t_bool	is_expandable;
+	char	*end_condition;
 
+	end_condition = token->next->value;
 	signal(SIGINT, handle_heredoc_sigint);
 	close(pipe_fd[0]);
 	if (init_heredoc(token, &fd, &file_name, &is_expandable) != SUCCESS)
 		_exit(FAILURE);
 	while (42)
-		if (write_to_heredoc(fd, token->value, is_expandable) == SUCCESS)
+		if (write_to_heredoc(fd, end_condition, is_expandable) == SUCCESS)
 			break ;
 	close(fd);
-	fd = open(file_name, O_RDONLY);	// Reopen the file and write it to the pipe for the parent to read
+	fd = open(file_name, O_RDONLY);
 	if (fd >= 0)
 	{
 		bytes_read = 1;
@@ -102,6 +104,8 @@ static int	finish_heredoc_parent(int default_stdin, int *pipe_fd, pid_t pid)
 	{
 		close(pipe_fd[0]);
 		dup2(default_stdin, STDIN_FILENO);
+		exit_status(130);
+		ft_printf_fd(1, "\n");
 		return (FAILURE);
 	}
 	if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
@@ -123,12 +127,17 @@ int	handle_heredoc(t_token *token)
 	default_stdin = dup(STDIN_FILENO);
 	if (pipe(pipe_fd) < 0)
 		return (FAILURE);
-	pid = fork();
-	if (pid < 0)
+	signal(SIGINT, SIG_IGN);
+	if ((pid = fork()) < 0)
 		return (FAILURE);
 	if (pid == 0)
+	{
+		signal(SIGINT, handle_heredoc_sigint);
 		heredoc_child(token, pipe_fd);
+	}
+	signal(SIGINT, SIG_IGN);
 	if (finish_heredoc_parent(default_stdin, pipe_fd, pid))
 		return (FAILURE);
+	signal(SIGINT, SIG_DFL);
 	return (SUCCESS);
 }
