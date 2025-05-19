@@ -6,7 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 23:59:42 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/19 16:45:26 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/19 18:41:21 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,10 @@ int	main(int argc, char **argv, char **envp)
 		{
 			tree = get_tree(tokens);
 			if (tree)
+			{
+				expand_tokens(tree);
 				minishell_exec(tree, &env);
+			}
 		}
 		ft_gc_free(input);
 		ft_gc_exit();

@@ -6,11 +6,22 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:33:24 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/19 16:49:26 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/19 18:32:32 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "minishell.h"
+
+static t_bool	has_heredoc(t_token *tok)
+{
+	while (tok)
+	{
+		if (tok->type == TK_REDIR_HDOC)
+			return (TRUE);
+		tok = tok->next;
+	}
+	return (FALSE);
+}
 
 void	exec_simple_command(t_token *token, char ***env)
 {
@@ -18,7 +29,7 @@ void	exec_simple_command(t_token *token, char ***env)
 	int		saved_stdin;
 
 	saved_stdin = dup(STDIN_FILENO);
-	if (handle_heredoc(token))
+	if (has_heredoc(token) && handle_heredoc(token))
 	{
 		exit_status(130);
 		dup2(saved_stdin, STDIN_FILENO);
