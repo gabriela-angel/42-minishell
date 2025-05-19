@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:27:27 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/15 17:26:22 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/18 22:38:33 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	apply_redirections(t_token *token)
 		{
 			if (token->type == TK_REDIR_HDOC)
 			{
-				if (handle_heredocs(token))
+				if (handle_heredoc(token->next))
 					return (1);
 			}
 			else

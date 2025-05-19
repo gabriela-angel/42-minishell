@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/13 13:42:47 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/15 16:14:24 by acesar-m         ###   ########.fr       */
+/*   Created: 2025/05/14 23:59:42 by gangel-a          #+#    #+#             */
+/*   Updated: 2025/05/14 23:59:42 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,16 @@ int	main(int argc, char **argv, char **envp)
 		if (input[0])
 			add_history(input);
 		tokens = get_token_list(input);
-		if (!tokens)
-			continue ;
-		tree = get_tree(tokens);
-		if (tree)
-			minishell_exec(tree, &env);
+		if (tokens)
+		{
+			tree = get_tree(tokens);
+			if (tree)
+				minishell_exec(tree, &env);
+		}
 		ft_gc_free(input);
 		ft_gc_exit();
 	}
+	delete_heredoc();
 	ft_free_split(env);
 	rl_clear_history();
 	return (0);

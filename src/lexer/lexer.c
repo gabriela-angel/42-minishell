@@ -12,7 +12,29 @@
 
 #include "minishell.h"
 
-static t_value_type get_type(char *input);
+static t_value_type	get_type(char *input)
+{
+	if (*input == '|' && *(input + 1) == '|')
+		return (TK_OR);
+	else if (*input == '|')
+		return (TK_PIPE);
+	else if (*input == '&' && *(input + 1) == '&')
+		return (TK_AND);
+	else if (*input == '<' && *(input + 1) == '<')
+		return (TK_REDIR_HDOC);
+	else if (*input == '<')
+		return (TK_REDIR_IN);
+	else if (*input == '>' && *(input + 1) == '>')
+		return (TK_REDIR_OUT_APP);
+	else if (*input == '>')
+		return (TK_REDIR_OUT);
+	else if (*input == '(')
+		return (TK_OPEN_PARENTHESIS);
+	else if (*input == ')')
+		return (TK_CLOSE_PARENTHESIS);
+	else
+		return (TK_WORD);
+}
 
 static int	word_len(char *input)
 {
@@ -20,7 +42,7 @@ static int	word_len(char *input)
 
 	len = 0;
 	while (input[len] && get_type(input + len) == TK_WORD
-	&& !ft_isspace(input[len]))
+		&& !ft_isspace(input[len]))
 	{
 		if (input[len] == '\'')
 		{
@@ -50,42 +72,14 @@ static int	tk_len(char *input, t_value_type type)
 		return (1);
 }
 
-static t_value_type	get_type(char *input)
-{
-	if (*input == '|' && *(input + 1) == '|')
-		return (TK_OR);
-	else if (*input == '|')
-		return (TK_PIPE);
-	else if (*input == '&' && *(input + 1) == '&')
-		return (TK_AND);
-	else if (*input == '<' && *(input + 1) == '<')
-		return (TK_REDIR_HDOC);
-	else if (*input == '<')
-		return (TK_REDIR_IN);
-	else if (*input == '>' && *(input + 1) == '>')
-		return (TK_REDIR_OUT_APP);
-	else if (*input == '>')
-		return (TK_REDIR_OUT);
-	else if (*input == '(')
-		return (TK_OPEN_PARENTHESIS);
-	else if (*input == ')')
-		return (TK_CLOSE_PARENTHESIS);
-	else
-		return (TK_WORD);
-}
-
-
 t_token	*get_token_list(char *input)
 {
-	t_token	*head;
-	t_token	*current;
-	int		len;
+	t_token		*head;
+	t_token		*current;
+	int			len;
 
 	if (!input || validate_input(input))
-	{
-		ft_printf_fd(2, "Invalid input: %s\n", input); // Depuração
-		return (NULL);
-	}
+		return (NULL); //create a function to set exit status to SYNTAX ERROR
 	head = NULL;
 	while (*input)
 	{

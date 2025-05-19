@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+         #
+#    By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/07 12:04:18 by gangel-a          #+#    #+#              #
-#    Updated: 2025/05/13 14:48:11 by acesar-m         ###   ########.fr        #
+#    Updated: 2025/05/18 19:13:59 by gangel-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,8 @@ SRC = ft_atoi.c \
 		ft_memchr.c \
 		ft_memcmp.c \
 		ft_num_abs.c \
+		ft_printf_fd.c \
+		ft_printf.c \
 		ft_printunbr.c \
 		ft_printf_utils.c \
 		ft_putchar_fd.c \
@@ -41,19 +43,19 @@ SRC = ft_atoi.c \
 		ft_putstr_fd.c \
 		ft_putptr_fd.c \
 		ft_putbase_fd.c \
-		ft_printf.c \
-		ft_printf_fd.c \
+		ft_recalloc.c \
 		ft_split.c \
 		ft_striteri.c \
 		ft_strlcpy.c \
 		ft_strlcat.c \
 		ft_strchr.c \
+		ft_strcmp.c \
 		ft_strdup.c \
 		ft_strdup_split.c \
 		ft_strjoin.c \
+		ft_strjoin_free.c \
 		ft_strrchr.c \
 		ft_strncmp.c \
-		ft_strcmp.c \
 		ft_strnstr.c \
 		ft_strmapi.c \
 		ft_strlen.c \
@@ -61,7 +63,6 @@ SRC = ft_atoi.c \
 		ft_substr.c \
 		ft_toupper.c \
 		ft_tolower.c
-
 BONUS_SRC = ft_lstnew_bonus.c \
 			ft_lstadd_front_bonus.c \
 			ft_lstsize_bonus.c \
@@ -71,7 +72,6 @@ BONUS_SRC = ft_lstnew_bonus.c \
 			ft_lstclear_bonus.c \
 			ft_lstiter_bonus.c \
 			ft_lstmap_bonus.c
-
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:%.c=%.o))
 BONUS_OBJ = $(addprefix $(OBJ_DIR), $(BONUS_SRC:%.c=%.o))
 

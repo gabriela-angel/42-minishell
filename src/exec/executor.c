@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:33:24 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/15 16:27:56 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/18 22:42:46 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,6 @@ void	exec_simple_command(t_token *token, char ***env)
 {
 	char	**argv;
 
-	if (handle_heredocs(token))
-	{
-		g_exit_status = 130;
-		return ;
-	}
 	if (apply_redirections(token))
 		return ;
 	argv = convert_token_to_argv(token);
