@@ -42,7 +42,7 @@ static char	*handle_dollar(char *init_value, char **str)
 	char	*before_var;
 	char	*after_var;
 	char	*expanded_var;
-	char	*result;
+	char	*tmp;
 
 	dollar = (*str)++;
 	if (!handle_special_cases(dollar, str, &after_var, &expanded_var))
@@ -50,16 +50,17 @@ static char	*handle_dollar(char *init_value, char **str)
 		while (**str && (ft_isalnum(**str) || **str == '_'))
 			(*str)++;
 		after_var = *str;
-		expanded_var = getenv(ft_substr(dollar, 1, after_var - dollar - 1));
+		tmp = ft_substr(dollar, 1, after_var - dollar - 1);
+		expanded_var = getenv(tmp);
+		free(tmp);
 	}
 	before_var = ft_substr(init_value, 0, dollar - init_value);
-	result = ft_strjoin(before_var, expanded_var);
-	result = ft_strjoin_free(result, after_var);
-	*str = result + ft_strlen(before_var) + ft_strlen(expanded_var) - 1;
+	tmp = ft_strjoin(before_var, expanded_var);
+	tmp = ft_strjoin_free(tmp, after_var);
+	*str = tmp + ft_strlen(before_var) + ft_strlen(expanded_var) - 1;
 	free(before_var);
-	free(expanded_var);
-	ft_gc_add(result);
-	return (result);
+	ft_gc_add(tmp);
+	return (tmp);
 }
 
 char	*expand_var(char *str)
@@ -67,7 +68,7 @@ char	*expand_var(char *str)
 	char	*expanded_str;
 
 	expanded_str = str;
-	while (str)
+	while (*str)
 	{
 		if (*str == '\'' )
 			while (*(++str) && *str != '\'')
@@ -97,6 +98,7 @@ void	expand_tokens(t_tree *tree)
 	while (current)
 	{
 		current->value = expand_var(current->value);
+
 		if (!(current->value))
 			handle_empty_value(&current, &tree);
 		if (ft_strchr_quote_aware(current->value, '*'))
