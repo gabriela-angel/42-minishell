@@ -67,7 +67,7 @@ char	*expand_var(char *str)
 	char	*expanded_str;
 
 	expanded_str = str;
-	while (str)
+	while (*str)
 	{
 		if (*str == '\'' )
 			while (*(++str) && *str != '\'')
@@ -83,7 +83,7 @@ char	*expand_var(char *str)
 		}
 		else if (*str == '$' && str[1] && (ft_isalnum(str[1])
 					|| ft_strchr("_?\'\"", str[1])))
-			expanded_str = handle_dollar(expanded_str, &str);
+			expanded_str = handle_dollar(expanded_str, &str); //something is going wrong inside here
 		str++;
 	}
 	return (expanded_str);
@@ -94,6 +94,7 @@ void	expand_tokens(t_tree *tree)
 	t_token	*current;
 
 	current = tree->token;
+	printf("expand_tokens: %s\n", current->value);
 	while (current)
 	{
 		current->value = expand_var(current->value);
