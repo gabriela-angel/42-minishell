@@ -3,25 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:49:54 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/14 18:33:09 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/19 11:57:32 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "minishell.h"
-=======
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/13 14:49:54 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/18 18:49:22 by gangel-a         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "minishell.h"
->>>>>>> origin/gabi
 
 void	ft_free_split(char **split)
 {
@@ -131,11 +120,7 @@ int	ft_setenv(char *arg, char ***env)
 	return (!new[size]);
 }
 
-<<<<<<< HEAD
 int handle_error(const char *msg)
-=======
-int	handle_error(const char *msg)
->>>>>>> origin/gabi
 {
 	ft_printf_fd(2, "minishell: %s\n", msg);
 	return (1);

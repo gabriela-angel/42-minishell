@@ -6,11 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 12:05:54 by gangel-a          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/05/13 14:47:41 by acesar-m         ###   ########.fr       */
-=======
-/*   Updated: 2025/05/18 20:14:01 by gangel-a         ###   ########.fr       */
->>>>>>> origin/gabi
+/*   Updated: 2025/05/19 11:53:52 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +43,6 @@ void			*ft_memcpy(void *dest, const void *src, size_t n);
 void			*ft_memmove(void *dest, const void *src, size_t n);
 void			*ft_memset(void *s, int c, size_t n);
 int				ft_num_abs(int nb);
-<<<<<<< HEAD
-int				ft_putbase_fd(long nb, char *base, int fd);
-int				ft_putchar_fd(char c, int fd);
-void			ft_putendl_fd(char *s, int fd);
-int				ft_putnbr_fd(long nbr, int fd);
-int				ft_putstr_fd(char *s, int fd);
-int				ft_putptr_fd(unsigned long nbr, int fd);
-int				ft_printf_fd(const int fd, const char *str, ...);
-=======
 int				ft_printf_fd(const int fd, const char *str, ...);
 int				ft_putbase_fd(long nb, char *base, int fd);
 int				ft_putchar_fd(char c, int fd);
@@ -64,19 +51,16 @@ int				ft_putnbr_fd(int n, int fd);
 int				ft_putptr_fd(unsigned long nbr, int fd);
 int				ft_putstr_fd(char *s, int fd);
 void			*ft_recalloc(void *ptr, size_t new_size, size_t old_size);
->>>>>>> origin/gabi
 char			**ft_split(char const *s, char c);
 char			*ft_strchr(const char *s, int c);
 int				ft_strcmp(const char *s1, const char *s2);
 char			*ft_strdup(const char *s);
-char			**ft_strdup_split(char **envp);
 void			ft_striteri(char *s, void (*f)(unsigned int, char*));
 char			*ft_strjoin(char *s1, char *s2);
 char			*ft_strjoin_free(char *s1, char *s2);
 size_t			ft_strlcat(char *dst, const char *src, size_t size);
 size_t			ft_strlcpy(char *dst, const char *src, size_t size);
 size_t			ft_strlen(const char *s);
-int				ft_strcmp(const char *s1, const char *s2);
 int				ft_strncmp(const char *s1, const char *s2, size_t n);
 char			**ft_strdup_split(char **envp);
 char			*ft_strnstr(const char *big, const char *little, size_t len);

@@ -6,11 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:30:39 by gangel-a          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/05/15 16:26:29 by acesar-m         ###   ########.fr       */
-=======
-/*   Updated: 2025/05/18 20:00:02 by gangel-a         ###   ########.fr       */
->>>>>>> origin/gabi
+/*   Updated: 2025/05/19 11:55:57 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +18,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <limits.h>
-<<<<<<< HEAD
-=======
 # include <dirent.h>
->>>>>>> origin/gabi
 # include <sys/wait.h>
 # include <fcntl.h>
 # include <readline/readline.h>
@@ -33,20 +26,13 @@
 
 // MACROS ---------------
 # define SUCCESS 0
-<<<<<<< HEAD
-# define ERROR 1
-=======
 # define FAILURE 1
->>>>>>> origin/gabi
 
 // ERROR MACROS -----------
 extern int	g_exit_status;
 
 // STRUCTS ----------------
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/gabi
 typedef enum e_value_type
 {
 	TK_AND = 1,
@@ -59,11 +45,7 @@ typedef enum e_value_type
 	TK_REDIR_IN,
 	TK_REDIR_OUT,
 	TK_WORD
-<<<<<<< HEAD
-}						t_value_type;
-=======
 }	t_value_type;
->>>>>>> origin/gabi
 
 typedef struct s_token
 {
@@ -71,23 +53,14 @@ typedef struct s_token
 	char				*value;
 	struct s_token	*prev;
 	struct s_token	*next;
-<<<<<<< HEAD
-}						t_token;
-=======
 }	t_token;
->>>>>>> origin/gabi
 
 typedef struct s_tree
 {
 	t_token		*token;
 	struct s_tree	*left;
 	struct s_tree	*right;
-<<<<<<< HEAD
-}						t_tree;
-
-=======
 }	t_tree;
->>>>>>> origin/gabi
 
 typedef enum e_bool
 {
@@ -172,50 +145,5 @@ t_token	*get_last_token(t_token *lst);
 t_token	*ft_cutlist(t_token *start, t_token *end);
 t_token	*search_token_rev(t_token *tk_lst, t_value_type start_type, t_value_type end_type);
 t_token	*search_token(t_token *tk_lst, t_value_type start_type, t_value_type end_type);
-
-// UTILS
-int		ft_setenv(char *arg, char ***env);
-void	ft_sort_strs(char **arr);
-void	ft_free_split(char **split);
-void	tk_lst_add_back(t_token **head, t_token *new_node);
-t_token	*get_last_token(t_token *lst);
-t_token	*ft_cutlist(t_token *start, t_token *end);
-t_token	*search_token_rev(t_token *token_list, t_value_type start_type, t_value_type end_type);
-t_token	*search_token(t_token *token_list, t_value_type start_type, t_value_type end_type);
-int		handle_error(const char *msg);
-
-// EXECUTOR
-int		minishell_exec(t_tree *ast, char ***env);
-void	execute_tree(t_tree *node, char ***env);
-void	exec_simple_command(t_token *token, char ***env);
-int		exec_external(char **argv, char **envp);
-int		apply_redirections(t_token *token);
-int		handle_heredocs(t_token *token);
-char	**convert_token_to_argv(t_token *token);
-
-// BUILTINS
-t_bool	is_builtin(const char *cmd);
-int		exec_builtin(char **args, char ***env, int last_status);
-int		exec_echo(char **args);
-int		exec_cd(char **args);
-int		exec_pwd(char **args);
-int		exec_env(char **args, char **env);
-int		exec_export(char **args, char ***env);
-int		exec_unset(char **args, char ***env);
-int		exec_exit(char **args, int last_status);
-
-// LEXER
-t_token	*get_token_list(char *input);
-int		validate_input(char *input);
-
-// PARSER
-int		validate_tokens(t_token *current);
-t_tree	*get_tree(t_token *token_list);
-
-// SIGNALS
-void	handle_sigint(int signum);
-void	setup_signals_prompt(void);
-void	setup_signals_child(void);
-void	handle_heredoc_sigint(int sig);
 
 #endif
