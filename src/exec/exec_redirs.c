@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:27:27 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/18 20:45:16 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/18 22:38:33 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	apply_redirections(t_token *token)
 		{
 			if (token->type == TK_REDIR_HDOC)
 			{
-				if (handle_heredoc(token))
+				if (handle_heredoc(token->next))
 					return (1);
 			}
 			else
@@ -45,7 +45,7 @@ int	apply_redirections(t_token *token)
 				int fd = open_redir(token);
 				if (fd < 0)
 					return (1);
-				if (dup2(fd, (token->type == TK_REDIR_IN) ? STDIN_FILENO : STDOUT_FILENO) < 0) //we can't do this I think. Ternario
+				if (dup2(fd, (token->type == TK_REDIR_IN) ? STDIN_FILENO : STDOUT_FILENO) < 0)
 				{
 					perror("dup2");
 					close(fd);

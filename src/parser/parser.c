@@ -14,7 +14,7 @@
 
 static t_tree	*build_tree(t_token *token_list);
 
-static void	split_redir(t_tree *tree, t_token *list, t_token *tk_to_cut)
+static void	split_redir(t_tree *tree, t_token *list,	t_token *tk_to_cut)
 {
 	if (!tree || !list || !tk_to_cut)
 		return ;
