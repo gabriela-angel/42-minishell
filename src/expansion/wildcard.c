@@ -66,9 +66,10 @@ static t_bool	is_match(char *str, char *pattern)
 	row_str = 1;
 	while (row_str <= str_len)
 	{
+		col_pat = 1;
 		while (col_pat <= pat_len)
 		{
-			col_pat = 1;
+
 			if (pattern[col_pat - 1] == '*')
 				match[row_str][col_pat] = match[row_str][col_pat - 1] || match[row_str - 1][col_pat];
 			else if (str[row_str - 1] == pattern[col_pat - 1])
