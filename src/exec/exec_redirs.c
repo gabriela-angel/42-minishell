@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:27:27 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/18 22:38:33 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/19 21:36:10 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,7 @@ int	apply_redirections(t_token *token)
 	{
 		if (token->type >= TK_REDIR_OUT && token->type <= TK_REDIR_HDOC)
 		{
-			if (token->type == TK_REDIR_HDOC)
-			{
-				if (handle_heredoc(token->next))
-					return (1);
-			}
-			else
+			if (token->type != TK_REDIR_HDOC)
 			{
 				int fd = open_redir(token);
 				if (fd < 0)

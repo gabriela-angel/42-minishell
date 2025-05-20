@@ -3,16 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 18:44:05 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/04/25 18:44:05 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/19 21:35:33 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_tree	*build_tree(t_token *token_list);
+static void split_list(t_tree *tree, t_token *list, t_token *tk_to_cut);
+static void split_redir(t_tree *tree, t_token *list, t_token *tk_to_cut);
+
+static void	branch_tree(t_tree *tree, t_token *token_list)
+{
+	t_token	*is_and_or;
+	t_token	*is_pipe;
+	t_token	*is_redir;
+
+	is_and_or = search_token_rev(token_list, TK_AND, TK_OR);
+	if (is_and_or)
+		return (split_list(tree, token_list, is_and_or));
+	is_pipe = search_token_rev(token_list, TK_PIPE, TK_PIPE);
+	if (is_pipe)
+		return (split_list(tree, token_list, is_pipe));
+	is_redir = search_token(token_list, TK_REDIR_OUT_APP, TK_REDIR_OUT);
+	if (is_redir)
+		return (split_redir(tree, token_list, is_redir));
+	else
+		tree->token = token_list;
+}
+
+static t_tree	*build_tree(t_token *token_list)
+{
+	t_tree	*tree;
+
+	tree = ft_malloc(sizeof(t_tree));
+	if (!tree)
+		return (NULL); // Handle error fail to build syntax tree
+	branch_tree(tree, token_list);
+	return (tree);
+}
 
 static void	split_redir(t_tree *tree, t_token *list,	t_token *tk_to_cut)
 {
@@ -53,35 +84,6 @@ static void	split_list(t_tree *tree, t_token *list, t_token *tk_to_cut)
 	tree->right = build_tree(sublist);
 }
 
-static void	branch_tree(t_tree *tree, t_token *token_list)
-{
-	t_token	*is_and_or;
-	t_token	*is_pipe;
-	t_token	*is_redir;
-
-	is_and_or = search_token_rev(token_list, TK_AND, TK_OR);
-	if (is_and_or)
-		return (split_list(tree, token_list, is_and_or));
-	is_pipe = search_token_rev(token_list, TK_PIPE, TK_PIPE);
-	if (is_pipe)
-		return (split_list(tree, token_list, is_pipe));
-	is_redir = search_token(token_list, TK_REDIR_OUT_APP, TK_REDIR_OUT);
-	if (is_redir)
-		return (split_redir(tree, token_list, is_redir));
-	else
-		tree->token = token_list;
-}
-
-static t_tree	*build_tree(t_token *token_list)
-{
-	t_tree	*tree;
-
-	tree = ft_malloc(sizeof(t_tree));
-	if (!tree)
-		return (NULL); // Handle error fail to build syntax tree
-	branch_tree(tree, token_list);
-	return (tree);
-}
 
 t_tree	*get_tree(t_token *token_list)
 {
@@ -94,12 +96,14 @@ t_tree	*get_tree(t_token *token_list)
 	while (current)
 	{
 		if (validate_tokens(current) != SUCCESS)
-			return (NULL); //create a function to set exit status to SYNTAX ERROR
-		if (current->type == TK_REDIR_HDOC && current->next->type == TK_WORD)
-			if (handle_heredoc(current->next) != SUCCESS)
-				return (NULL); //create a function to set exit status
+		{
+			ft_printf_fd(2, "Syntax error in tokens\n"); // Depuração
+			return (NULL);
+		}
 		current = current->next;
 	}
 	tree = build_tree(token_list);
+	if (!tree)
+		ft_printf_fd(2, "Failed to build syntax tree\n"); // Depuração
 	return (tree);
 }

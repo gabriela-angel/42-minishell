@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:49:54 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/18 18:49:22 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/19 21:37:59 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+# include "minishell.h"
 
 void	ft_free_split(char **split)
 {
@@ -120,8 +120,17 @@ int	ft_setenv(char *arg, char ***env)
 	return (!new[size]);
 }
 
-int	handle_error(const char *msg)
+int handle_error(const char *msg)
 {
 	ft_printf_fd(2, "minishell: %s\n", msg);
 	return (1);
+}
+
+int	exit_status(int set)
+{
+	static int	status = 0;
+
+	if (set != -1)
+		status = set;
+	return status;
 }

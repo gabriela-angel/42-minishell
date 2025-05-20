@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:30:39 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/18 20:00:02 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/19 21:36:34 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,6 @@
 // MACROS ---------------
 # define SUCCESS 0
 # define FAILURE 1
-
-// ERROR MACROS -----------
-extern int	g_exit_status;
 
 // STRUCTS ----------------
 
@@ -138,6 +135,7 @@ void	ft_free_split(char **split);
 void	ft_sort_strs(char **arr);
 int		ft_setenv(char *arg, char ***env);
 int		handle_error(const char *msg);
+int		exit_status(int set);
 
 // TOKEN UTILS -------------
 void	tk_lst_add_back(t_token **head, t_token *new_node);

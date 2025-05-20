@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_minishell.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 11:20:26 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/18 22:48:56 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/19 21:36:16 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	minishell_exec(t_tree *tree, char ***env)
 {
 	if (!tree)
 		return (1);
-	expand_tokens(tree);
 	execute_tree(tree, env);
 	return (0);
 }
