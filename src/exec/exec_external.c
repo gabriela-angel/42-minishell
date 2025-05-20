@@ -6,7 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:41 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/15 13:48:59 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/19 21:05:52 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,16 +63,21 @@ int	exec_external(char **argv, char **envp)
 		ft_printf_fd(2, "minishell: %s: command not found\n", argv[0]);
 		return (127);
 	}
+	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == 0)
 	{
+		setup_signals_child();
 		execve(cmd_path, argv, envp);
 		perror("minishell");
 		ft_gc_exit();
 	}
 	waitpid(pid, &status, 0);
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+		ft_printf_fd(1, "\n");
+	signal(SIGINT, handle_sigint);
 	ft_gc_free(cmd_path);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
-	return (1);
+	return (FAILURE);
 }
