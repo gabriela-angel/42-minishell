@@ -36,6 +36,9 @@ SRC := $(addprefix $(SRC_DIR), main.c) \
 
 OBJ := $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
 
+# VALGRIND
+VALGRIND = valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all --suppressions=readline.supp
+
 # ------------------------------ COLORS ------------------------------
 
 BLUE		=	\033[0;34m
@@ -80,6 +83,9 @@ norm:
 	@norminette src | sed 's/OK/\x1b[1;32m&\x1b[0m/g' | sed 's/Error/\x1b[1;31m&\x1b[0m/g'
 	@echo "\n$(MAGENTA_BOLD)======= INCLUDES =======$(RESET)"
 	@norminette include | sed 's/OK/\x1b[1;32m&\x1b[0m/g' | sed 's/Error/\x1b[1;31m&\x1b[0m/g'
+
+val: re
+	@$(VALGRIND) ./$(NAME)
 
 clean:
 	@make -C $(LIBFT_DIR) clean --no-print-directory

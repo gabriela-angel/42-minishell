@@ -16,12 +16,16 @@ int	delete_heredoc(void)
 {
 	char	*file_name;
 	int		*heredoc_counter;
+	char	*str_counter;
 
 	heredoc_counter = get_heredoc_counter();
 	while ((*heredoc_counter) >= 0)
 	{
-		file_name = ft_strjoin("/tmp/.heredoc", ft_itoa((*heredoc_counter)));
+		str_counter = ft_itoa((*heredoc_counter));
+		file_name = ft_strjoin("/tmp/.heredoc", str_counter);
 		unlink(file_name);
+		free(str_counter);
+		free(file_name);
 		if (*heredoc_counter > 0)
 			(*heredoc_counter)--;
 		else
