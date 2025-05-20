@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 18:44:05 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/19 21:35:33 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/20 18:11:21 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,10 @@ static t_tree	*build_tree(t_token *token_list)
 
 	tree = ft_malloc(sizeof(t_tree));
 	if (!tree)
-		return (NULL); // Handle error fail to build syntax tree
+	{
+		perror("failed to build syntax tree");
+		return (NULL);
+	}
 	branch_tree(tree, token_list);
 	return (tree);
 }
@@ -75,10 +78,16 @@ static void	split_list(t_tree *tree, t_token *list, t_token *tk_to_cut)
 	tree->token = tk_to_cut;
 	list = ft_cutlist(list, tk_to_cut);
 	if (!list)
-		return ; //CREATE ERROR FUNC TO PRINT ERROR MSG "FAILED TO BUILD SYNTAX TREE"
+	{
+		perror("failed to build syntax tree");
+		return ;
+	}
 	sublist = ft_cutlist(tk_to_cut->next, NULL);
 	if (!sublist)
-		return ; //CREATE ERROR FUNC TO PRINT ERROR MSG "FAILED TO BUILD SYNTAX TREE"
+	{
+		perror("failed to build syntax tree");
+		return ;
+	}
 	tk_to_cut->prev = NULL;
 	tree->left = build_tree(list);
 	tree->right = build_tree(sublist);
@@ -97,13 +106,11 @@ t_tree	*get_tree(t_token *token_list)
 	{
 		if (validate_tokens(current) != SUCCESS)
 		{
-			ft_printf_fd(2, "Syntax error in tokens\n"); // Depuração
+			exit_status(SYNTAX_ERROR);
 			return (NULL);
 		}
 		current = current->next;
 	}
 	tree = build_tree(token_list);
-	if (!tree)
-		ft_printf_fd(2, "Failed to build syntax tree\n"); // Depuração
 	return (tree);
 }
