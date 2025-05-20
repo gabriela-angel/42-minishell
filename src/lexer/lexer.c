@@ -79,7 +79,10 @@ t_token	*get_token_list(char *input)
 	int			len;
 
 	if (!input || validate_input(input))
-		return (NULL); //create a function to set exit status to SYNTAX ERROR
+	{
+		exit_status(SYNTAX_ERROR);
+		return (NULL);
+	}
 	head = NULL;
 	while (*input)
 	{
