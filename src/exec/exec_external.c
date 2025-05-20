@@ -6,7 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:41 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/19 21:27:09 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/19 21:30:42 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,7 @@ int	exec_external(char **argv, char **envp)
 
 	cmd_path = find_cmd_path(argv[0]);
 	if (!cmd_path)
-	{
 		return (127);
-	}
 	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == 0)
