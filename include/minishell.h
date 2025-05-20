@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:30:39 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/19 21:36:34 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/20 18:13:53 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <errno.h>
 # include <limits.h>
 # include <dirent.h>
 # include <sys/wait.h>
@@ -27,6 +28,7 @@
 // MACROS ---------------
 # define SUCCESS 0
 # define FAILURE 1
+# define SYNTAX_ERROR 2
 
 // STRUCTS ----------------
 

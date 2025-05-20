@@ -12,16 +12,12 @@
 
 #include "minishell.h"
 
-//get_exit_status
-
-// Handles special cases for variable expansion such as : $? (last exit status) and quotes
 static char	*handle_special_cases(char *dollar, char **str, char **after_var,
 		char **expanded_var)
 {
 	if (*(dollar + 1) == '?')
 	{
-		// *expanded_var = ft_itoa(*get_exit_status()); WE HAVE TO MAKE THIS FUNC
-		*expanded_var = ft_strdup("NOT FIXED!");
+		*expanded_var = ft_itoa(exit_status(-1));
 		ft_gc_add(*expanded_var);
 		*after_var = ++(*str);
 	}

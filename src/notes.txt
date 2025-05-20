@@ -1,3 +1,7 @@
 - check change main
 - create exit functions for errors and error macros
 - add the function to clean up heredoc files on all error/exit functions
+- understand exit_status function
+- heredoc broken
+- norminette
+- valgrind

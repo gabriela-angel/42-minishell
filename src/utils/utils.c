@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:49:54 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/19 21:37:59 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/20 17:11:02 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,8 +122,13 @@ int	ft_setenv(char *arg, char ***env)
 
 int handle_error(const char *msg)
 {
-	ft_printf_fd(2, "minishell: %s\n", msg);
-	return (1);
+	if (!(*msg))
+		msg = " ";
+	ft_printf_fd(STDERR_FILENO, "%s: %s\n", msg, strerror(errno));
+	// delete_heredoc();
+	// ft_free_split(env);
+	ft_gc_exit();
+	return (!!errno);
 }
 
 int	exit_status(int set)
@@ -132,5 +137,5 @@ int	exit_status(int set)
 
 	if (set != -1)
 		status = set;
-	return status;
+	return (status);
 }
