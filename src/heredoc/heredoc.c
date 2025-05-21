@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 static int	write_to_heredoc(int fd, char *end_condition, int is_expandable)
 {

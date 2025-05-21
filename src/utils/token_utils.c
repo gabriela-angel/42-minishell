@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 13:37:12 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/20 18:50:33 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/20 22:58:17 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	tk_lst_add_back(t_token **head, t_token *new_node)
 	t_token	*last_node;
 
 	if (!new_node)
-		return;
+		return ;
 	if (!(*head))
 		*head = new_node;
 	else
@@ -56,14 +56,15 @@ t_token	*ft_cutlist(t_token *start, t_token *end)
 		if (current->next == end && end)
 		{
 			current->next = NULL;
-			break;
+			break ;
 		}
 		current = current->next;
 	}
 	return (sublist);
 }
 
-t_token	*search_token_rev(t_token *token_list, t_value_type start_type, t_value_type end_type)
+t_token	*search_token_rev(t_token *token_list, t_value_type start_type, \
+	t_value_type end_type)
 {
 	t_token	*current;
 	int		parenthesis;
@@ -90,7 +91,8 @@ t_token	*search_token_rev(t_token *token_list, t_value_type start_type, t_value_
 	return (NULL);
 }
 
-t_token	*search_token(t_token *token_list, t_value_type start_type, t_value_type end_type)
+t_token	*search_token(t_token *token_list, t_value_type start_type, \
+	t_value_type end_type)
 {
 	t_token	*current;
 	int		parenthesis;

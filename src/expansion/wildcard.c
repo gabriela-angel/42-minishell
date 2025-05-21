@@ -15,7 +15,7 @@
 static t_bool	match_and_free(t_bool **match, int str_len, int pat_len)
 {
 	t_bool	match_found;
-	int	i;
+	int		i;
 
 	i = 0;
 	match_found = match[str_len][pat_len];
@@ -28,10 +28,11 @@ static t_bool	match_and_free(t_bool **match, int str_len, int pat_len)
 	return (match_found);
 }
 
-static t_bool	**init_match_table(char *str, int *str_len, char *pattern, int *pat_len)
+static t_bool	**init_match_table(char *str, int *str_len, \
+	char *pattern, int *pat_len)
 {
-	int	row_str;
-	int	col_pat;
+	int		row_str;
+	int		col_pat;
 	t_bool	**match;
 
 	*str_len = ft_strlen(str);
@@ -56,10 +57,10 @@ static t_bool	**init_match_table(char *str, int *str_len, char *pattern, int *pa
 
 static t_bool	is_match(char *str, char *pattern)
 {
-	int	row_str;
-	int	col_pat;
-	int	str_len;
-	int	pat_len;
+	int		row_str;
+	int		col_pat;
+	int		str_len;
+	int		pat_len;
 	t_bool	**match;
 
 	match = init_match_table(str, &str_len, pattern, &pat_len);
@@ -69,9 +70,9 @@ static t_bool	is_match(char *str, char *pattern)
 		col_pat = 1;
 		while (col_pat <= pat_len)
 		{
-
 			if (pattern[col_pat - 1] == '*')
-				match[row_str][col_pat] = match[row_str][col_pat - 1] || match[row_str - 1][col_pat];
+				match[row_str][col_pat] = match[row_str][col_pat - 1] \
+				|| match[row_str - 1][col_pat];
 			else if (str[row_str - 1] == pattern[col_pat - 1])
 				match[row_str][col_pat] = match[row_str - 1][col_pat - 1];
 			col_pat++;
@@ -83,9 +84,9 @@ static t_bool	is_match(char *str, char *pattern)
 
 void	expand_wildcard(t_token **token, t_tree **tree)
 {
-	DIR	*dir;
+	DIR				*dir;
 	struct dirent	*entry;
-	t_token	*match_lst;
+	t_token			*match_lst;
 
 	dir = opendir(".");
 	if (!dir)

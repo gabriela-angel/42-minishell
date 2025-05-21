@@ -6,13 +6,14 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 23:31:06 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/20 18:37:25 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/20 23:02:07 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	check_quotes(char *input, int *i, int *single_quotes, int *double_quotes)
+static void	check_quotes(char *input, int *i, \
+	int *single_quotes, int *double_quotes)
 {
 	if (input[*i] == '\'')
 	{

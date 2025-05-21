@@ -6,14 +6,14 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 18:44:05 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/20 18:11:21 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/20 22:50:01 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void split_list(t_tree *tree, t_token *list, t_token *tk_to_cut);
-static void split_redir(t_tree *tree, t_token *list, t_token *tk_to_cut);
+static void	split_list(t_tree *tree, t_token *list, t_token *tk_to_cut);
+static void	split_redir(t_tree *tree, t_token *list, t_token *tk_to_cut);
 
 static void	branch_tree(t_tree *tree, t_token *token_list)
 {
@@ -92,7 +92,6 @@ static void	split_list(t_tree *tree, t_token *list, t_token *tk_to_cut)
 	tree->left = build_tree(list);
 	tree->right = build_tree(sublist);
 }
-
 
 t_tree	*get_tree(t_token *token_list)
 {

@@ -68,18 +68,18 @@ char	*expand_var(char *str)
 	{
 		if (*str == '\'' )
 			while (*(++str) && *str != '\'')
-				continue;
+				continue ;
 		else if (*str == '\"')
 		{
 			while (*(++str) && *str != '\"')
 			{
-				if (*str == '$' && str[1] && (ft_isalnum(str[1])
-						|| ft_strchr("_?", str[1])))
+				if (*str == '$' && str[1] && (ft_isalnum(str[1]) \
+					|| ft_strchr("_?", str[1])))
 					expanded_str = handle_dollar(expanded_str, &str);
 			}
 		}
-		else if (*str == '$' && str[1] && (ft_isalnum(str[1])
-					|| ft_strchr("_?\'\"", str[1])))
+		else if (*str == '$' && str[1] && (ft_isalnum(str[1]) \
+				|| ft_strchr("_?\'\"", str[1])))
 			expanded_str = handle_dollar(expanded_str, &str);
 		str++;
 	}
@@ -94,7 +94,6 @@ void	expand_tokens(t_tree *tree)
 	while (current)
 	{
 		current->value = expand_var(current->value);
-
 		if (!(current->value))
 			handle_empty_value(&current, &tree);
 		if (ft_strchr_quote_aware(current->value, '*'))

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec_external.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:41 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/19 21:34:43 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/20 22:41:15 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 static char	*join_path_cmd(char *dir, char *cmd)
 {
@@ -60,6 +60,7 @@ int	exec_external(char **argv, char **envp)
 	cmd_path = find_cmd_path(argv[0]);
 	if (!cmd_path)
 	{
+		ft_printf_fd(2, "%s: command not found\n", argv[0]); // necessary bc bash acts like this too
 		return (127);
 	}
 	signal(SIGINT, SIG_IGN);

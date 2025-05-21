@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:42:53 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/14 18:25:41 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/20 22:46:07 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 /**
  * Verifica se a string é um identificador válido para export.
@@ -47,7 +47,7 @@ static void	print_variable(char *var)
 		if (var[j] == '=')
 		{
 			ft_printf_fd(1, "\"%s\"\n", var + j + 1);
-			return;
+			return ;
 		}
 		ft_printf_fd(1, "%c", var[j]);
 		j++;
@@ -62,7 +62,7 @@ static void	print_env_sorted(char **env)
 
 	copy = ft_strdup_split(env);
 	if (!copy)
-		return;
+		return ;
 	ft_sort_strs(copy);
 	i = 0;
 	while (copy[i])
@@ -74,7 +74,8 @@ static void	print_env_sorted(char **env)
 }
 
 /**
- * Exporta variáveis. Sem argumentos: imprime. Com argumentos: define ou atualiza.
+ * Exporta variáveis. Sem argumentos: imprime. 
+ * Com argumentos: define ou atualiza.
  */
 int	exec_export(char **args, char ***env)
 {

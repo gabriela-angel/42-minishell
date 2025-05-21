@@ -1,7 +1,11 @@
 - check change main
-- create exit functions for errors and error macros DONE ON: parser, lexer, expansion.
-- add the function to clean up heredoc files on all error/exit functions
-- understand exit_status function
-- heredoc broken
+- add the function to clean up heredoc files on all error/exit functions ->create like a malloc inside the func to see if the files are actually getting deleted
+- check if all exit status are being set properly
+
+- && -> working
+- || -> working
+- subshell -> not working
+- heredoc -> not printing file on cat, not adding the text from the heredoc file in history, - exit_status for ctrl+d should be == 0
+- redirects -> not working
 - norminette
 - valgrind

@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 23:59:42 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/20 19:15:19 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/20 23:02:28 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	main(int argc, char **argv, char **envp)
 			ft_gc_free(input);
 			ft_gc_exit();
 			exit_status(0);
-			continue;
+			continue ;
 		}
 		if (input[0])
 			add_history(input);
