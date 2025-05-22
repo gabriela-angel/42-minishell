@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:33:24 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/20 23:11:13 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:06:38 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static t_bool	has_heredoc(t_token *tok)
 	return (FALSE);
 }
 
-void	exec_simple_command(t_token *token, char ***env)
+static void	exec_simple_command(t_token *token, char ***env)
 {
 	char	**argv;
 	int		saved_stdin;
@@ -73,26 +73,30 @@ static void	exec_and_node(t_tree *node, char ***env)
 		execute_tree(node->right, env);
 }
 
-// NOT COMPLETED
 static void	exec_subshell(t_tree *node, char ***env)
 {
-	// pid_t	pid;
-	// int		status;
-	(void)node;
-	(void)env;
-	return ;
-	// pid = fork();
-	// if (pid == -1)
-	// 	exit(handle_error("fork"));
-	// if (pid == 0)
-	// {
-	// 	close(fd[0]);
-	// 	dup2(fd[1], STDOUT_FILENO);
-	// 	close(fd[1]);
-	// 	execute_tree(node->left, env);
-	// 	ft_gc_exit();
-	// }
-	// waitpid(pid, NULL, 0);
+	int		status;
+	pid_t	pid;
+	t_token	*current;
+	t_tree	*subshell;
+
+	pid = fork();
+	if (pid < 0)
+		exit(handle_error("fork"));
+	if (pid == 0)
+	{
+		current = node->token;
+		while (current->next)
+			current = current->next;
+		current->prev->next = NULL;
+		current = node->token->next;
+		subshell = get_tree(current);
+		if (subshell)
+			execute_tree(subshell, env);
+		ft_gc_exit();
+		exit(exit_status(-1));
+	}
+	wait_for_child(pid, &status);
 }
 
 void	execute_tree(t_tree *node, char ***env)

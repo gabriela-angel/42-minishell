@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:30:39 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/20 23:13:27 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:06:33 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,9 @@ int		exec_exit(char **args, int last_status);
 int		minishell_exec(t_tree *ast, char ***env);
 void	execute_tree(t_tree *node, char ***env);
 void	exec_pipe_node(t_tree *node, char ***env);
-void	exec_simple_command(t_token *token, char ***env);
+void	wait_for_child(pid_t pid, int *status);
 int		exec_external(char **argv, char **envp);
 int		apply_redirections(t_token *token);
-int		handle_heredocs(t_token *token);
 char	**convert_token_to_argv(t_token *token);
 
 // EXPANSION -------------
