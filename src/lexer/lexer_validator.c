@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_validator.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 23:31:06 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/19 11:56:33 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/20 23:02:07 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	check_quotes(char *input, int *i, int *single_quotes, int *double_quotes)
+static void	check_quotes(char *input, int *i, \
+	int *single_quotes, int *double_quotes)
 {
 	if (input[*i] == '\'')
 	{
@@ -41,11 +42,11 @@ int	validate_input(char *input)
 	int	single_quotes;
 	int	double_quotes;
 
-	i = 0;
+	i = -1;
 	parenthesis = 0;
 	single_quotes = 0;
 	double_quotes = 0;
-	while (input[i])
+	while (input[++i])
 	{
 		if (input[i] == '\'' || input[i] == '\"')
 			check_quotes(input, &i, &single_quotes, &double_quotes);
@@ -53,9 +54,12 @@ int	validate_input(char *input)
 			parenthesis++;
 		else if (input[i] == ')')
 			parenthesis--;
-		i++;
 	}
 	if (parenthesis != 0 || single_quotes != 0 || double_quotes != 0)
-		return (FAILURE); //create a function to set exit status to SYNTAX ERROR
+	{
+		write(STDERR_FILENO, "Invalid syntax, check input \
+			for open quotes or brackets.\n", 57);
+		return (SYNTAX_ERROR);
+	}
 	return (SUCCESS);
 }

@@ -79,7 +79,10 @@ t_token	*get_token_list(char *input)
 	int			len;
 
 	if (!input || validate_input(input))
-		return (NULL); //create a function to set exit status to SYNTAX ERROR
+	{
+		exit_status(SYNTAX_ERROR);
+		return (NULL);
+	}
 	head = NULL;
 	while (*input)
 	{
@@ -91,6 +94,7 @@ t_token	*get_token_list(char *input)
 			current->type = get_type(input);
 			len = tk_len(input, current->type);
 			current->value = ft_substr(input, 0, len);
+			ft_gc_add(current->value);
 			tk_lst_add_back(&head, current);
 			input += len;
 		}

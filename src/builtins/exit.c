@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:30:19 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/14 18:25:46 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/20 22:44:43 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 static int	is_numeric(const char *s)
 {
-	int	i = 0;
+	int	i;
 
+	i = 0;
 	if (!s)
 		return (0);
 	if (s[i] == '+' || s[i] == '-')

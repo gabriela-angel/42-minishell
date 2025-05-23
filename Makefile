@@ -13,20 +13,31 @@ LIB_PATHS = -L$(LIBFT_DIR) -lft -lreadline
 
 # PATHS
 SRC_DIR = src/
+BTIN_DIR = src/builtins/
+EXC_DIR = src/exec/
+EXP_DIR = src/expansion/
+HDOC_DIR = src/heredoc/
+LXR_DIR = src/lexer/
+PRS_DIR = src/parser/
+SIG_DIR = src/signals/
+UTL_DIR = src/utils/
 OBJ_DIR = obj/
 
 # FILES AND OBJECTS
-SRC := $(wildcard $(SRC_DIR)*.c) \
-		$(wildcard $(SRC_DIR)builtins/*.c) \
-		$(wildcard $(SRC_DIR)exec/*.c) \
-		$(wildcard $(SRC_DIR)expansion/*.c) \
-		$(wildcard $(SRC_DIR)heredoc/*.c) \
-		$(wildcard $(SRC_DIR)lexer/*.c) \
-		$(wildcard $(SRC_DIR)parser/*.c) \
-		$(wildcard $(SRC_DIR)signals/*.c) \
-		$(wildcard $(SRC_DIR)utils/*.c)
+SRC := $(addprefix $(SRC_DIR), main.c) \
+		$(addprefix $(BTIN_DIR), builtins.c cd.c echo.c env.c exit.c export.c pwd.c unset.c) \
+		$(addprefix $(EXC_DIR), executor.c exec_pipe.c exec_redirs.c exec_minishell.c exec_external.c convert_argv.c) \
+		$(addprefix $(EXP_DIR), expand.c expand_utils.c wildcard.c wildcard_utils.c) \
+		$(addprefix $(HDOC_DIR), heredoc.c heredoc_utils.c) \
+		$(addprefix $(LXR_DIR), lexer.c lexer_validator.c) \
+		$(addprefix $(PRS_DIR), parser.c parser_validator.c) \
+		$(addprefix $(SIG_DIR), signals.c) \
+		$(addprefix $(UTL_DIR), utils.c exit_and_error.c ft_malloc.c token_utils.c)
 
 OBJ := $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
+
+# VALGRIND
+VALGRIND = valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all --suppressions=readline.supp
 
 # ------------------------------ COLORS ------------------------------
 
@@ -67,11 +78,15 @@ $(NAME): $(OBJ) $(LIBFT)
 
 norm:
 	@echo "\n$(CYAN_BOLD)======= LIBFT =======$(RESET)"
-	@norminette lib/libft | sed 's/OK/\x1b[1;32m&\x1b[0m/g' | sed 's/Error/\x1b[1;31m&\x1b[0m/g'
+	@norminette libft | sed 's/OK/\x1b[1;32m&\x1b[0m/g' | sed 's/Error/\x1b[1;31m&\x1b[0m/g'
 	@echo "\n$(YELLOW_BOLD)======= MANDATORY =======$(RESET)"
 	@norminette src | sed 's/OK/\x1b[1;32m&\x1b[0m/g' | sed 's/Error/\x1b[1;31m&\x1b[0m/g'
 	@echo "\n$(MAGENTA_BOLD)======= INCLUDES =======$(RESET)"
 	@norminette include | sed 's/OK/\x1b[1;32m&\x1b[0m/g' | sed 's/Error/\x1b[1;31m&\x1b[0m/g'
+	@echo "\n"
+
+val: re
+	@$(VALGRIND) ./$(NAME)
 
 clean:
 	@make -C $(LIBFT_DIR) clean --no-print-directory

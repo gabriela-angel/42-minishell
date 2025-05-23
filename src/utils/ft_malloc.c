@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_malloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:52:06 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/19 11:48:04 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/20 17:02:24 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 static t_malloc	*get_malloc_item(void)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 23:59:42 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/19 18:41:21 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/20 23:02:28 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	main(int argc, char **argv, char **envp)
 			ft_gc_free(input);
 			ft_gc_exit();
 			exit_status(0);
-			continue;
+			continue ;
 		}
 		if (input[0])
 			add_history(input);
@@ -55,6 +55,7 @@ int	main(int argc, char **argv, char **envp)
 	}
 	delete_heredoc();
 	ft_free_split(env);
+	ft_gc_exit();
 	rl_clear_history();
 	return (0);
 }

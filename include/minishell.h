@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:30:39 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/19 16:04:56 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:06:33 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <errno.h>
 # include <limits.h>
 # include <dirent.h>
 # include <sys/wait.h>
@@ -27,6 +28,7 @@
 // MACROS ---------------
 # define SUCCESS 0
 # define FAILURE 1
+# define SYNTAX_ERROR 2
 
 // STRUCTS ----------------
 
@@ -46,15 +48,15 @@ typedef enum e_value_type
 
 typedef struct s_token
 {
-	t_value_type		type;
-	char				*value;
+	t_value_type	type;
+	char			*value;
 	struct s_token	*prev;
 	struct s_token	*next;
 }	t_token;
 
 typedef struct s_tree
 {
-	t_token		*token;
+	t_token			*token;
 	struct s_tree	*left;
 	struct s_tree	*right;
 }	t_tree;
@@ -85,10 +87,10 @@ int		exec_exit(char **args, int last_status);
 // EXECUTOR -------------
 int		minishell_exec(t_tree *ast, char ***env);
 void	execute_tree(t_tree *node, char ***env);
-void	exec_simple_command(t_token *token, char ***env);
+void	exec_pipe_node(t_tree *node, char ***env);
+void	wait_for_child(pid_t pid, int *status);
 int		exec_external(char **argv, char **envp);
 int		apply_redirections(t_token *token);
-int		handle_heredocs(t_token *token);
 char	**convert_token_to_argv(t_token *token);
 
 // EXPANSION -------------
@@ -141,7 +143,9 @@ int		exit_status(int set);
 void	tk_lst_add_back(t_token **head, t_token *new_node);
 t_token	*get_last_token(t_token *lst);
 t_token	*ft_cutlist(t_token *start, t_token *end);
-t_token	*search_token_rev(t_token *tk_lst, t_value_type start_type, t_value_type end_type);
-t_token	*search_token(t_token *tk_lst, t_value_type start_type, t_value_type end_type);
+t_token	*search_token_rev(t_token *tk_lst, t_value_type start_type, \
+	t_value_type end_type);
+t_token	*search_token(t_token *tk_lst, t_value_type start_type, \
+	t_value_type end_type);
 
 #endif
