@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 20:57:44 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/20 23:04:31 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/22 19:30:34 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ static int	check_control_operator(t_token *current)
 	if (current->prev == NULL || current->prev->type <= TK_PIPE
 		|| current->prev->type == TK_OPEN_PARENTHESIS || (current->prev->type <= TK_REDIR_OUT && current->prev->type >= TK_REDIR_OUT_APP))
 		return (ft_printf_fd(2, "minishell: syntax error near \
-			unexpected token `%s'\n", current->value));
+unexpected token `%s'\n", current->value));
 	if (current->next == NULL || current->next->type <= TK_PIPE
 		|| current->next->type == TK_CLOSE_PARENTHESIS || (current->next->type <= TK_REDIR_OUT && current->next->type >= TK_REDIR_OUT_APP))
 		return (ft_printf_fd(2, "minishell: syntax error near \
-			unexpected token `%s'\n", current->value));
+unexpected token `%s'\n", current->value));
 	return (SUCCESS);
 }
 
@@ -29,7 +29,7 @@ static int	check_redirector(t_token *current)
 {
 	if (current->next == NULL || current->next->type != TK_WORD)
 		return (ft_printf_fd(2, "minishell: syntax error near \
-			unexpected token `%s'\n", current->value));
+unexpected token `%s'\n", current->value));
 	return (SUCCESS);
 }
 
@@ -39,19 +39,19 @@ static int	check_parenthesis(t_token *current)
 	{
 		if (current->prev != NULL && current->prev->type > TK_OPEN_PARENTHESIS)
 			return (ft_printf_fd(2, "minishell: syntax error near \
-				unexpected token `%s'\n", current->value));
+unexpected token `%s'\n", current->value));
 		if (current->next == NULL || current->next->type <= TK_PIPE)
 			return (ft_printf_fd(2, "minishell: syntax error near \
-				unexpected token `%s'\n", current->value));
+unexpected token `%s'\n", current->value));
 	}
 	else if (current->type == TK_CLOSE_PARENTHESIS)
 	{
 		if (current->prev == NULL || (current->prev->type != TK_WORD && current->prev->type != TK_CLOSE_PARENTHESIS))
 			return (ft_printf_fd(2, "minishell: syntax error near \
-				unexpected token `%s'\n", current->value));
+unexpected token `%s'\n", current->value));
 		if (current->next != NULL && (current->next->type == TK_WORD))
 			return (ft_printf_fd(2, "minishell: syntax error near \
-				unexpected token `%s'\n", current->value));
+unexpected token `%s'\n", current->value));
 	}
 	return (SUCCESS);
 }

@@ -6,57 +6,56 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:33:24 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/22 15:06:38 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/22 20:40:46 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_bool	has_heredoc(t_token *tok)
-{
-	while (tok)
-	{
-		if (tok->type == TK_REDIR_HDOC)
-			return (TRUE);
-		tok = tok->next;
-	}
-	return (FALSE);
-}
-
-static void	exec_simple_command(t_token *token, char ***env)
+static void	exec_simple_command(t_tree *node, t_token *token, char ***env)
 {
 	char	**argv;
-	int		saved_stdin;
+	pid_t	pid;
 
-	saved_stdin = dup(STDIN_FILENO);
-	if (has_heredoc(token) && handle_heredoc(token))
-	{
-		exit_status(130);
-		dup2(saved_stdin, STDIN_FILENO);
-		close(saved_stdin);
+	if (token)
+		expand_tokens(node);
+	if (cmd_node->tokens == NULL)
 		return ;
-	}
-	if (apply_redirections(token))
-	{
-		dup2(saved_stdin, STDIN_FILENO);
-		close(saved_stdin);
-		return ;
-	}
 	argv = convert_token_to_argv(token);
 	if (!argv || !argv[0])
 	{
 		ft_free_split(argv);
-		dup2(saved_stdin, STDIN_FILENO);
-		close(saved_stdin);
 		return ;
 	}
 	if (is_builtin(argv[0]))
 		exit_status(exec_builtin(argv, env, exit_status(-1)));
 	else
+	{
+		pid = fork();
+		if (pid < 0)
+			exit(handle_error("fork"));
+		if (pid == 0)
+			run_command_in_child_process(cmd_node->tokens);
 		exit_status(exec_external(argv, *env));
+		wait_for_child(pid, &status);
+	}
 	ft_free_split(argv);
-	dup2(saved_stdin, STDIN_FILENO);
-	close(saved_stdin);
+}
+
+void	run_command_in_child_process(t_token *tokens)
+{
+	char	**cmd_and_args;
+	char	*cmd_path;
+	int		exit_status;
+
+	cmd_path = get_cmd_path(tokens);
+	cmd_and_args = get_cmd_and_args(tokens);
+	if (execve(cmd_path, cmd_and_args, __environ) == -1)
+	{
+		exit_status = throw_error(cmd_path);
+		ft_gc_exit();
+		exit(exit_status);
+	}
 }
 
 static void	exec_or_node(t_tree *node, char ***env)
@@ -111,9 +110,9 @@ void	execute_tree(t_tree *node, char ***env)
 		exec_pipe_node(node, env);
 	else if (node->token->type >= TK_REDIR_OUT_APP \
 		&& node->token->type <= TK_REDIR_OUT)
-		exec_simple_command(node->token, env);
+		exec_redirection(node->left, node->right, node->token->type, env);
 	else if (node->token->type == TK_OPEN_PARENTHESIS)
 		exec_subshell(node, env);
 	else
-		exec_simple_command(node->token, env);
+		exec_simple_command(node, node->token, env);
 }

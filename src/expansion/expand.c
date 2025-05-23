@@ -50,6 +50,11 @@ static char	*handle_dollar(char *init_value, char **str)
 		expanded_var = getenv(tmp);
 		free(tmp);
 	}
+	if (!expanded_var)
+	{
+		expanded_var = ft_strdup("");
+		ft_gc_add(expanded_var);
+	}
 	before_var = ft_substr(init_value, 0, dollar - init_value);
 	tmp = ft_strjoin(before_var, expanded_var);
 	tmp = ft_strjoin_free(tmp, after_var);

@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:30:39 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/22 15:06:33 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/22 19:11:15 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	execute_tree(t_tree *node, char ***env);
 void	exec_pipe_node(t_tree *node, char ***env);
 void	wait_for_child(pid_t pid, int *status);
 int		exec_external(char **argv, char **envp);
-int		apply_redirections(t_token *token);
+void	exec_redirection(t_tree *left, t_tree *right, int redir_type, char ***env);
 char	**convert_token_to_argv(t_token *token);
 
 // EXPANSION -------------
