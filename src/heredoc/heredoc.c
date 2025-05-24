@@ -60,31 +60,30 @@ static int	init_heredoc(t_token *token, int *fd, char **file_name,
 	return (SUCCESS);
 }
 
-static int	heredoc_child(t_token *token, int *pipe_fd)
+static int heredoc_child(t_token *token, int *pipe_fd)
 {
-	int		fd;
-	char	*file_name;
-	char	buffer[1024];
-	ssize_t	bytes_read;
-	t_bool	is_expandable;
-	char	*end_condition;
+	int fd;
+	char *file_name;
+	t_bool is_expandable;
+	char *end_condition;
+	char buffer[1024];
+	ssize_t bytes_read;
 
 	end_condition = token->next->value;
 	signal(SIGINT, handle_heredoc_sigint);
 	close(pipe_fd[0]);
 	if (init_heredoc(token, &fd, &file_name, &is_expandable) != SUCCESS)
 		_exit(FAILURE);
-	while (42)
+	while (42) {
 		if (write_to_heredoc(fd, end_condition, is_expandable) == SUCCESS)
-			break ;
+			break;
+	}
 	close(fd);
 	fd = open(file_name, O_RDONLY);
 	if (fd >= 0)
 	{
-		bytes_read = 1;
-		while (bytes_read > 0)
+		while ((bytes_read = read(fd, buffer, sizeof(buffer))))
 		{
-			bytes_read = read(fd, buffer, 1024);
 			if (bytes_read > 0)
 				write(pipe_fd[1], buffer, bytes_read);
 		}
@@ -94,50 +93,54 @@ static int	heredoc_child(t_token *token, int *pipe_fd)
 	_exit(SUCCESS);
 }
 
-static int	finish_heredoc_parent(int default_stdin, int *pipe_fd, pid_t pid)
+static int finish_heredoc_parent(int default_stdin, int *pipe_fd, pid_t pid)
 {
-	int	status;
+	int status;
+	char buffer[1024];
+	ssize_t bytes_read;
 
 	close(pipe_fd[1]);
 	waitpid(pid, &status, 0);
-	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-	{
+
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT) {
 		close(pipe_fd[0]);
 		dup2(default_stdin, STDIN_FILENO);
 		exit_status(130);
 		ft_printf_fd(1, "\n");
 		return (FAILURE);
 	}
-	if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-	{
-		close(pipe_fd[0]);
-		return (FAILURE);
+
+	// Lê do pipe e escreve na saída padrão
+	while ((bytes_read = read(pipe_fd[0], buffer, sizeof(buffer))) > 0) {
+		write(STDOUT_FILENO, buffer, bytes_read);
 	}
-	dup2(pipe_fd[0], STDIN_FILENO);
+
 	close(pipe_fd[0]);
+	dup2(default_stdin, STDIN_FILENO);
 	return (SUCCESS);
 }
 
-int	handle_heredoc(t_token *token)
+int handle_heredoc(t_token *token)
 {
-	int		pipe_fd[2];
-	pid_t	pid;
-	int		default_stdin;
+	int pipe_fd[2];
+	pid_t pid;
+	int default_stdin = dup(STDIN_FILENO);
 
-	default_stdin = dup(STDIN_FILENO);
 	if (pipe(pipe_fd) < 0)
 		return (FAILURE);
+
 	signal(SIGINT, SIG_IGN);
-	if ((pid = fork()) < 0)
+	pid = fork();
+	
+	if (pid < 0)
 		return (FAILURE);
-	if (pid == 0)
-	{
-		signal(SIGINT, handle_heredoc_sigint);
+
+	if (pid == 0) {
 		heredoc_child(token, pipe_fd);
 	}
-	signal(SIGINT, SIG_IGN);
+	
 	if (finish_heredoc_parent(default_stdin, pipe_fd, pid))
 		return (FAILURE);
-	signal(SIGINT, SIG_DFL);
+
 	return (SUCCESS);
 }
