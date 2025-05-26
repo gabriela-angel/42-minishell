@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:30:39 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/22 15:06:33 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/26 19:18:20 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ int		exec_unset(char **args, char ***env);
 int		exec_exit(char **args, int last_status);
 
 // EXECUTOR -------------
+// EXECUTOR -------------
 int		minishell_exec(t_tree *ast, char ***env);
 void	execute_tree(t_tree *node, char ***env);
 void	exec_pipe_node(t_tree *node, char ***env);
@@ -92,6 +93,7 @@ void	wait_for_child(pid_t pid, int *status);
 int		exec_external(char **argv, char **envp);
 int		apply_redirections(t_token *token);
 char	**convert_token_to_argv(t_token *token);
+void	exec_simple_command(t_token *token, char ***env);
 
 // EXPANSION -------------
 char	*expand_var(char *str);
@@ -111,6 +113,7 @@ void	create_match_lst(t_token **head, char *data);
 int		handle_heredoc(t_token *token);
 int		delete_heredoc(void);
 int		*get_heredoc_counter(void);
+void	read_temp_file_and_write_to_pipe(int *pipe_fd, char *file_name);
 
 // LEXER -------------
 t_token	*get_token_list(char *input);

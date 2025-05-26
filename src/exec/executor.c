@@ -3,62 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:33:24 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/22 15:06:38 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/26 18:48:55 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_bool	has_heredoc(t_token *tok)
-{
-	while (tok)
-	{
-		if (tok->type == TK_REDIR_HDOC)
-			return (TRUE);
-		tok = tok->next;
-	}
-	return (FALSE);
-}
-
-static void	exec_simple_command(t_token *token, char ***env)
-{
-	char	**argv;
-	int		saved_stdin;
-
-	saved_stdin = dup(STDIN_FILENO);
-	if (has_heredoc(token) && handle_heredoc(token))
-	{
-		exit_status(130);
-		dup2(saved_stdin, STDIN_FILENO);
-		close(saved_stdin);
-		return ;
-	}
-	if (apply_redirections(token))
-	{
-		dup2(saved_stdin, STDIN_FILENO);
-		close(saved_stdin);
-		return ;
-	}
-	argv = convert_token_to_argv(token);
-	if (!argv || !argv[0])
-	{
-		ft_free_split(argv);
-		dup2(saved_stdin, STDIN_FILENO);
-		close(saved_stdin);
-		return ;
-	}
-	if (is_builtin(argv[0]))
-		exit_status(exec_builtin(argv, env, exit_status(-1)));
-	else
-		exit_status(exec_external(argv, *env));
-	ft_free_split(argv);
-	dup2(saved_stdin, STDIN_FILENO);
-	close(saved_stdin);
-}
-
+// Executa um nó logico || (OR)
 static void	exec_or_node(t_tree *node, char ***env)
 {
 	execute_tree(node->left, env);
@@ -66,6 +20,7 @@ static void	exec_or_node(t_tree *node, char ***env)
 		execute_tree(node->right, env);
 }
 
+// Executa um nó logico && (AND)
 static void	exec_and_node(t_tree *node, char ***env)
 {
 	execute_tree(node->left, env);
@@ -73,6 +28,7 @@ static void	exec_and_node(t_tree *node, char ***env)
 		execute_tree(node->right, env);
 }
 
+// Executa um subshell (comandos entre parênteses)
 static void	exec_subshell(t_tree *node, char ***env)
 {
 	int		status;
@@ -99,6 +55,7 @@ static void	exec_subshell(t_tree *node, char ***env)
 	wait_for_child(pid, &status);
 }
 
+// Executa a árvore de comandos
 void	execute_tree(t_tree *node, char ***env)
 {
 	if (!node)
@@ -116,4 +73,12 @@ void	execute_tree(t_tree *node, char ***env)
 		exec_subshell(node, env);
 	else
 		exec_simple_command(node->token, env);
+}
+
+int	minishell_exec(t_tree *tree, char ***env)
+{
+	if (!tree)
+		return (FAILURE);
+	execute_tree(tree, env);
+	return (SUCCESS);
 }

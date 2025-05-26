@@ -6,12 +6,12 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:41 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/23 11:17:55 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/26 18:48:12 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+// Concatena um descritor e um comando para formar um caminho completo
 static char	*join_path_cmd(char *dir, char *cmd)
 {
 	char	*tmp;
@@ -25,6 +25,7 @@ static char	*join_path_cmd(char *dir, char *cmd)
 	return (res);
 }
 
+// Localiza o caminho de um comando no ambiente PATH
 static char	*find_cmd_path(char *cmd)
 {
 	char	**paths;
@@ -51,6 +52,16 @@ static char	*find_cmd_path(char *cmd)
 	return (NULL);
 }
 
+// Executa o comando no processo filho
+static void	exec_child_process(char *cmd_path, char **argv, char **envp)
+{
+	setup_signals_child();
+	execve(cmd_path, argv, envp);
+	perror("minishell");
+	ft_gc_exit();
+}
+
+// Executa um comando externo, localizando seu caminho e gerenciando o processo filho
 int	exec_external(char **argv, char **envp)
 {
 	pid_t	pid;
@@ -60,18 +71,13 @@ int	exec_external(char **argv, char **envp)
 	cmd_path = find_cmd_path(argv[0]);
 	if (!cmd_path)
 	{
-		ft_printf_fd(2, "%s: command not found\n", argv[0]); // necessary bc bash acts like this too
+		ft_printf_fd(2, "%s: command not found\n", argv[0]);
 		return (127);
 	}
 	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == 0)
-	{
-		setup_signals_child();
-		execve(cmd_path, argv, envp);
-		perror("minishell");
-		ft_gc_exit();
-	}
+		exec_child_process(cmd_path, argv, envp);
 	waitpid(pid, &status, 0);
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 		ft_printf_fd(1, "\n");
