@@ -6,17 +6,19 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:33:24 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/27 14:31:45 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/27 14:41:36 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	exec_simple_command(t_token *token, char ***env)
+static void	exec_simple_command(t_tree *node, t_token *token, char ***env)
 {
 	char	**argv;
 	int		saved_stdin;
 
+	if (token)
+		expand_tokens(node);
 	saved_stdin = dup(STDIN_FILENO);
 	argv = convert_token_to_argv(token);
 	if (!argv || !argv[0])
@@ -91,5 +93,5 @@ void	execute_tree(t_tree *node, char ***env)
 	else if (node->token->type == TK_OPEN_PARENTHESIS)
 		exec_subshell(node, env);
 	else
-		exec_simple_command(node->token, env);
+		exec_simple_command(node, node->token, env);
 }
