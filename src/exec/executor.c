@@ -6,7 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:33:24 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/26 18:48:55 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:47:07 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,17 @@ void	execute_tree(t_tree *node, char ***env)
 		exec_pipe_node(node, env);
 	else if (node->token->type >= TK_REDIR_OUT_APP \
 		&& node->token->type <= TK_REDIR_OUT)
-		exec_simple_command(node->token, env);
+	{
+		int saved_stdin = dup(STDIN_FILENO);
+		if (node->token->type == TK_REDIR_HDOC)
+			handle_heredoc(node->token);
+		else
+			process_heredoc_and_redirections(node->token, saved_stdin);
+		execute_tree(node->left, env);
+		dup2(saved_stdin, STDIN_FILENO);
+		close(saved_stdin);
+		return ;
+	}
 	else if (node->token->type == TK_OPEN_PARENTHESIS)
 		exec_subshell(node, env);
 	else

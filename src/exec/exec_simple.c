@@ -6,14 +6,14 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 18:37:58 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/26 18:54:47 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/29 14:36:18 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "minishell.h"
 
 // Processa os redirecionamentos e heredocs associados ao token.
-static t_bool	process_heredoc_and_redirections(t_token *token, int saved_stdin)
+t_bool	process_heredoc_and_redirections(t_token *token, int saved_stdin)
 {
 	while (token)
 	{
@@ -61,17 +61,36 @@ static void	cleanup_and_restore(int saved_stdin, char **argv)
 // Executa um comando simples (sem pipes ou operadores logicos)
 void	exec_simple_command(t_token *token, char ***env)
 {
-	char	**argv;
-	int		saved_stdin;
+    int		saved_stdin;
+    char	**argv;
+    t_token	*cur;
+    int		i;
 
-	saved_stdin = dup(STDIN_FILENO);
-	if (process_heredoc_and_redirections(token, saved_stdin))
-		return;
-	argv = convert_token_to_argv(token);
-	if (!argv || !argv[0])
-	{
-		cleanup_and_restore(saved_stdin, argv);
-		return;
-	}
-	execute_command(argv, env, saved_stdin);
+    saved_stdin = dup(STDIN_FILENO);
+
+    /*=== DEBUG: imprimir lista de tokens ===*/
+    cur = token;
+    while (cur)
+    {
+        cur = cur->next;
+    }
+
+    /* Processa heredoc e redirs */
+    if (process_heredoc_and_redirections(token, saved_stdin))
+        return ;
+
+    /* Converte tokens em argv e imprime */
+    argv = convert_token_to_argv(token);
+    i = 0;
+    while (argv && argv[i])
+    {
+        i++;
+    }
+
+    if (!argv || !argv[0])
+    {
+        cleanup_and_restore(saved_stdin, argv);
+        return ;
+    }
+    execute_command(argv, env, saved_stdin);
 }

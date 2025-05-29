@@ -6,7 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:30:39 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/26 19:18:20 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/29 14:32:56 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ int		exec_external(char **argv, char **envp);
 int		apply_redirections(t_token *token);
 char	**convert_token_to_argv(t_token *token);
 void	exec_simple_command(t_token *token, char ***env);
+t_bool	process_heredoc_and_redirections(t_token *token, int saved_stdin);
 
 // EXPANSION -------------
 char	*expand_var(char *str);

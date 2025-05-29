@@ -20,17 +20,23 @@ static int	write_to_heredoc(int fd, char *end_condition, int is_expandable)
 	line = readline("> ");
 	if (!line)
 	{
-		ft_printf_fd(STDERR_FILENO, "minishell: warning: here-document at line 1 delimited by end-of-file (wanted `%s`)\n", end_condition);
+		ft_printf_fd(STDERR_FILENO,
+			"minishell: warning: here-document at line 1 delimited by end-of-file (wanted `%s`)\n",
+			end_condition);
 		return (SUCCESS);
 	}
 	ft_gc_add(line);
 	if (ft_strcmp(line, end_condition) == SUCCESS)
+	{
+		ft_gc_free(line);
 		return (SUCCESS);
-	if (is_expandable)
+	}
+	if (is_expandable && ft_strchr(line, '$'))
 	{
 		expanded_line = expand_var(line);
 		ft_gc_free(line);
 		line = expanded_line;
+		ft_gc_add(line);
 	}
 	ft_printf_fd(fd, "%s\n", line);
 	return (FAILURE);
@@ -85,8 +91,6 @@ static int	heredoc_child(t_token *token, int *pipe_fd)
 static int finish_heredoc_parent(int default_stdin, int *pipe_fd, pid_t pid)
 {
 	int status;
-	char buffer[1024];
-	ssize_t bytes_read;
 
 	close(pipe_fd[1]);
 	waitpid(pid, &status, 0);
@@ -97,10 +101,8 @@ static int finish_heredoc_parent(int default_stdin, int *pipe_fd, pid_t pid)
 		ft_printf_fd(1, "\n");
 		return (FAILURE);
 	}
-	while ((bytes_read = read(pipe_fd[0], buffer, sizeof(buffer))) > 0)
-		write(STDOUT_FILENO, buffer, bytes_read);
+	dup2(pipe_fd[0], STDIN_FILENO);
 	close(pipe_fd[0]);
-	dup2(default_stdin, STDIN_FILENO);
 	return (SUCCESS);
 }
 
@@ -120,5 +122,6 @@ int handle_heredoc(t_token *token)
 		heredoc_child(token, pipe_fd);
 	if (finish_heredoc_parent(default_stdin, pipe_fd, pid))
 		return (FAILURE);
+	signal(SIGINT, handle_sigint);
 	return (SUCCESS);
 }

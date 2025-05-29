@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   convert_argv.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:26:34 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/20 22:41:11 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:53:50 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	count_words(t_token *token)
 	{
 		if (token->type == TK_WORD)
 			count++;
-		if (token->type >= TK_REDIR_OUT && token->type <= TK_REDIR_HDOC)
+		if (token->type >= TK_REDIR_OUT_APP && token->type <= TK_REDIR_OUT)
 			token = token->next;
 		token = token->next;
 	}
@@ -43,7 +43,7 @@ char	**convert_token_to_argv(t_token *token)
 	{
 		if (token->type == TK_WORD)
 			argv[i++] = ft_strdup(token->value);
-		if (token->type >= TK_REDIR_OUT && token->type <= TK_REDIR_HDOC)
+		if (token->type >= TK_REDIR_OUT_APP && token->type <= TK_REDIR_OUT)
 			token = token->next;
 		token = token->next;
 	}

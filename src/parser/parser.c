@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 18:44:05 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/20 22:50:01 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:46:44 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,21 @@ static void	split_redir(t_tree *tree, t_token *list, t_token *tk_to_cut);
 
 static void	branch_tree(t_tree *tree, t_token *token_list)
 {
-	t_token	*is_and_or;
-	t_token	*is_pipe;
-	t_token	*is_redir;
+    t_token	*is_and_or;
+    t_token	*is_pipe;
+    t_token	*is_redir;
 
-	is_and_or = search_token_rev(token_list, TK_AND, TK_OR);
-	if (is_and_or)
-		return (split_list(tree, token_list, is_and_or));
-	is_pipe = search_token_rev(token_list, TK_PIPE, TK_PIPE);
-	if (is_pipe)
-		return (split_list(tree, token_list, is_pipe));
-	is_redir = search_token(token_list, TK_REDIR_OUT_APP, TK_REDIR_OUT);
-	if (is_redir)
-		return (split_redir(tree, token_list, is_redir));
-	else
-		tree->token = token_list;
+    is_and_or = search_token_rev(token_list, TK_AND, TK_OR);
+    if (is_and_or)
+        return (split_list(tree, token_list, is_and_or));
+    is_pipe = search_token_rev(token_list, TK_PIPE, TK_PIPE);
+    if (is_pipe)
+	return (split_list(tree, token_list, is_pipe));
+    is_redir = search_token(token_list, TK_REDIR_OUT_APP, TK_REDIR_OUT);
+    if (is_redir)
+        return (split_redir(tree, token_list, is_redir));
+    else
+        tree->token = token_list;
 }
 
 static t_tree	*build_tree(t_token *token_list)
