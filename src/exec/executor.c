@@ -6,13 +6,15 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:33:24 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/29 15:47:07 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/30 10:37:13 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// Executa um nó logico || (OR)
+// Executa um nó lógico || (OR).
+// Executa o nó da esquerda e, se o status de saída for diferente de SUCCESS,
+// executa o nó da direita.
 static void	exec_or_node(t_tree *node, char ***env)
 {
 	execute_tree(node->left, env);
@@ -20,7 +22,9 @@ static void	exec_or_node(t_tree *node, char ***env)
 		execute_tree(node->right, env);
 }
 
-// Executa um nó logico && (AND)
+// Executa um nó lógico && (AND).
+// Executa o nó da esquerda e, se o status de saída for SUCCESS,
+// executa o nó da direita.
 static void	exec_and_node(t_tree *node, char ***env)
 {
 	execute_tree(node->left, env);
@@ -28,7 +32,9 @@ static void	exec_and_node(t_tree *node, char ***env)
 		execute_tree(node->right, env);
 }
 
-// Executa um subshell (comandos entre parênteses)
+// Executa um subshell (comandos entre parênteses).
+// Cria um processo filho para executar os comandos do subshell.
+// Gera uma nova árvore de comandos para o subshell e a executa.
 static void	exec_subshell(t_tree *node, char ***env)
 {
 	int		status;
@@ -55,7 +61,9 @@ static void	exec_subshell(t_tree *node, char ***env)
 	wait_for_child(pid, &status);
 }
 
-// Executa a árvore de comandos
+// Executa a árvore de comandos.
+// Identifica o tipo do nó atual (AND, OR, PIPE, REDIREÇÃO, etc.)
+// e chama a função apropriada para executar o nó.
 void	execute_tree(t_tree *node, char ***env)
 {
 	if (!node)
@@ -85,6 +93,9 @@ void	execute_tree(t_tree *node, char ***env)
 		exec_simple_command(node->token, env);
 }
 
+// Função principal para executar a árvore de comandos.
+// Verifica se a árvore é válida e chama a função `execute_tree`.
+// Retorna SUCCESS em caso de sucesso ou FAILURE em caso de erro.
 int	minishell_exec(t_tree *tree, char ***env)
 {
 	if (!tree)

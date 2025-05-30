@@ -12,6 +12,9 @@
 
 #include "minishell.h"
 
+// Remove todos os arquivos temporários de heredoc criados durante a execução.
+// Utiliza um contador estático para gerar os nomes dos arquivos e os exclui
+// usando a função `unlink`. O contador é decrementado até atingir zero.
 int	delete_heredoc(void)
 {
 	char	*file_name;
@@ -34,14 +37,18 @@ int	delete_heredoc(void)
 	return (SUCCESS);
 }
 
+// Retorna um ponteiro para um contador estático usado para rastrear o número
+// de arquivos temporários de heredoc criados. Esse contador é compartilhado
+// entre as funções que manipulam heredocs.
 int	*get_heredoc_counter(void)
 {
 	static int	counter;
-
 	return (&counter);
 }
 
-// Lê o arquivo temporário e escreve no pipe
+// Lê o conteúdo de um arquivo temporário de heredoc e escreve no pipe fornecido.
+// Abre o arquivo em modo somente leitura, lê os dados em blocos de 1024 bytes
+// e os escreve no descritor de escrita do pipe.
 void	read_temp_file_and_write_to_pipe(int *pipe_fd, char *file_name)
 {
 	int		fd;
