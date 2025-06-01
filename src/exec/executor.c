@@ -6,7 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:33:24 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/30 10:37:13 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/05/31 17:59:51 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,13 +78,17 @@ void	execute_tree(t_tree *node, char ***env)
 		&& node->token->type <= TK_REDIR_OUT)
 	{
 		int saved_stdin = dup(STDIN_FILENO);
+		int saved_stdout = dup(STDOUT_FILENO);
+		
 		if (node->token->type == TK_REDIR_HDOC)
 			handle_heredoc(node->token);
 		else
 			process_heredoc_and_redirections(node->token, saved_stdin);
 		execute_tree(node->left, env);
 		dup2(saved_stdin, STDIN_FILENO);
+		dup2(saved_stdout, STDOUT_FILENO);
 		close(saved_stdin);
+		close(saved_stdout);
 		return ;
 	}
 	else if (node->token->type == TK_OPEN_PARENTHESIS)
@@ -103,3 +107,4 @@ int	minishell_exec(t_tree *tree, char ***env)
 	execute_tree(tree, env);
 	return (SUCCESS);
 }
+
