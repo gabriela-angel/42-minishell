@@ -6,11 +6,11 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 18:37:58 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/31 17:42:38 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/02 16:53:07 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 // Processa os redirecionamentos e heredocs associados ao token.
 // Lida com heredocs e aplica redirecionamentos de entrada/saída.
@@ -18,9 +18,8 @@
 // caso contrário, retorna FALSE.
 t_bool	process_heredoc_and_redirections(t_token *token, int saved_stdin)
 {
-	t_token *cur;
+	t_token	*cur;
 
-	/* 1) Tratar todos os heredocs sem avançar `token` */
 	cur = token;
 	while (cur)
 	{
@@ -33,8 +32,6 @@ t_bool	process_heredoc_and_redirections(t_token *token, int saved_stdin)
 		}
 		cur = cur->next;
 	}
-
-	/* 2) Voltar ao início e aplicar redirecionamentos */
 	cur = token;
 	if (apply_redirections(cur))
 	{
@@ -45,70 +42,61 @@ t_bool	process_heredoc_and_redirections(t_token *token, int saved_stdin)
 	return (FALSE);
 }
 
-// Executa um comando simples (sem pipes ou operadores lógicos).
-// Verifica se o comando é um builtin ou um comando externo e o executa.
-// Libera a memória de `argv` e restaura o stdin original após a execução.
-// static void	execute_command(char **argv, char ***env,
-// 								int saved_stdin, int saved_stdout)
-// {
-// 	if (is_builtin(argv[0]))
-// 		exit_status(exec_builtin(argv, env, exit_status(-1)));
-// 	else
-// 		exit_status(exec_external(argv, *env));
-// 	ft_free_split(argv);
-
-// 	dup2(saved_stdout, STDOUT_FILENO);
-// 	close(saved_stdout);
-// 	dup2(saved_stdin, STDIN_FILENO);
-// 	close(saved_stdin);
-// }
-
-// // Libera a memória e restaura o stdin original após a execução de um comando simples.
-// // Usada para garantir que os recursos sejam liberados corretamente em caso de erro.
-// static void	cleanup_and_restore(int saved_stdin, char **argv)
-// {
-// 	ft_free_split(argv);
-// 	dup2(saved_stdin, STDIN_FILENO);
-// 	close(saved_stdin);
-// }
-
-// Executa um comando simples (sem pipes ou operadores lógicos).
-// Processa heredocs e redirecionamentos, converte tokens em `argv` e executa o comando.
-// Restaura o stdin original após a execução.
-void exec_simple_command(t_token *token, char ***env)
+static void	child_simple_command(t_token *token, char ***env, int saved_stdin)
 {
-	int   saved_stdin  = dup(STDIN_FILENO);
-	int   saved_stdout = dup(STDOUT_FILENO);
-	pid_t pid;
+	char	**argv;
+
+	if (process_heredoc_and_redirections(token, saved_stdin))
+		_exit(exit_status(-1));
+	argv = convert_token_to_argv(token);
+	if (!argv || !*argv)
+		_exit(exit_status(-1));
+	if (is_builtin(argv[0]))
+		exit_status(exec_builtin(argv, env, exit_status(-1)));
+	else
+		exit_status(exec_external(argv, *env));
+	ft_free_split(argv);
+	_exit(exit_status(-1));
+}
+
+static void	perform_fork(t_token *token, char ***env,
+				int saved_stdin, int saved_stdout)
+{
+	pid_t	pid;
+	int		status;
 
 	pid = fork();
 	if (pid < 0)
-	{
 		perror("fork");
-	}
 	else if (pid == 0)
-	{
-		/* Filho: trata heredoc/redirs e executa o comando */
-		if (process_heredoc_and_redirections(token, saved_stdin))
-			_exit(exit_status(-1));
-		char **argv = convert_token_to_argv(token);
-		if (!argv || !*argv)
-			_exit(exit_status(-1));
-		if (is_builtin(argv[0]))
-			exit_status(exec_builtin(argv, env, exit_status(-1)));
-		else
-			exit_status(exec_external(argv, *env));
-		ft_free_split(argv);
-		_exit(exit_status(-1));
-	}
+		child_simple_command(token, env, saved_stdin);
 	else
 	{
-		/* Pai: espera filho e restaura STDIN/STDOUT */
-		int status;
 		waitpid(pid, &status, 0);
-		dup2(saved_stdin,  STDIN_FILENO);
+		dup2(saved_stdin, STDIN_FILENO);
 		dup2(saved_stdout, STDOUT_FILENO);
 		close(saved_stdin);
 		close(saved_stdout);
 	}
+}
+
+void	exec_simple_command(t_token *token, char ***env)
+{
+	int		saved_stdin;
+	int		saved_stdout;
+	char	**argv;
+	int		status;
+
+	argv = convert_token_to_argv(token);
+	if (is_builtin(argv[0]))
+	{
+		status = exec_builtin(argv, env, exit_status(-1));
+		exit_status(status);
+		ft_free_split(argv);
+		return ;
+	}
+	saved_stdin = dup(STDIN_FILENO);
+	saved_stdout = dup(STDOUT_FILENO);
+	perform_fork(token, env, saved_stdin, saved_stdout);
+	ft_free_split(argv);
 }

@@ -6,7 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 23:59:42 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/30 11:07:39 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/02 15:00:10 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	shell_loop(char ***env)
 		if (tokens && (tree = get_tree(tokens)))
 		{
 			expand_tokens(tree);
-			minishell_exec(tree, env);
+			execute_tree(tree, env);
 		}
 		ft_gc_free(input);
 		ft_gc_exit();

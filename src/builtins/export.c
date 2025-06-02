@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:42:53 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/20 22:46:07 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/02 12:17:57 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,20 +84,18 @@ int	exec_export(char **args, char ***env)
 	if (!args[1])
 	{
 		print_env_sorted(*env);
-		return (0);
+		return (SUCCESS);
 	}
 	i = 1;
 	while (args[i])
 	{
 		if (!is_valid_identifier(args[i]))
 		{
-			write(2, "export: `", 9);
-			write(2, args[i], ft_strlen(args[i]));
-			write(2, "': not a valid identifier\n", 27);
-			return (1);
+			ft_printf_fd(2, "export: `%s': not a valid identifier\n", args[i]);
+			return (FAILURE);
 		}
 		ft_setenv(args[i], env);
 		i++;
 	}
-	return (0);
+	return (SUCCESS);
 }

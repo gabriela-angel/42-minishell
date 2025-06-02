@@ -12,42 +12,6 @@
 
 #include "minishell.h"
 
-// Lê linhas do terminal até encontrar a condição de término especificada.
-// Expande variáveis se necessário e escreve o conteúdo no arquivo temporário.
-// Retorna SUCCESS se a condição de término for encontrada, caso contrário FAILURE.
-static int	write_to_heredoc(int fd, char *end_condition, int is_expandable)
-{
-	char	*line;
-	char	*expanded_line;
-
-	line = readline("> ");
-	if (!line)
-	{
-		ft_printf_fd(STDERR_FILENO,
-			"minishell: warning: here-document at line 1 delimited by end-of-file (wanted `%s`)\n",
-			end_condition);
-		return (SUCCESS);
-	}
-	ft_gc_add(line);
-	if (ft_strcmp(line, end_condition) == SUCCESS)
-	{
-		ft_gc_free(line);
-		return (SUCCESS);
-	}
-	if (is_expandable && ft_strchr(line, '$'))
-	{
-		expanded_line = expand_var(line);
-		ft_gc_free(line);
-		line = expanded_line;
-		ft_gc_add(line);
-	}
-	ft_printf_fd(fd, "%s\n", line);
-	return (FAILURE);
-}
-
-// Inicializa o heredoc criando um arquivo temporário para armazenar o conteúdo.
-// Define se o heredoc é expansível com base na presença de aspas no token.
-// Retorna SUCCESS em caso de sucesso ou FAILURE em caso de erro.
 static int	init_heredoc(t_token *token, int *fd, char **file_name,
 		t_bool *is_expandable)
 {
@@ -70,9 +34,6 @@ static int	init_heredoc(t_token *token, int *fd, char **file_name,
 	return (SUCCESS);
 }
 
-// Processo filho responsável por lidar com o heredoc.
-// Lê as entradas do usuário, escreve no arquivo temporário e envia o conteúdo para o pipe.
-// Finaliza o processo filho após concluir o trabalho.
 static int	heredoc_child(t_token *token, int *pipe_fd)
 {
 	int		fd;
@@ -96,12 +57,9 @@ static int	heredoc_child(t_token *token, int *pipe_fd)
 	_exit(SUCCESS);
 }
 
-// Processo pai que gerencia o heredoc após o término do processo filho.
-// Lê o conteúdo do pipe e redireciona a entrada padrão para o pipe.
-// Retorna SUCCESS em caso de sucesso ou FAILURE se o processo filho for interrompido.
-static int finish_heredoc_parent(int default_stdin, int *pipe_fd, pid_t pid)
+static int	finish_heredoc_parent(int default_stdin, int *pipe_fd, pid_t pid)
 {
-	int status;
+	int	status;
 
 	close(pipe_fd[1]);
 	waitpid(pid, &status, 0);
@@ -117,14 +75,11 @@ static int finish_heredoc_parent(int default_stdin, int *pipe_fd, pid_t pid)
 	return (SUCCESS);
 }
 
-// Função principal para lidar com heredocs.
-// Cria um pipe, forka um processo filho para lidar com o heredoc e gerencia o processo pai.
-// Retorna SUCCESS em caso de sucesso ou FAILURE em caso de erro.
-int handle_heredoc(t_token *token)
+int	handle_heredoc(t_token *token)
 {
-	int pipe_fd[2];
-	pid_t pid;
-	int default_stdin = dup(STDIN_FILENO);
+	int		pipe_fd[2];
+	pid_t	pid;
+	int		default_stdin = dup(STDIN_FILENO);
 
 	if (pipe(pipe_fd) < 0)
 		return (FAILURE);

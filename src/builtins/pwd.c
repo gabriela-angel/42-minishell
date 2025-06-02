@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:41:32 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/20 22:40:53 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/02 12:18:15 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ int	exec_pwd(char **args)
 	if (!cwd)
 	{
 		perror("pwd");
-		return (1);
+		return (FAILURE);
 	}
 	printf("%s\n", cwd);
 	free(cwd);
-	return (0);
+	return (SUCCESS);
 }

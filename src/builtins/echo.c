@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:31:26 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/20 22:40:04 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/02 12:07:08 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,12 @@ int	exec_echo(char **args)
 	}
 	while (args[i])
 	{
-		write(1, args[i], ft_strlen(args[i]));
+		ft_printf_fd(1, "%s", args[i]);
 		if (args[i + 1])
-			write(1, " ", 1);
+			ft_printf_fd(1, " ");
 		i++;
 	}
 	if (newline)
-		write(1, "\n", 1);
+		ft_printf_fd(1, "\n");
 	return (0);
 }

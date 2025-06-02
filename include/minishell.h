@@ -6,7 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:30:39 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/05/29 14:32:56 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/02 15:49:15 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,8 @@ int		exec_unset(char **args, char ***env);
 int		exec_exit(char **args, int last_status);
 
 // EXECUTOR -------------
-// EXECUTOR -------------
 int		minishell_exec(t_tree *ast, char ***env);
-void	execute_tree(t_tree *node, char ***env);
+int		execute_tree(t_tree *node, char ***env);
 void	exec_pipe_node(t_tree *node, char ***env);
 void	wait_for_child(pid_t pid, int *status);
 int		exec_external(char **argv, char **envp);
@@ -115,6 +114,7 @@ int		handle_heredoc(t_token *token);
 int		delete_heredoc(void);
 int		*get_heredoc_counter(void);
 void	read_temp_file_and_write_to_pipe(int *pipe_fd, char *file_name);
+int		write_to_heredoc(int fd, char *end_condition, int is_expandable);
 
 // LEXER -------------
 t_token	*get_token_list(char *input);

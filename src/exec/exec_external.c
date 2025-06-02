@@ -6,7 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:41 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/29 14:37:57 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/02 15:12:11 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ static void	exec_child_process(char *cmd_path, char **argv, char **envp)
 	ft_gc_exit();
 }
 
-// Executa um comando externo, localizando seu caminho e gerenciando o processo filho
+/* Executa um comando externo, localizando seu caminho e 
+gerenciando o processo filho */
 int	exec_external(char **argv, char **envp)
 {
 	pid_t	pid;

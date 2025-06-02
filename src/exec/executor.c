@@ -6,7 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:33:24 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/31 17:59:51 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/02 15:11:30 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,29 @@ static void	exec_subshell(t_tree *node, char ***env)
 	wait_for_child(pid, &status);
 }
 
-// Executa a árvore de comandos.
-// Identifica o tipo do nó atual (AND, OR, PIPE, REDIREÇÃO, etc.)
-// e chama a função apropriada para executar o nó.
-void	execute_tree(t_tree *node, char ***env)
+static int	exec_redirection_node(t_tree *node, char ***env)
+{
+	int	saved_stdin;
+	int	saved_stdout;
+
+	saved_stdin = dup(STDIN_FILENO);
+	saved_stdout = dup(STDOUT_FILENO);
+	if (node->token->type == TK_REDIR_HDOC)
+		handle_heredoc(node->token);
+	else
+		process_heredoc_and_redirections(node->token, saved_stdin);
+	execute_tree(node->left, env);
+	dup2(saved_stdin, STDIN_FILENO);
+	dup2(saved_stdout, STDOUT_FILENO);
+	close(saved_stdin);
+	close(saved_stdout);
+	return (SUCCESS);
+}
+
+int	execute_tree(t_tree *node, char ***env)
 {
 	if (!node)
-		return ;
+		return (FAILURE);
 	if (node->token->type == TK_AND)
 		exec_and_node(node, env);
 	else if (node->token->type == TK_OR)
@@ -76,35 +92,10 @@ void	execute_tree(t_tree *node, char ***env)
 		exec_pipe_node(node, env);
 	else if (node->token->type >= TK_REDIR_OUT_APP \
 		&& node->token->type <= TK_REDIR_OUT)
-	{
-		int saved_stdin = dup(STDIN_FILENO);
-		int saved_stdout = dup(STDOUT_FILENO);
-		
-		if (node->token->type == TK_REDIR_HDOC)
-			handle_heredoc(node->token);
-		else
-			process_heredoc_and_redirections(node->token, saved_stdin);
-		execute_tree(node->left, env);
-		dup2(saved_stdin, STDIN_FILENO);
-		dup2(saved_stdout, STDOUT_FILENO);
-		close(saved_stdin);
-		close(saved_stdout);
-		return ;
-	}
+		return (exec_redirection_node(node, env));
 	else if (node->token->type == TK_OPEN_PARENTHESIS)
 		exec_subshell(node, env);
 	else
 		exec_simple_command(node->token, env);
-}
-
-// Função principal para executar a árvore de comandos.
-// Verifica se a árvore é válida e chama a função `execute_tree`.
-// Retorna SUCCESS em caso de sucesso ou FAILURE em caso de erro.
-int	minishell_exec(t_tree *tree, char ***env)
-{
-	if (!tree)
-		return (FAILURE);
-	execute_tree(tree, env);
 	return (SUCCESS);
 }
-

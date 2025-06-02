@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:38:52 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/20 23:05:30 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/02 12:04:21 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	update_pwd(void)
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 		return ;
-	free(cwd);
+	ft_gc_free(cwd);
 }
 
 /**
