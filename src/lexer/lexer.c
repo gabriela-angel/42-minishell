@@ -41,19 +41,14 @@ static int	word_len(char *input)
 	int	len;
 
 	len = 0;
-	while (input[len] && get_type(input + len) == TK_WORD
+	while (input[len]
+		&& get_type(input + len) == TK_WORD
 		&& !ft_isspace(input[len]))
 	{
-		if (input[len] == '\'')
+		if (input[len] == '\'' || input[len] == '"')
 		{
-			len++;
-			while (input[len] != '\'')
-				len++;
-		}
-		if (input[len] == '\"')
-		{
-			len++;
-			while (input[len] != '\"')
+			char quote = input[len++];
+			while (input[len] && input[len] != quote)
 				len++;
 		}
 		len++;

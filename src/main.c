@@ -3,17 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 23:59:42 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/06/02 15:00:10 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/03 15:43:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// Gerencia o loop principal do shell.
-// Lê a entrada do usuário, processa tokens, constrói a árvore de comandos e executa.
 static void	shell_loop(char ***env)
 {
 	char	*input;
@@ -41,8 +39,6 @@ static void	shell_loop(char ***env)
 	}
 }
 
-// Função principal.
-// Inicializa os recursos, chama o loop principal do shell e finaliza os recursos.
 int	main(int argc, char **argv, char **envp)
 {
 	char	**env;

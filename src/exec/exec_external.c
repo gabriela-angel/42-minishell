@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_external.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:41 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/02 15:12:11 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/03 14:56:52 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,14 @@ int	exec_external(char **argv, char **envp)
 	if (pid == 0)
 		exec_child_process(cmd_path, argv, envp);
 	waitpid(pid, &status, 0);
-	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-		ft_printf_fd(1, "\n");
+	if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGINT)
+			ft_printf_fd(1, "\n");
+		signal(SIGINT, handle_sigint);
+		ft_gc_free(cmd_path);
+		return (128 + WTERMSIG(status));
+	}
 	signal(SIGINT, handle_sigint);
 	ft_gc_free(cmd_path);
 	if (WIFEXITED(status))

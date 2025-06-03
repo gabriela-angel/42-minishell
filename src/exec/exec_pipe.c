@@ -30,6 +30,7 @@ static void	exec_child_left(t_tree *left, char ***env, int *fd)
 	close(fd[1]);
 	execute_tree(left, env);
 	ft_gc_exit();
+	_exit(exit_status(-1));
 }
 
 static void	exec_child_right(t_tree *right, char ***env, int *fd)
@@ -39,6 +40,7 @@ static void	exec_child_right(t_tree *right, char ***env, int *fd)
 	close(fd[0]);
 	execute_tree(right, env);
 	ft_gc_exit();
+	_exit(exit_status(-1));
 }
 
 void	exec_pipe_node(t_tree *node, char ***env)

@@ -3,19 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   exec_simple.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 18:37:58 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/02 16:53:07 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/03 17:20:38 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// Processa os redirecionamentos e heredocs associados ao token.
-// Lida com heredocs e aplica redirecionamentos de entrada/saída.
-// Retorna TRUE se ocorrer um erro ou se o comando não puder ser executado,
-// caso contrário, retorna FALSE.
 t_bool	process_heredoc_and_redirections(t_token *token, int saved_stdin)
 {
 	t_token	*cur;
@@ -73,6 +69,10 @@ static void	perform_fork(t_token *token, char ***env,
 	else
 	{
 		waitpid(pid, &status, 0);
+		if (WIFSIGNALED(status))
+			exit_status(128 + WTERMSIG(status));
+		else if (WIFEXITED(status))
+			exit_status(WEXITSTATUS(status));
 		dup2(saved_stdin, STDIN_FILENO);
 		dup2(saved_stdout, STDOUT_FILENO);
 		close(saved_stdin);

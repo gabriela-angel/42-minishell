@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:27:27 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/02 15:10:54 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/03 15:29:28 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static int	open_redir_out(t_token *token)
 {
-	int	flags;
-	int	fd;
+	int		flags;
+	int		fd;
 
 	flags = O_CREAT | O_WRONLY;
 	if (token->type == TK_REDIR_OUT_APP)
@@ -24,7 +24,12 @@ static int	open_redir_out(t_token *token)
 		flags |= O_TRUNC;
 	fd = open(token->next->value, flags, 0644);
 	if (fd < 0)
+	{
+		ft_printf_fd(2, "minishell: %s: %s\n",
+			token->next->value, strerror(errno));
+		exit_status(1);
 		return (FAILURE);
+	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 	return (SUCCESS);
@@ -36,7 +41,12 @@ static int	open_redir_in(t_token *token)
 
 	fd = open(token->next->value, O_RDONLY);
 	if (fd < 0)
+	{
+		ft_printf_fd(2, "minishell: %s: %s\n",
+			token->next->value, strerror(errno));
+		exit_status(1);
 		return (FAILURE);
+	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
 	return (SUCCESS);

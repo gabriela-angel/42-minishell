@@ -3,18 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:33:24 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/02 15:11:30 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/03 15:42:36 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// Executa um nó lógico || (OR).
-// Executa o nó da esquerda e, se o status de saída for diferente de SUCCESS,
-// executa o nó da direita.
 static void	exec_or_node(t_tree *node, char ***env)
 {
 	execute_tree(node->left, env);
@@ -22,9 +19,6 @@ static void	exec_or_node(t_tree *node, char ***env)
 		execute_tree(node->right, env);
 }
 
-// Executa um nó lógico && (AND).
-// Executa o nó da esquerda e, se o status de saída for SUCCESS,
-// executa o nó da direita.
 static void	exec_and_node(t_tree *node, char ***env)
 {
 	execute_tree(node->left, env);
@@ -32,9 +26,6 @@ static void	exec_and_node(t_tree *node, char ***env)
 		execute_tree(node->right, env);
 }
 
-// Executa um subshell (comandos entre parênteses).
-// Cria um processo filho para executar os comandos do subshell.
-// Gera uma nova árvore de comandos para o subshell e a executa.
 static void	exec_subshell(t_tree *node, char ***env)
 {
 	int		status;
@@ -63,15 +54,24 @@ static void	exec_subshell(t_tree *node, char ***env)
 
 static int	exec_redirection_node(t_tree *node, char ***env)
 {
-	int	saved_stdin;
-	int	saved_stdout;
+	int		saved_stdin;
+	int		saved_stdout;
+	t_bool	err;
 
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
 	if (node->token->type == TK_REDIR_HDOC)
-		handle_heredoc(node->token);
+		err = handle_heredoc(node->token);
 	else
-		process_heredoc_and_redirections(node->token, saved_stdin);
+		err = process_heredoc_and_redirections(node->token, saved_stdin);
+	if (err)
+	{
+		dup2(saved_stdin, STDIN_FILENO);
+		dup2(saved_stdout, STDOUT_FILENO);
+		close(saved_stdin);
+		close(saved_stdout);
+		return (FAILURE);
+	}
 	execute_tree(node->left, env);
 	dup2(saved_stdin, STDIN_FILENO);
 	dup2(saved_stdout, STDOUT_FILENO);

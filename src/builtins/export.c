@@ -3,99 +3,73 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:42:53 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/02 12:17:57 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/03 14:35:53 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * Verifica se a string é um identificador válido para export.
- * O primeiro caractere deve ser uma letra ou '_'.
- * Os demais podem ser letras, números ou '_'.
- */
-static t_bool	is_valid_identifier(const char *str)
+static t_bool	valid_assignment(const char *s)
 {
-	int	i;
+	size_t	i;
 
-	if (!str || (!ft_isalpha(str[0]) && str[0] != '_'))
+	if (!s || (!ft_isalpha(s[0]) && s[0] != '_'))
 		return (FALSE);
 	i = 1;
-	while (str[i] && str[i] != '=')
+	while (s[i] && s[i] != '=')
 	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
+		if (!ft_isalnum(s[i]) && s[i] != '_')
 			return (FALSE);
 		i++;
 	}
-	return (TRUE);
+	return (s[i] == '=');
 }
 
-/**
- * Imprime as variáveis de ambiente no formato do export.
- */
-static void	print_variable(char *var)
+static char	**extend_env_array(const char *assignment, char **env)
 {
-	int	j;
+	size_t	len;
+	char	**new_env;
+	size_t	i;
 
-	ft_printf_fd(1, "declare -x ");
-	j = 0;
-	while (var[j])
-	{
-		if (var[j] == '=')
-		{
-			ft_printf_fd(1, "\"%s\"\n", var + j + 1);
-			return ;
-		}
-		ft_printf_fd(1, "%c", var[j]);
-		j++;
-	}
-	ft_printf_fd(1, "\n");
-}
-
-static void	print_env_sorted(char **env)
-{
-	int		i;
-	char	**copy;
-
-	copy = ft_strdup_split(env);
-	if (!copy)
-		return ;
-	ft_sort_strs(copy);
+	len = 0;
+	while (env && env[len])
+		len++;
+	new_env = malloc(sizeof(char *) * (len + 2));
+	if (!new_env)
+		return (NULL);
 	i = 0;
-	while (copy[i])
+	while (i < len)
 	{
-		print_variable(copy[i]);
+		new_env[i] = env[i];
 		i++;
 	}
-	ft_free_split(copy);
+	new_env[i] = ft_strdup(assignment);
+	new_env[i + 1] = NULL;
+	free(env);
+	return (new_env);
 }
 
-/**
- * Exporta variáveis. Sem argumentos: imprime. 
- * Com argumentos: define ou atualiza.
- */
 int	exec_export(char **args, char ***env)
 {
-	int		i;
+	int	i;
+	int	status;
 
-	if (!args[1])
-	{
-		print_env_sorted(*env);
-		return (SUCCESS);
-	}
+	status = 0;
 	i = 1;
 	while (args[i])
 	{
-		if (!is_valid_identifier(args[i]))
+		if (valid_assignment(args[i]))
+			*env = extend_env_array(args[i], *env);
+		else
 		{
-			ft_printf_fd(2, "export: `%s': not a valid identifier\n", args[i]);
-			return (FAILURE);
+			ft_printf_fd(2, "export: `%s': not a valid identifier\n",
+				args[i]);
+			status = 1;
 		}
-		ft_setenv(args[i], env);
 		i++;
 	}
-	return (SUCCESS);
+	return (status);
 }
