@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_external.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:41 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/03 14:56:52 by marvin           ###   ########.fr       */
+/*   Updated: 2025/06/03 22:14:24 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ static char	*join_path_cmd(char *dir, char *cmd)
 	tmp = ft_strjoin(dir, "/");
 	if (!tmp)
 		return (NULL);
-	res = ft_strjoin(tmp, cmd);
-	ft_gc_free(tmp);
+	res = ft_strjoin_free(tmp, cmd);
+	ft_gc_add(res);
 	return (res);
 }
 
@@ -44,11 +44,11 @@ static char	*find_cmd_path(char *cmd)
 	{
 		full = join_path_cmd(paths[i], cmd);
 		if (access(full, X_OK) == 0)
-			return (ft_free_split(paths), full);
+			return (ft_free_matrix(paths), full);
 		ft_gc_free(full);
 		i++;
 	}
-	ft_free_split(paths);
+	ft_free_matrix(paths);
 	return (NULL);
 }
 

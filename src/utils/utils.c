@@ -6,26 +6,11 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:49:54 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/20 22:56:48 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/03 21:28:21 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	ft_free_split(char **split)
-{
-	int	i;
-
-	if (!split)
-		return ;
-	i = 0;
-	while (split[i])
-	{
-		ft_gc_free(split[i]);
-		i++;
-	}
-	ft_gc_free(split);
-}
 
 void	ft_sort_strs(char **arr)
 {

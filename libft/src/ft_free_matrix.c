@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 16:17:48 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/02/17 19:51:21 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/03 21:34:42 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,6 @@ void	ft_free_matrix(char **arr)
 		i++;
 	}
 	free(arr);
+	arr = NULL;
 	return ;
 }

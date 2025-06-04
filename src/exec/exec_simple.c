@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_simple.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 18:37:58 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/03 17:20:38 by marvin           ###   ########.fr       */
+/*   Updated: 2025/06/03 22:11:11 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static void	child_simple_command(t_token *token, char ***env, int saved_stdin)
 		exit_status(exec_builtin(argv, env, exit_status(-1)));
 	else
 		exit_status(exec_external(argv, *env));
-	ft_free_split(argv);
+	ft_gc_free_matrix(argv);
 	_exit(exit_status(-1));
 }
 
@@ -92,11 +92,11 @@ void	exec_simple_command(t_token *token, char ***env)
 	{
 		status = exec_builtin(argv, env, exit_status(-1));
 		exit_status(status);
-		ft_free_split(argv);
+		ft_gc_free_matrix(argv);
 		return ;
 	}
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
 	perform_fork(token, env, saved_stdin, saved_stdout);
-	ft_free_split(argv);
+	ft_gc_free_matrix(argv);
 }

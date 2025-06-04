@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:52:06 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/20 17:02:24 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/03 23:04:46 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,7 @@
 static t_malloc	*get_malloc_item(void)
 {
 	static t_malloc	mlc;
-	static int		is_initialized = 0;
 
-	if (!is_initialized)
-	{
-		mlc.ptr = NULL;
-		mlc.next = NULL;
-		is_initialized = 1;
-	}
 	return (&mlc);
 }
 
@@ -108,4 +101,20 @@ t_bool	ft_gc_add(void *ptr)
 		return (FALSE);
 	mlc->ptr = ptr;
 	return (TRUE);
+}
+
+void	ft_gc_free_matrix(char **matrix)
+{
+	int	i;
+
+	if (!matrix)
+		return ;
+	i = 0;
+	while (matrix[i])
+	{
+		ft_gc_free(matrix[i]);
+		i++;
+	}
+	ft_gc_free(matrix);
+	return ;
 }

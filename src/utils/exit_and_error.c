@@ -23,9 +23,23 @@ int	handle_error(const char *msg)
 
 int	exit_status(int set)
 {
-	static int	status = 0;
+	static int	status;
 
 	if (set != -1)
 		status = set;
 	return (status);
+}
+
+int	cleanup_and_exit(int status)
+{
+	char **env;
+
+	env = get_envp(NULL);
+	delete_heredoc();
+	ft_free_matrix(env);
+	ft_gc_exit();
+	rl_clear_history();
+	exit_status(status);
+	ft_printf_fd(1, "exit\n", 5);
+	exit(exit_status(-1));
 }

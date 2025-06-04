@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   convert_argv.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:26:34 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/05/29 15:53:50 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/03 22:06:42 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,10 @@ char	**convert_token_to_argv(t_token *token)
 	while (token)
 	{
 		if (token->type == TK_WORD)
+		{
 			argv[i++] = ft_strdup(token->value);
+			ft_gc_add(argv[i - 1]);
+		}
 		if (token->type >= TK_REDIR_OUT_APP && token->type <= TK_REDIR_OUT)
 			token = token->next;
 		token = token->next;

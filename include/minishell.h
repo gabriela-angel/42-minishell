@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:30:39 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/06/02 15:49:15 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/03 23:15:46 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ int		exec_unset(char **args, char ***env);
 int		exec_exit(char **args, int last_status);
 
 // EXECUTOR -------------
+char	**get_envp(char **envp);
 int		minishell_exec(t_tree *ast, char ***env);
 int		execute_tree(t_tree *node, char ***env);
 void	exec_pipe_node(t_tree *node, char ***env);
@@ -135,13 +136,14 @@ void	*ft_malloc(size_t size);
 void	ft_gc_free(void *ptr);
 void	ft_gc_exit(void);
 t_bool	ft_gc_add(void *ptr);
+void	ft_gc_free_matrix(char **matrix);
 
 // UTILS -----------------
-void	ft_free_split(char **split);
 void	ft_sort_strs(char **arr);
 int		ft_setenv(char *arg, char ***env);
 int		handle_error(const char *msg);
 int		exit_status(int set);
+int	cleanup_and_exit(int status);
 
 // TOKEN UTILS -------------
 void	tk_lst_add_back(t_token **head, t_token *new_node);

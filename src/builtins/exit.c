@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:30:19 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/02 12:15:34 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/03 23:28:04 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,17 @@ int	exec_exit(char **args, int last_status)
 {
 	ft_printf_fd(2, "exit\n");
 	if (!args[1])
-		exit(last_status);
+		cleanup_and_exit(last_status);
 	if (!is_numeric(args[1]))
 	{
 		ft_printf_fd(2, "minishell: exit: numeric argument required\n");
-		exit(255);
+		cleanup_and_exit(255);
 	}
 	if (args[2])
 	{
 		ft_printf_fd(2, "minishell: exit: too many arguments\n");
-		return (1);
+		exit_status(1);
 	}
-	exit((unsigned char)ft_atoi(args[1]));
+	cleanup_and_exit((unsigned char)ft_atoi(args[1]));
+	return (0);
 }
