@@ -32,7 +32,7 @@ static char	*handle_special_cases(char *dollar, char **str, char **after_var,
 	return (*expanded_var);
 }
 
-static char	*handle_dollar(char *init_value, char **str)
+static char	*handle_dollar(char *init_value, char **str, char **env)
 {
 	char	*dollar;
 	char	*before_var;
@@ -47,7 +47,7 @@ static char	*handle_dollar(char *init_value, char **str)
 			(*str)++;
 		after_var = *str;
 		tmp = ft_substr(dollar, 1, after_var - dollar - 1);
-		expanded_var = getenv(tmp);
+		expanded_var = get_var_from_env(tmp, env);
 		free(tmp);
 	}
 	before_var = ft_substr(init_value, 0, dollar - init_value);
@@ -59,7 +59,7 @@ static char	*handle_dollar(char *init_value, char **str)
 	return (tmp);
 }
 
-char	*expand_var(char *str)
+char	*expand_var(char *str, char **env)
 {
 	char	*expanded_str;
 
@@ -75,25 +75,25 @@ char	*expand_var(char *str)
 			{
 				if (*str == '$' && str[1] && (ft_isalnum(str[1]) \
 					|| ft_strchr("_?", str[1])))
-					expanded_str = handle_dollar(expanded_str, &str);
+					expanded_str = handle_dollar(expanded_str, &str, env);
 			}
 		}
 		else if (*str == '$' && str[1] && (ft_isalnum(str[1]) \
 				|| ft_strchr("_?\'\"", str[1])))
-			expanded_str = handle_dollar(expanded_str, &str);
+			expanded_str = handle_dollar(expanded_str, &str, env);
 		str++;
 	}
 	return (expanded_str);
 }
 
-void	expand_tokens(t_tree *tree)
+void	expand_tokens(t_tree *tree, char **env)
 {
 	t_token	*current;
 
 	current = tree->token;
 	while (current)
 	{
-		current->value = expand_var(current->value);
+		current->value = expand_var(current->value, env);
 		if (!(current->value))
 			handle_empty_value(&current, &tree);
 		if (ft_strchr_quote_aware(current->value, '*'))

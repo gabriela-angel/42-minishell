@@ -38,7 +38,9 @@ int	write_to_heredoc(int fd, char *end_condition, int is_expandable)
 {
 	char	*line;
 	char	*expanded_line;
+	char	**env;
 
+	env = get_envp(NULL);
 	line = readline("> ");
 	if (!line)
 	{
@@ -55,7 +57,7 @@ int	write_to_heredoc(int fd, char *end_condition, int is_expandable)
 	}
 	if (is_expandable && ft_strchr(line, '$'))
 	{
-		expanded_line = expand_var(line);
+		expanded_line = expand_var(line, env);
 		ft_gc_free(line);
 		line = expanded_line;
 		ft_gc_add(line);

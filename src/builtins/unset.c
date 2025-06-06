@@ -3,53 +3,51 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:28:05 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/02 15:20:43 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/06 16:18:32 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	is_valid_key(const char *key)
+static int is_valid_key(const char *key)
 {
-	int	i;
-
 	if (!key || (!ft_isalpha(key[0]) && key[0] != '_'))
-		return (SUCCESS);
-	i = 1;
-	while (key[i])
-	{
+		return (0);
+	for (int i = 1; key[i]; i++)
 		if (!ft_isalnum(key[i]) && key[i] != '_')
-			return (SUCCESS);
-		i++;
-	}
-	return (FAILURE);
+			return (0);
+	return (1);
 }
 
-int	exec_unset(char **args, char ***env)
+int exec_unset(char **args, char ***env)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	while (args[++i])
+	int i = 1;
+	while (args[i])
 	{
-		if (is_valid_key(args[i]) == FAILURE)
+		if (is_valid_key(args[i]))
 		{
-			j = 0;
+			size_t len = ft_strlen(args[i]);
+			int j = 0;
 			while ((*env)[j]
-				&& (!ft_strncmp((*env)[j], args[i], ft_strlen(args[i]))
-				|| (*env)[j][ft_strlen(args[i])] == '='))
+				&& (ft_strncmp((*env)[j], args[i], len) != 0
+					|| (*env)[j][len] != '='))
 				j++;
 			if ((*env)[j])
 			{
 				ft_gc_free((*env)[j]);
 				while ((*env)[j])
+				{
 					(*env)[j] = (*env)[j + 1];
+					j++;
+				}
 			}
 		}
+		else
+			ft_printf_fd(2, "unset: `%s': not a valid identifier\n", args[i]);
+		i++;
 	}
-	return (SUCCESS);
+	return (0);
 }

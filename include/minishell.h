@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:30:39 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/06/03 23:15:46 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/06 17:03:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ int		exec_env(char **args, char **env);
 int		exec_export(char **args, char ***env);
 int		exec_unset(char **args, char ***env);
 int		exec_exit(char **args, int last_status);
+char	*get_var_from_env(const char *key, char **env);
 
 // EXECUTOR -------------
 char	**get_envp(char **envp);
@@ -97,8 +98,8 @@ void	exec_simple_command(t_token *token, char ***env);
 t_bool	process_heredoc_and_redirections(t_token *token, int saved_stdin);
 
 // EXPANSION -------------
-char	*expand_var(char *str);
-void	expand_tokens(t_tree *tree);
+char	*expand_var(char *str, char **env);
+void	expand_tokens(t_tree *tree, char **env);
 char	*remove_quotes(char *str);
 void	handle_empty_value(t_token **current, t_tree **tree);
 char	*ft_strchr_quote_aware(const char *s, int c);

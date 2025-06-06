@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:28:47 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/02 12:10:52 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/06 16:25:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,22 @@ int	exec_env(char **args, char **env)
 		i++;
 	}
 	return (SUCCESS);
+}
+
+char	*get_var_from_env(const char *key, char **env)
+{
+	size_t	klen;
+	int		i;
+
+	if (!key)
+		return ("");
+	klen = ft_strlen(key);
+	i = 0;
+	while (env && env[i])
+	{
+		if (!ft_strncmp(env[i], key, klen) && env[i][klen] == '=')
+			return (&env[i][klen + 1]);
+		i++;
+	}
+	return ("");
 }

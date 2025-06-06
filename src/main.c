@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 23:59:42 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/06/03 23:19:07 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/04 20:19:28 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	shell_loop(char ***env)
 		tokens = get_token_list(input);
 		if (tokens && (tree = get_tree(tokens)))
 		{
-			expand_tokens(tree);
+			expand_tokens(tree, *env);
 			execute_tree(tree, env);
 		}
 		ft_gc_exit();
