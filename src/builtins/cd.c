@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:38:52 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/08 14:57:50 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/08 19:20:29 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	exec_cd(char **args)
 		path = args[1];
 	if (chdir(path) != 0)
 	{
-		ft_printf_fd(2, "cd: no such file or directory: %s\n", path);
+		ft_printf_fd(2, "cd: %s: No such file or directory\n", path);
 		return (1);
 	}
 	update_pwd();

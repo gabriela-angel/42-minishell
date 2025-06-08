@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 23:59:42 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/06/08 19:07:35 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/08 19:52:49 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,7 @@ static void	shell_loop(void)
 			add_history(input);
 		tokens = get_token_list(input);
 		if (tokens && (tree = get_tree(tokens)))
-		{
-			expand_tokens(tree);
 			execute_tree(tree);
-		}
 		ft_gc_exit();
 	}
 }

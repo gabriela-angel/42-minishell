@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 18:44:05 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/06/08 19:01:46 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/08 19:52:17 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ static t_tree	*build_tree(t_token *token_list)
 		return (NULL);
 	}
 	branch_tree(tree, token_list);
+	expand_tokens(tree);
 	return (tree);
 }
 
