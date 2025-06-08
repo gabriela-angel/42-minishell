@@ -40,6 +40,5 @@ int	cleanup_and_exit(int status)
 	ft_gc_exit();
 	rl_clear_history();
 	exit_status(status);
-	ft_printf_fd(1, "exit\n", 5);
 	exit(exit_status(-1));
 }
