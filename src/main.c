@@ -6,13 +6,13 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 23:59:42 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/06/08 14:32:41 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/08 17:27:30 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	shell_loop(char ***env)
+static void	shell_loop(void)
 {
 	char	*input;
 	t_token	*tokens;
@@ -32,8 +32,8 @@ static void	shell_loop(char ***env)
 		tokens = get_token_list(input);
 		if (tokens && (tree = get_tree(tokens)))
 		{
-			expand_tokens(tree, *env);
-			execute_tree(tree, env);
+			expand_tokens(tree);
+			execute_tree(tree);
 		}
 		ft_gc_exit();
 	}
@@ -47,8 +47,9 @@ char	**get_envp(char **envp)
 		return (NULL);
 	if (!envp || !*envp)
 		return (env);
-	if (!env)
-		env = ft_strdup_split(envp);
+	if (env)
+		ft_free_matrix(env);
+	env = ft_strdup_split(envp);
 	return (env);
 }
 
@@ -59,7 +60,8 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	env = get_envp(envp);
-	shell_loop(&env);
+	(void)env;
+	shell_loop();
 	ft_printf_fd(1, "exit\n");
 	cleanup_and_exit(-1);
 	return (0);

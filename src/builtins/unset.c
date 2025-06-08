@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:28:05 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/06 16:18:32 by marvin           ###   ########.fr       */
+/*   Updated: 2025/06/08 17:01:44 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,37 +14,54 @@
 
 static int is_valid_key(const char *key)
 {
+	size_t i;
+
+	i = 1;
 	if (!key || (!ft_isalpha(key[0]) && key[0] != '_'))
 		return (0);
-	for (int i = 1; key[i]; i++)
+	while (key[i])
+	{
 		if (!ft_isalnum(key[i]) && key[i] != '_')
 			return (0);
+		i++;
+	}
 	return (1);
 }
 
-int exec_unset(char **args, char ***env)
+static void remove_env_var(const char *key)
 {
-	int i = 1;
+	char	**env;
+	size_t	len;
+	int		i;
+
+	env = get_envp(NULL);
+	if (!env)
+		return;
+	len = ft_strlen(key);
+	i = 0;
+	while (env[i] && (ft_strncmp(env[i], key, len) != 0 || env[i][len] != '='))
+		i++;
+	if (env[i])
+	{
+		free(env[i]);
+		while (env[i + 1])
+		{
+			env[i] = env[i + 1];
+			i++;
+		}
+		env[i] = NULL;
+	}
+}
+
+int exec_unset(char **args)
+{
+	int		i;
+
+	i = 1;
 	while (args[i])
 	{
 		if (is_valid_key(args[i]))
-		{
-			size_t len = ft_strlen(args[i]);
-			int j = 0;
-			while ((*env)[j]
-				&& (ft_strncmp((*env)[j], args[i], len) != 0
-					|| (*env)[j][len] != '='))
-				j++;
-			if ((*env)[j])
-			{
-				ft_gc_free((*env)[j]);
-				while ((*env)[j])
-				{
-					(*env)[j] = (*env)[j + 1];
-					j++;
-				}
-			}
-		}
+			remove_env_var(args[i]);
 		else
 			ft_printf_fd(2, "unset: `%s': not a valid identifier\n", args[i]);
 		i++;

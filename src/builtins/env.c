@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:28:47 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/06 16:25:06 by marvin           ###   ########.fr       */
+/*   Updated: 2025/06/08 17:28:24 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,12 @@
 /**
  * Imprime as variáveis de ambiente com '='.
  */
-int	exec_env(char **args, char **env)
+int	exec_env(char **args)
 {
 	int	i;
-
+	char	**env;
+	
+	env = get_envp(NULL);
 	if (args[1])
 	{
 		ft_printf_fd(2, "env: too many arguments\n");

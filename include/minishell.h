@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:30:39 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/06/06 17:03:44 by marvin           ###   ########.fr       */
+/*   Updated: 2025/06/08 17:28:41 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,31 +75,30 @@ typedef struct s_malloc
 
 // BUILTINS -------------
 t_bool	is_builtin(const char *cmd);
-int		exec_builtin(char **args, char ***env, int last_status);
-int		exec_echo(char **args);
+int		exec_builtin(char **args, int last_status);
 int		exec_cd(char **args);
-int		exec_pwd(char **args);
-int		exec_env(char **args, char **env);
-int		exec_export(char **args, char ***env);
-int		exec_unset(char **args, char ***env);
+int		exec_echo(char **args);
+int		exec_env(char **args);
 int		exec_exit(char **args, int last_status);
+int		exec_export(char **args);
+int		exec_unset(char **args);
+int		exec_pwd(char **args);
 char	*get_var_from_env(const char *key, char **env);
 
 // EXECUTOR -------------
-char	**get_envp(char **envp);
-int		minishell_exec(t_tree *ast, char ***env);
-int		execute_tree(t_tree *node, char ***env);
-void	exec_pipe_node(t_tree *node, char ***env);
-void	wait_for_child(pid_t pid, int *status);
-int		exec_external(char **argv, char **envp);
 int		apply_redirections(t_token *token);
 char	**convert_token_to_argv(t_token *token);
-void	exec_simple_command(t_token *token, char ***env);
+int		execute_tree(t_tree *node);
+int		exec_external(char **argv);
+void	exec_pipe_node(t_tree *node);
+void	exec_simple_command(t_token *token);
+char	**get_envp(char **envp);
 t_bool	process_heredoc_and_redirections(t_token *token, int saved_stdin);
+void	wait_for_child(pid_t pid, int *status);
 
 // EXPANSION -------------
 char	*expand_var(char *str, char **env);
-void	expand_tokens(t_tree *tree, char **env);
+void	expand_tokens(t_tree *tree);
 char	*remove_quotes(char *str);
 void	handle_empty_value(t_token **current, t_tree **tree);
 char	*ft_strchr_quote_aware(const char *s, int c);
@@ -140,8 +139,8 @@ t_bool	ft_gc_add(void *ptr);
 void	ft_gc_free_matrix(char **matrix);
 
 // UTILS -----------------
-void	ft_sort_strs(char **arr);
-int		ft_setenv(char *arg, char ***env);
+// void	ft_sort_strs(char **arr);
+// int		ft_setenv(char *arg, char ***env);
 int		handle_error(const char *msg);
 int		exit_status(int set);
 int	cleanup_and_exit(int status);

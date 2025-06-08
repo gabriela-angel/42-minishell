@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:46:39 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/02 19:11:19 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/08 16:44:43 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_bool	is_builtin(const char *cmd)
 	return (FALSE);
 }
 
-int	exec_builtin(char **args, char ***env, int last_status)
+int	exec_builtin(char **args, int last_status)
 {
 	if (!args || !args[0])
 		return (1);
@@ -31,14 +31,14 @@ int	exec_builtin(char **args, char ***env, int last_status)
 	if (!ft_strcmp(args[0], "echo"))
 		return (exec_echo(args));
 	if (!ft_strcmp(args[0], "env"))
-		return (exec_env(args, *env));
+		return (exec_env(args));
 	if (!ft_strcmp(args[0], "exit"))
 		return (exec_exit(args, last_status));
 	if (!ft_strcmp(args[0], "export"))
-		return (exec_export(args, env));
+		return (exec_export(args));
 	if (!ft_strcmp(args[0], "pwd"))
 		return (exec_pwd(args));
 	if (!ft_strcmp(args[0], "unset"))
-		return (exec_unset(args, env));
+		return (exec_unset(args));
 	return (handle_error("error executing builtin"));
 }

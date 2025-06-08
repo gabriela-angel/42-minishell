@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 18:37:58 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/03 22:11:11 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/08 17:20:20 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_bool	process_heredoc_and_redirections(t_token *token, int saved_stdin)
 	return (FALSE);
 }
 
-static void	child_simple_command(t_token *token, char ***env, int saved_stdin)
+static void	child_simple_command(t_token *token, int saved_stdin)
 {
 	char	**argv;
 
@@ -48,15 +48,14 @@ static void	child_simple_command(t_token *token, char ***env, int saved_stdin)
 	if (!argv || !*argv)
 		_exit(exit_status(-1));
 	if (is_builtin(argv[0]))
-		exit_status(exec_builtin(argv, env, exit_status(-1)));
+		exit_status(exec_builtin(argv, exit_status(-1)));
 	else
-		exit_status(exec_external(argv, *env));
+		exit_status(exec_external(argv));
 	ft_gc_free_matrix(argv);
 	_exit(exit_status(-1));
 }
 
-static void	perform_fork(t_token *token, char ***env,
-				int saved_stdin, int saved_stdout)
+static void	perform_fork(t_token *token, int saved_stdin, int saved_stdout)
 {
 	pid_t	pid;
 	int		status;
@@ -65,14 +64,10 @@ static void	perform_fork(t_token *token, char ***env,
 	if (pid < 0)
 		perror("fork");
 	else if (pid == 0)
-		child_simple_command(token, env, saved_stdin);
+		child_simple_command(token, saved_stdin);
 	else
 	{
-		waitpid(pid, &status, 0);
-		if (WIFSIGNALED(status))
-			exit_status(128 + WTERMSIG(status));
-		else if (WIFEXITED(status))
-			exit_status(WEXITSTATUS(status));
+		wait_for_child(pid, &status);
 		dup2(saved_stdin, STDIN_FILENO);
 		dup2(saved_stdout, STDOUT_FILENO);
 		close(saved_stdin);
@@ -80,7 +75,7 @@ static void	perform_fork(t_token *token, char ***env,
 	}
 }
 
-void	exec_simple_command(t_token *token, char ***env)
+void	exec_simple_command(t_token *token)
 {
 	int		saved_stdin;
 	int		saved_stdout;
@@ -90,13 +85,13 @@ void	exec_simple_command(t_token *token, char ***env)
 	argv = convert_token_to_argv(token);
 	if (is_builtin(argv[0]))
 	{
-		status = exec_builtin(argv, env, exit_status(-1));
+		status = exec_builtin(argv, exit_status(-1));
 		exit_status(status);
 		ft_gc_free_matrix(argv);
 		return ;
 	}
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
-	perform_fork(token, env, saved_stdin, saved_stdout);
+	perform_fork(token, saved_stdin, saved_stdout);
 	ft_gc_free_matrix(argv);
 }

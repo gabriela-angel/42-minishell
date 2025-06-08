@@ -3,30 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:33:24 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/03 15:42:36 by marvin           ###   ########.fr       */
+/*   Updated: 2025/06/08 16:17:27 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	exec_or_node(t_tree *node, char ***env)
+static void	exec_or_node(t_tree *node)
 {
-	execute_tree(node->left, env);
+	execute_tree(node->left);
 	if (exit_status(-1) != SUCCESS && exit_status(-1) < 128)
-		execute_tree(node->right, env);
+		execute_tree(node->right);
 }
 
-static void	exec_and_node(t_tree *node, char ***env)
+static void	exec_and_node(t_tree *node)
 {
-	execute_tree(node->left, env);
+	execute_tree(node->left);
 	if (exit_status(-1) == SUCCESS)
-		execute_tree(node->right, env);
+		execute_tree(node->right);
 }
 
-static void	exec_subshell(t_tree *node, char ***env)
+static void	exec_subshell(t_tree *node)
 {
 	int		status;
 	pid_t	pid;
@@ -45,14 +45,14 @@ static void	exec_subshell(t_tree *node, char ***env)
 		current = node->token->next;
 		subshell = get_tree(current);
 		if (subshell)
-			execute_tree(subshell, env);
+			execute_tree(subshell);
 		ft_gc_exit();
 		exit(exit_status(-1));
 	}
 	wait_for_child(pid, &status);
 }
 
-static int	exec_redirection_node(t_tree *node, char ***env)
+static int	exec_redirection_node(t_tree *node)
 {
 	int		saved_stdin;
 	int		saved_stdout;
@@ -72,7 +72,7 @@ static int	exec_redirection_node(t_tree *node, char ***env)
 		close(saved_stdout);
 		return (FAILURE);
 	}
-	execute_tree(node->left, env);
+	execute_tree(node->left);
 	dup2(saved_stdin, STDIN_FILENO);
 	dup2(saved_stdout, STDOUT_FILENO);
 	close(saved_stdin);
@@ -80,22 +80,22 @@ static int	exec_redirection_node(t_tree *node, char ***env)
 	return (SUCCESS);
 }
 
-int	execute_tree(t_tree *node, char ***env)
+int	execute_tree(t_tree *node)
 {
 	if (!node)
 		return (FAILURE);
 	if (node->token->type == TK_AND)
-		exec_and_node(node, env);
+		exec_and_node(node);
 	else if (node->token->type == TK_OR)
-		exec_or_node(node, env);
+		exec_or_node(node);
 	else if (node->token->type == TK_PIPE)
-		exec_pipe_node(node, env);
+		exec_pipe_node(node);
 	else if (node->token->type >= TK_REDIR_OUT_APP \
 		&& node->token->type <= TK_REDIR_OUT)
-		return (exec_redirection_node(node, env));
+		return (exec_redirection_node(node));
 	else if (node->token->type == TK_OPEN_PARENTHESIS)
-		exec_subshell(node, env);
+		exec_subshell(node);
 	else
-		exec_simple_command(node->token, env);
+		exec_simple_command(node->token);
 	return (SUCCESS);
 }

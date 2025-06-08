@@ -23,27 +23,27 @@ void	wait_for_child(pid_t pid, int *status)
 		exit_status(1);
 }
 
-static void	exec_child_left(t_tree *left, char ***env, int *fd)
+static void	exec_child_left(t_tree *left, int *fd)
 {
 	close(fd[0]);
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[1]);
-	execute_tree(left, env);
+	execute_tree(left);
 	ft_gc_exit();
 	_exit(exit_status(-1));
 }
 
-static void	exec_child_right(t_tree *right, char ***env, int *fd)
+static void	exec_child_right(t_tree *right, int *fd)
 {
 	close(fd[1]);
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
-	execute_tree(right, env);
+	execute_tree(right);
 	ft_gc_exit();
 	_exit(exit_status(-1));
 }
 
-void	exec_pipe_node(t_tree *node, char ***env)
+void	exec_pipe_node(t_tree *node)
 {
 	int		fd[2];
 	pid_t	pid1;
@@ -54,10 +54,10 @@ void	exec_pipe_node(t_tree *node, char ***env)
 		return ;
 	pid1 = fork();
 	if (pid1 == 0)
-		exec_child_left(node->left, env, fd);
+		exec_child_left(node->left, fd);
 	pid2 = fork();
 	if (pid2 == 0)
-		exec_child_right(node->right, env, fd);
+		exec_child_right(node->right, fd);
 	close(fd[0]);
 	close(fd[1]);
 	wait_for_child(pid1, &exit_status[0]);

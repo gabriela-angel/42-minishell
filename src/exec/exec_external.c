@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:41 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/03 22:14:24 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/08 16:24:55 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,20 @@ static char	*find_cmd_path(char *cmd)
 }
 
 // Executa o comando no processo filho
-static void	exec_child_process(char *cmd_path, char **argv, char **envp)
+static void	exec_child_process(char *cmd_path, char **argv)
 {
+	char	**env;
+	
+	env = get_envp(NULL);
 	setup_signals_child();
-	execve(cmd_path, argv, envp);
+	execve(cmd_path, argv, env);
 	perror("minishell");
 	ft_gc_exit();
 }
 
 /* Executa um comando externo, localizando seu caminho e 
 gerenciando o processo filho */
-int	exec_external(char **argv, char **envp)
+int	exec_external(char **argv)
 {
 	pid_t	pid;
 	int		status;
@@ -78,7 +81,7 @@ int	exec_external(char **argv, char **envp)
 	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == 0)
-		exec_child_process(cmd_path, argv, envp);
+		exec_child_process(cmd_path, argv);
 	waitpid(pid, &status, 0);
 	if (WIFSIGNALED(status))
 	{

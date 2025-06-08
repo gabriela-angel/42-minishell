@@ -86,11 +86,13 @@ char	*expand_var(char *str, char **env)
 	return (expanded_str);
 }
 
-void	expand_tokens(t_tree *tree, char **env)
+void	expand_tokens(t_tree *tree)
 {
 	t_token	*current;
+	char	**env;
 
 	current = tree->token;
+	env = get_envp(NULL);
 	while (current)
 	{
 		current->value = expand_var(current->value, env);

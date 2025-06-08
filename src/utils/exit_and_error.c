@@ -36,7 +36,8 @@ int	cleanup_and_exit(int status)
 
 	env = get_envp(NULL);
 	delete_heredoc();
-	ft_free_matrix(env);
+	if (env)
+		ft_free_matrix(env);
 	ft_gc_exit();
 	rl_clear_history();
 	exit_status(status);
