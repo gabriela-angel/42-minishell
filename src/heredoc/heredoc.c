@@ -27,10 +27,10 @@ static int	init_heredoc(t_token *token, int *fd, char **file_name,
 	*fd = open(*file_name, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (*fd < 0)
 		return (FAILURE);
-	if (!ft_strchr(token->value, '\"') && !ft_strchr(token->value, '\''))
+	if (!ft_strchr(token->next->value, '\"') && !ft_strchr(token->next->value, '\''))
 		*is_expandable = TRUE;
 	else
-		token->value = remove_quotes(token->value);
+		token->next->value = remove_quotes(token->next->value);
 	return (SUCCESS);
 }
 
@@ -41,11 +41,11 @@ static int	heredoc_child(t_token *token, int *pipe_fd)
 	t_bool	is_expandable;
 	char	*end_condition;
 
-	end_condition = token->next->value;
 	signal(SIGINT, handle_heredoc_sigint);
 	close(pipe_fd[0]);
 	if (init_heredoc(token, &fd, &file_name, &is_expandable) != SUCCESS)
 		_exit(FAILURE);
+	end_condition = token->next->value;
 	while (42)
 	{
 		if (write_to_heredoc(fd, end_condition, is_expandable) == SUCCESS)

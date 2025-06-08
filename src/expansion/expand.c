@@ -95,6 +95,11 @@ void	expand_tokens(t_tree *tree)
 	env = get_envp(NULL);
 	while (current)
 	{
+		if (current->type == TK_REDIR_HDOC)
+		{
+			current = current->next->next;
+			continue ;
+		}
 		current->value = expand_var(current->value, env);
 		if (!(current->value))
 			handle_empty_value(&current, &tree);
