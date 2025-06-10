@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:38:52 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/08 19:20:29 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/10 16:56:56 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,16 @@ int	exec_cd(char **args)
 {
 	const char	*path;
 	char		*home;
-
+	int			argc;
+	
+	argc = 0;
+	while (args[argc])
+		argc++;
+	if (argc > 2)
+	{
+		ft_printf_fd(2, "cd: too many arguments\n");
+		return (1);
+	}
 	if (!args[1])
 	{
 		home = getenv("HOME");
