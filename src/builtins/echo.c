@@ -3,19 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:31:26 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/08 19:53:01 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/10 15:43:42 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * Função para verificar se uma string é uma flag -n válida.
- * Pode aceitar múltiplos 'n' após o primeiro.
- */
 static t_bool	is_n_flag(char *str)
 {
 	int	i;
@@ -32,11 +28,6 @@ static t_bool	is_n_flag(char *str)
 	return (TRUE);
 }
 
-/**
- * Implementação do built-in echo com suporte à flag -n.
- * Imprime os argumentos separados por espaço e, por padrão, com quebra de linha.
- * Se a flag -n for passada, suprime a quebra de linha.
- */
 int	exec_echo(char **args)
 {
 	int		i;

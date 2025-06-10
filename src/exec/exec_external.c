@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   exec_external.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:41 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/08 16:24:55 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/10 15:53:30 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-// Concatena um descritor e um comando para formar um caminho completo
+
 static char	*join_path_cmd(char *dir, char *cmd)
 {
 	char	*tmp;
@@ -25,7 +25,6 @@ static char	*join_path_cmd(char *dir, char *cmd)
 	return (res);
 }
 
-// Localiza o caminho de um comando no ambiente PATH
 static char	*find_cmd_path(char *cmd)
 {
 	char	**paths;
@@ -52,11 +51,10 @@ static char	*find_cmd_path(char *cmd)
 	return (NULL);
 }
 
-// Executa o comando no processo filho
 static void	exec_child_process(char *cmd_path, char **argv)
 {
 	char	**env;
-	
+
 	env = get_envp(NULL);
 	setup_signals_child();
 	execve(cmd_path, argv, env);
@@ -64,8 +62,23 @@ static void	exec_child_process(char *cmd_path, char **argv)
 	ft_gc_exit();
 }
 
-/* Executa um comando externo, localizando seu caminho e 
-gerenciando o processo filho */
+static int	wait_and_handle_status(int status, char *cmd_path)
+{
+	if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGINT)
+			ft_printf_fd(1, "\n");
+		signal(SIGINT, handle_sigint);
+		ft_gc_free(cmd_path);
+		return (128 + WTERMSIG(status));
+	}
+	signal(SIGINT, handle_sigint);
+	ft_gc_free(cmd_path);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	return (FAILURE);
+}
+
 int	exec_external(char **argv)
 {
 	pid_t	pid;
@@ -83,17 +96,5 @@ int	exec_external(char **argv)
 	if (pid == 0)
 		exec_child_process(cmd_path, argv);
 	waitpid(pid, &status, 0);
-	if (WIFSIGNALED(status))
-	{
-		if (WTERMSIG(status) == SIGINT)
-			ft_printf_fd(1, "\n");
-		signal(SIGINT, handle_sigint);
-		ft_gc_free(cmd_path);
-		return (128 + WTERMSIG(status));
-	}
-	signal(SIGINT, handle_sigint);
-	ft_gc_free(cmd_path);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	return (FAILURE);
+	return (wait_and_handle_status(status, cmd_path));
 }

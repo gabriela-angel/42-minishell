@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 23:59:42 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/06/08 19:52:49 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/10 15:43:18 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,5 +61,5 @@ int	main(int argc, char **argv, char **envp)
 	shell_loop();
 	ft_printf_fd(1, "exit\n");
 	cleanup_and_exit(-1);
-	return (0);
+	return (SUCCESS);
 }
