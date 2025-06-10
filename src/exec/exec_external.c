@@ -6,11 +6,40 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:41 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/08 16:24:55 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/10 18:15:54 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+//Checa para ver se 'e um comando valido
+static char	*verify_cmd(char *cmd, int *res)
+{
+	struct stat info;
+
+	*res = 0;
+	if (cmd[0] == '/' || cmd[0] == '.')
+	{
+		if (access(cmd, X_OK) != 0 || stat(cmd, &info) != 0)
+		{
+			if (errno == EACCES)
+				*res = -1;
+			else if (errno == ENOENT)
+				*res = -2;
+			else
+				*res = -3;
+			return (NULL);
+		}
+		if (S_ISDIR(info.st_mode))
+		{
+			*res = -3;
+			return (NULL);
+		}
+		return (ft_strdup(cmd));
+	}
+	return (NULL);
+}
+
 // Concatena um descritor e um comando para formar um caminho completo
 static char	*join_path_cmd(char *dir, char *cmd)
 {
@@ -33,8 +62,8 @@ static char	*find_cmd_path(char *cmd)
 	char	*full;
 	int		i;
 
-	if (ft_strchr(cmd, '/'))
-		return (ft_strdup(cmd));
+	// if (ft_strchr(cmd, '/'))
+	// 	return (ft_strdup(cmd));
 	path_env = getenv("PATH");
 	if (!path_env)
 		return (NULL);
@@ -71,28 +100,31 @@ int	exec_external(char **argv)
 	pid_t	pid;
 	int		status;
 	char	*cmd_path;
+	int		res;
 
-	cmd_path = find_cmd_path(argv[0]);
+	if (!argv[0] || argv[0][0] == '\0')
+		return (0);
+	res = 0;
+	cmd_path = verify_cmd(argv[0], &res);
 	if (!cmd_path)
 	{
-		ft_printf_fd(2, "%s: command not found\n", argv[0]);
-		return (127);
+		if (res != 0)
+			return (print_exec_exit_msg(argv[0], res));
+		cmd_path = find_cmd_path(argv[0]);
+		if (!cmd_path)
+			return (print_exec_exit_msg(argv[0], -2));
 	}
 	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == 0)
 		exec_child_process(cmd_path, argv);
 	waitpid(pid, &status, 0);
-	if (WIFSIGNALED(status))
-	{
-		if (WTERMSIG(status) == SIGINT)
-			ft_printf_fd(1, "\n");
-		signal(SIGINT, handle_sigint);
-		ft_gc_free(cmd_path);
-		return (128 + WTERMSIG(status));
-	}
 	signal(SIGINT, handle_sigint);
 	ft_gc_free(cmd_path);
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+		ft_printf_fd(1, "\n");
+	if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (FAILURE);

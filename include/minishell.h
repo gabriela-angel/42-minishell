@@ -3,27 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:30:39 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/06/09 14:17:53 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/10 18:04:45 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../libft/include/libft.h"
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <errno.h>
-# include <limits.h>
 # include <dirent.h>
-# include <sys/wait.h>
+# include <errno.h>
 # include <fcntl.h>
+# include <limits.h>
+# include "../libft/include/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/stat.h>
+# include <sys/wait.h>
+# include <unistd.h>
 
 // MACROS ---------------
 # define SUCCESS 0
@@ -138,11 +139,10 @@ t_bool	ft_gc_add(void *ptr);
 void	ft_gc_free_matrix(char **matrix);
 
 // UTILS -----------------
-// void	ft_sort_strs(char **arr);
-// int		ft_setenv(char *arg, char ***env);
 int		handle_error(const char *msg);
 int		exit_status(int set);
 int	cleanup_and_exit(int status);
+int	print_exec_exit_msg(const char *msg, int res);
 
 // TOKEN UTILS -------------
 void	tk_lst_add_back(t_token **head, t_token *new_node);

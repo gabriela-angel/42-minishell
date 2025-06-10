@@ -43,3 +43,26 @@ int	cleanup_and_exit(int status)
 	exit_status(status);
 	exit(exit_status(-1));
 }
+
+int	print_exec_exit_msg(const char *msg, int res)
+{
+	if (res == -3)
+	{
+		ft_printf_fd(2, "minishell: -bash: %s: Is a directory\n", msg);
+		return (126);
+	}
+	else if (res == -1)
+	{
+		ft_printf_fd(2, "minishell: %s: Permission denied\n", msg);
+		return (126);
+	}
+	else if (res == -2)
+	{
+		if (ft_strchr(msg, '/'))
+			ft_printf_fd(2, "minishell: %s: No such file or directory\n", msg);
+		else
+			ft_printf_fd(2, "minishell: %s: command not found\n", msg);
+		return (127);
+	}
+	return (res);
+}
