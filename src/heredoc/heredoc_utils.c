@@ -34,19 +34,34 @@ int	delete_heredoc(void)
 	return (SUCCESS);
 }
 
-int	write_to_heredoc(int fd, char *end_condition, int is_expandable)
+static char	*hd_readline(int *save_out)
 {
+	int		tty_output_fd;
 	char	*line;
-	char	*expanded_line;
-	char	**env;
 
-	env = get_envp(NULL);
+	*save_out = dup(STDOUT_FILENO);
+	tty_output_fd = open("/dev/tty", O_WRONLY | O_NOCTTY);
+	if (tty_output_fd >= 0)
+	{
+		dup2(tty_output_fd, STDOUT_FILENO);
+		close(tty_output_fd);
+	}
 	line = readline("> ");
+	dup2(*save_out, STDOUT_FILENO);
+	close(*save_out);
+	return (line);
+}
+
+static int	hd_process_line(char *line, char *end_condition,
+						int is_expandable, char **env, int fd)
+{
+	char	*expanded;
+
 	if (!line)
 	{
 		ft_printf_fd(STDERR_FILENO,
-			"minishell: warning: here-document at line 1 delimited by end-of-file (wanted `%s`)\n",
-			end_condition);
+			"minishell: warning: here-document at line 1 "
+			"delimited by end-of-file (wanted `%s`)\n", end_condition);
 		return (SUCCESS);
 	}
 	ft_gc_add(line);
@@ -57,13 +72,25 @@ int	write_to_heredoc(int fd, char *end_condition, int is_expandable)
 	}
 	if (is_expandable && ft_strchr(line, '$'))
 	{
-		expanded_line = expand_var(line, env);
+		expanded = expand_var(line, env);
 		ft_gc_free(line);
-		line = expanded_line;
+		line = expanded;
 		ft_gc_add(line);
 	}
 	ft_printf_fd(fd, "%s\n", line);
+	ft_gc_free(line);
 	return (FAILURE);
+}
+
+int	write_to_heredoc(int fd, char *end_condition, int is_expandable)
+{
+	char	*line;
+	char	**env;
+	int		save_out;
+
+	env = get_envp(NULL);
+	line = hd_readline(&save_out);
+	return (hd_process_line(line, end_condition, is_expandable, env, fd));
 }
 
 int	*get_heredoc_counter(void)
@@ -72,17 +99,3 @@ int	*get_heredoc_counter(void)
 	return (&counter);
 }
 
-void	read_temp_file_and_write_to_pipe(int *pipe_fd, char *file_name)
-{
-	int		fd;
-	char	buffer[1024];
-	ssize_t	bytes_read;
-
-	fd = open(file_name, O_RDONLY);
-	if (fd >= 0)
-	{
-		while ((bytes_read = read(fd, buffer, sizeof(buffer))) > 0)
-			write(pipe_fd[1], buffer, bytes_read);
-		close(fd);
-	}
-}

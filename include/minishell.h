@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:30:39 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/06/08 17:28:41 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/09 14:17:53 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,6 @@ void	create_match_lst(t_token **head, char *data);
 int		handle_heredoc(t_token *token);
 int		delete_heredoc(void);
 int		*get_heredoc_counter(void);
-void	read_temp_file_and_write_to_pipe(int *pipe_fd, char *file_name);
 int		write_to_heredoc(int fd, char *end_condition, int is_expandable);
 
 // LEXER -------------

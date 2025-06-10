@@ -12,6 +12,21 @@
 
 #include "minishell.h"
 
+static void	read_temp_file_and_write_to_pipe(int *pipe_fd, char *file_name)
+{
+	int		fd;
+	char	buffer[1024];
+	ssize_t	bytes_read;
+
+	fd = open(file_name, O_RDONLY);
+	if (fd >= 0)
+	{
+		while ((bytes_read = read(fd, buffer, sizeof(buffer))) > 0)
+			write(pipe_fd[1], buffer, bytes_read);
+		close(fd);
+	}
+}
+
 static int	init_heredoc(t_token *token, int *fd, char **file_name,
 		t_bool *is_expandable)
 {
