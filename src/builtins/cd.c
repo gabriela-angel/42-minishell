@@ -6,7 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:38:52 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/10 15:43:33 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/11 12:13:12 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,23 +27,22 @@ int	exec_cd(char **args)
 	const char	*path;
 	char		*home;
 
-	if (!args[1])
+	if (args[1] && args[2])
 	{
-		home = getenv("HOME");
-		if (!home)
-		{
-			ft_printf_fd(2, "cd: HOME not set\n");
-			return (1);
-		}
-		path = home;
+		ft_printf_fd(2, "cd: too many arguments\n");
+		return (FAILURE);
 	}
-	else
-		path = args[1];
-	if (chdir(path) != 0)
+	if (!args[1] && !(home = getenv("HOME")))
+	{
+		ft_printf_fd(2, "cd: HOME not set\n");
+		return (FAILURE);
+	}
+	path = args[1] ? args[1] : home;
+	if (chdir(path))
 	{
 		ft_printf_fd(2, "cd: %s: No such file or directory\n", path);
-		return (1);
+		return (FAILURE);
 	}
 	update_pwd();
-	return (0);
+	return (SUCCESS);
 }

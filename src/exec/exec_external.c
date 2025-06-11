@@ -6,7 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:41 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/10 15:53:30 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/11 14:32:47 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,17 +79,27 @@ static int	wait_and_handle_status(int status, char *cmd_path)
 	return (FAILURE);
 }
 
-int	exec_external(char **argv)
+int exec_external(char **argv)
 {
 	pid_t	pid;
 	int		status;
 	char	*cmd_path;
+	DIR		*dir;
 
 	cmd_path = find_cmd_path(argv[0]);
 	if (!cmd_path)
 	{
 		ft_printf_fd(2, "%s: command not found\n", argv[0]);
 		return (127);
+	}
+	dir = opendir(cmd_path);
+	if (dir)
+	{
+		closedir(dir);
+		ft_printf_fd(2, "minishell: %s: Is a directory\n", cmd_path);
+		ft_gc_free(cmd_path);
+		exit_status(126);
+		return (126);
 	}
 	signal(SIGINT, SIG_IGN);
 	pid = fork();

@@ -6,7 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:42:53 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/10 17:07:21 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/11 11:59:58 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ int	exec_export(char **args)
 	char	**env;
 
 	env = get_envp(NULL);
+	if (!args[1])
+		return print_export_list(env);
 	status = 0;
 	i = 1;
 	while (args[i])
