@@ -6,17 +6,12 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:38:52 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/10 16:56:56 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/11 15:12:09 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * Atualiza a variável de ambiente PWD e OLDPWD após mudar de diretório.
- * Você pode ajustar isso para trabalhar com sua própria lista de variáveis
- * se não usar getenv/setenv.
- */
 static void	update_pwd(void)
 {
 	char	*cwd;
@@ -27,11 +22,6 @@ static void	update_pwd(void)
 	free(cwd);
 }
 
-/**
- * Implementa o comando `cd` com um caminho absoluto ou relativo.
- * - Se nenhum argumento for passado, tenta usar $HOME.
- * - Retorna 1 em caso de erro, 0 em sucesso.
- */
 int	exec_cd(char **args)
 {
 	const char	*path;

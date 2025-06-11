@@ -62,9 +62,9 @@ static int	tk_len(char *input, t_value_type type)
 		return (word_len(input));
 	else if (type == TK_OR || type == TK_AND || type == TK_REDIR_HDOC
 		|| type == TK_REDIR_OUT_APP)
-		return (2);
+		return (SYNTAX_ERROR);
 	else
-		return (1);
+		return (FAILURE);
 }
 
 t_token	*get_token_list(char *input)

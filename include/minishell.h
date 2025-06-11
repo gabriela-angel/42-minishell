@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:30:39 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/06/10 18:04:45 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/11 15:02:40 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ int		exec_export(char **args);
 int		exec_unset(char **args);
 int		exec_pwd(char **args);
 char	*get_var_from_env(const char *key, char **env);
+int		print_export_list(char **env);
 
 // EXECUTOR -------------
 int		apply_redirections(t_token *token);

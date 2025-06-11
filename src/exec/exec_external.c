@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:41 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/10 18:15:54 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/11 15:12:39 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ static char	*join_path_cmd(char *dir, char *cmd)
 	return (res);
 }
 
-// Localiza o caminho de um comando no ambiente PATH
 static char	*find_cmd_path(char *cmd)
 {
 	char	**paths;
@@ -81,11 +80,10 @@ static char	*find_cmd_path(char *cmd)
 	return (NULL);
 }
 
-// Executa o comando no processo filho
 static void	exec_child_process(char *cmd_path, char **argv)
 {
 	char	**env;
-	
+
 	env = get_envp(NULL);
 	setup_signals_child();
 	execve(cmd_path, argv, env);

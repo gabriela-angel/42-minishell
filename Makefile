@@ -25,7 +25,7 @@ OBJ_DIR = obj/
 
 # FILES AND OBJECTS
 SRC := $(addprefix $(SRC_DIR), main.c) \
-		$(addprefix $(BTIN_DIR), builtins.c cd.c echo.c env.c exit.c export.c pwd.c unset.c) \
+		$(addprefix $(BTIN_DIR), builtins.c cd.c echo.c env.c exit.c export.c export_print.c pwd.c unset.c) \
 		$(addprefix $(EXC_DIR), executor.c exec_simple.c exec_pipe.c exec_redirs.c exec_external.c convert_argv.c) \
 		$(addprefix $(EXP_DIR), expand.c expand_utils.c wildcard.c wildcard_utils.c) \
 		$(addprefix $(HDOC_DIR), heredoc.c heredoc_utils.c) \
