@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_external.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:41 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/11 15:12:39 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/13 16:33:30 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,6 @@ static void	exec_child_process(char *cmd_path, char **argv)
 	ft_gc_exit();
 }
 
-/* Executa um comando externo, localizando seu caminho e 
-gerenciando o processo filho */
 int	exec_external(char **argv)
 {
 	pid_t	pid;

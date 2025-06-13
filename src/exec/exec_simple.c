@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_simple.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 18:37:58 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/08 19:44:50 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/13 16:15:44 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,11 @@ static void	child_simple_command(t_token *token, int saved_stdin)
 	if (process_heredoc_and_redirections(token, saved_stdin))
 		_exit(exit_status(-1));
 	argv = convert_token_to_argv(token);
-	if (!argv || !*argv)
-		_exit(exit_status(-1));
+	if (!argv || !argv[0] || argv[0][0] == '\0')
+	{
+		ft_gc_free_matrix(argv);
+		_exit(0);
+	}
 	if (is_builtin(argv[0]))
 		exit_status(exec_builtin(argv, exit_status(-1)));
 	else
@@ -83,6 +86,11 @@ void	exec_simple_command(t_token *token)
 	int		status;
 
 	argv = convert_token_to_argv(token);
+	if (!argv || !argv[0] || argv[0][0] == '\0')
+	{
+		ft_gc_free_matrix(argv);
+		return ;
+	}
 	if (is_builtin(argv[0]))
 	{
 		status = exec_builtin(argv, exit_status(-1));
