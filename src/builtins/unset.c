@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:28:05 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/10 15:44:47 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/13 17:05:20 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ int	exec_unset(char **args)
 	{
 		if (is_valid_key(args[i]))
 			remove_env_var(args[i]);
-		else
-			ft_printf_fd(2, "unset: `%s': not a valid identifier\n", args[i]);
 		i++;
 	}
 	return (0);

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+         #
+#    By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/07 12:04:18 by gangel-a          #+#    #+#              #
-#    Updated: 2025/05/19 21:37:46 by acesar-m         ###   ########.fr        #
+#    Updated: 2025/06/13 17:46:19 by gangel-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,6 +55,7 @@ SRC = ft_atoi.c \
 		ft_strjoin.c \
 		ft_strjoin_free.c \
 		ft_strrchr.c \
+		ft_strtoll_check.c \
 		ft_strncmp.c \
 		ft_strnstr.c \
 		ft_strmapi.c \
