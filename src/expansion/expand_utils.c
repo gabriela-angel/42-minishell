@@ -87,6 +87,7 @@ void	retokenize(t_token **token)
 	t_token	*current;
 	char	**tk_lst;
 	int		i;
+	int		len;
 
 	current = *token;
 	next = (*token)->next;
@@ -97,9 +98,7 @@ void	retokenize(t_token **token)
 		i = 0;
 		while (tk_lst[++i])
 		{
-			(*token)->next = ft_malloc(sizeof(t_token));
-			(*token)->next->value = tk_lst[i];
-			(*token)->next->type = TK_WORD;
+			(*token)->next = new_token(tk_lst[i], &len);
 			(*token)->next->prev = (*token);
 			(*token) = (*token)->next;
 		}
@@ -108,4 +107,5 @@ void	retokenize(t_token **token)
 	}
 	else
 		(*token)->value = "\0";
+	ft_free_matrix(tk_lst);
 }

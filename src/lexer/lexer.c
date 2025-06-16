@@ -68,7 +68,7 @@ static int	tk_len(char *input, t_value_type type)
 		return (FAILURE);
 }
 
-static t_token	*new_token(char *content, int *len)
+t_token	*new_token(char *content, int *len)
 {
 	t_token	*new;
 

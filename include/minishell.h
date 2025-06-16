@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:30:39 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/06/15 23:19:57 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/15 23:55:43 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ int			write_to_heredoc(int fd, char *end_condition, int is_expandable);
 // LEXER -------------
 t_token		*get_token_list(char *input);
 int			validate_input(char *input);
+t_token		*new_token(char *content, int *len);
 
 // PARSER -------------
 t_tree		*get_tree(t_token *token_list);
