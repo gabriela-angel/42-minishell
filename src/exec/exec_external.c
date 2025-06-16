@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_external.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:41 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/13 16:33:30 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/15 23:25:45 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 //Checa para ver se 'e um comando valido
 static char	*verify_cmd(char *cmd, int *res)
 {
-	struct stat info;
+	struct stat	info;
 
 	*res = 0;
 	if (cmd[0] == '/' || cmd[0] == '.')
@@ -105,10 +105,10 @@ int	exec_external(char **argv)
 	if (!cmd_path)
 	{
 		if (res != 0)
-			return (print_exec_exit_msg(argv[0], res));
+			return (handle_err_exec(argv[0], res));
 		cmd_path = find_cmd_path(argv[0]);
 		if (!cmd_path)
-			return (print_exec_exit_msg(argv[0], -2));
+			return (handle_err_exec(argv[0], -2));
 	}
 	signal(SIGINT, SIG_IGN);
 	pid = fork();

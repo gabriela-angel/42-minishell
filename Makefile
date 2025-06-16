@@ -32,7 +32,7 @@ SRC := $(addprefix $(SRC_DIR), main.c) \
 		$(addprefix $(LXR_DIR), lexer.c lexer_validator.c) \
 		$(addprefix $(PRS_DIR), parser.c parser_validator.c) \
 		$(addprefix $(SIG_DIR), signals.c) \
-		$(addprefix $(UTL_DIR), exit_and_error.c ft_malloc.c token_utils.c)
+		$(addprefix $(UTL_DIR), exit_and_error.c token_utils.c ft_malloc/ft_malloc.c ft_malloc/ft_malloc_utils.c)
 
 OBJ := $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
 

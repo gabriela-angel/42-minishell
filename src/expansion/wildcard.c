@@ -82,6 +82,18 @@ static t_bool	is_match(char *str, char *pattern)
 	return (match_and_free(match, str_len, pat_len));
 }
 
+static void	adjust_tk_list(t_token **token, t_tree **tree, t_token *match_lst)
+{
+	if ((*token)->prev == NULL)
+	{
+		if ((*tree)->token->type >= TK_REDIR_OUT_APP
+			&& (*tree)->token->type <= TK_REDIR_OUT)
+			(*tree)->token->next = match_lst;
+		else
+			(*tree)->token = match_lst;
+	}
+}
+
 void	expand_wildcard(t_token **token, t_tree **tree)
 {
 	DIR				*dir;
@@ -102,8 +114,7 @@ void	expand_wildcard(t_token **token, t_tree **tree)
 	closedir(dir);
 	if (!match_lst)
 		return ;
-	if ((*token)->prev == NULL)
-		(*tree)->token = match_lst;
+	adjust_tk_list(token, tree, match_lst);
 	alpha_sort_lst(&match_lst);
 	update_tk_lst(token, match_lst);
 }

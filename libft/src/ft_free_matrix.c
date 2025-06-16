@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 16:17:48 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/06/08 15:32:11 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/15 23:31:12 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_free_matrix(char **matrix)
 
 	i = 0;
 	if (!matrix)
-		return;
+		return ;
 	while (matrix[i])
 	{
 		free(matrix[i]);

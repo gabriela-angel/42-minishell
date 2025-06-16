@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:38:52 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/11 15:12:09 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/15 23:24:26 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,28 +22,28 @@ static void	update_pwd(void)
 	free(cwd);
 }
 
+static int	print_cd_err(char *msg)
+{
+	ft_printf_fd(2, "%s", msg);
+	return (1);
+}
+
 int	exec_cd(char **args)
 {
 	const char	*path;
 	char		*home;
 	int			argc;
-	
+
 	argc = 0;
 	while (args[argc])
 		argc++;
 	if (argc > 2)
-	{
-		ft_printf_fd(2, "cd: too many arguments\n");
-		return (1);
-	}
+		return (print_cd_err("cd: too many arguments\n"));
 	if (!args[1])
 	{
 		home = getenv("HOME");
 		if (!home)
-		{
-			ft_printf_fd(2, "cd: HOME not set\n");
-			return (1);
-		}
+			return (print_cd_err("cd: HOME not set\n"));
 		path = home;
 	}
 	else

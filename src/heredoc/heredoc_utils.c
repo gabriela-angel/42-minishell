@@ -96,6 +96,6 @@ int	write_to_heredoc(int fd, char *end_condition, int is_expandable)
 int	*get_heredoc_counter(void)
 {
 	static int	counter;
+
 	return (&counter);
 }
-

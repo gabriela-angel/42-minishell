@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 23:59:42 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/06/13 16:09:31 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/15 23:07:09 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,12 @@ static void	shell_loop(void)
 		else if (input[0])
 			add_history(input);
 		tokens = get_token_list(input);
-		if (tokens && (tree = get_tree(tokens)))
-			execute_tree(tree);
+		if (tokens)
+		{
+			tree = get_tree(tokens);
+			if (tree)
+				execute_tree(tree);
+		}
 		ft_gc_exit();
 	}
 }
@@ -39,7 +43,7 @@ static void	shell_loop(void)
 char	**get_envp(char **envp)
 {
 	static char	**env;
-	
+
 	if ((!envp || !*envp) && !env)
 		return (NULL);
 	if (!envp || !*envp)

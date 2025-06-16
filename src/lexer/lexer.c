@@ -38,7 +38,8 @@ static t_value_type	get_type(char *input)
 
 static int	word_len(char *input)
 {
-	int	len;
+	int		len;
+	char	quote;
 
 	len = 0;
 	while (input[len]
@@ -47,7 +48,7 @@ static int	word_len(char *input)
 	{
 		if (input[len] == '\'' || input[len] == '"')
 		{
-			char quote = input[len++];
+			quote = input[len++];
 			while (input[len] && input[len] != quote)
 				len++;
 		}
@@ -67,12 +68,30 @@ static int	tk_len(char *input, t_value_type type)
 		return (FAILURE);
 }
 
+static t_token	*new_token(char *content, int *len)
+{
+	t_token	*new;
+
+	new = ft_malloc(sizeof(t_token));
+	if (!new)
+	{
+		perror("failed to allocate token");
+		return (NULL);
+	}
+	new->type = get_type(content);
+	*len = tk_len(content, new->type);
+	new->value = ft_substr(content, 0, *len);
+	ft_gc_add(new->value);
+	return (new);
+}
+
 t_token	*get_token_list(char *input)
 {
 	t_token		*head;
 	t_token		*current;
 	int			len;
 
+	len = 0;
 	if (!input || validate_input(input))
 	{
 		exit_status(SYNTAX_ERROR);
@@ -85,11 +104,9 @@ t_token	*get_token_list(char *input)
 			input++;
 		else
 		{
-			current = ft_malloc(sizeof(t_token));
-			current->type = get_type(input);
-			len = tk_len(input, current->type);
-			current->value = ft_substr(input, 0, len);
-			ft_gc_add(current->value);
+			current = new_token(input, &len);
+			if (!current)
+				return (NULL);
 			tk_lst_add_back(&head, current);
 			input += len;
 		}

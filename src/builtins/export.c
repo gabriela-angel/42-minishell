@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:42:53 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/11 11:59:58 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/15 22:52:12 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,10 @@ int	exec_export(char **args)
 
 	env = get_envp(NULL);
 	if (!args[1])
-		return print_export_list(env);
+		return (print_export_list(env));
 	status = 0;
-	i = 1;
-	while (args[i])
+	i = 0;
+	while (args[++i])
 	{
 		if (ft_strchr(args[i], '='))
 		{
@@ -102,7 +102,6 @@ int	exec_export(char **args)
 				args[i]);
 			status = 1;
 		}
-		i++;
 	}
 	return (status);
 }

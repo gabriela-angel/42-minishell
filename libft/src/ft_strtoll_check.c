@@ -25,8 +25,8 @@ static int	is_overflow(unsigned long long nb, int sign)
 int	ft_strtoll_check(const char *nptr, long long *out)
 {
 	long long	nb;
-	int		i;
-	int		sign;
+	int			i;
+	int			sign;
 
 	i = 0;
 	nb = 0;

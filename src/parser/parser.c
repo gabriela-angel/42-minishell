@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 18:44:05 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/06/09 17:20:49 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/15 22:51:07 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static t_tree	*build_tree(t_token *token_list)
 static void	split_redir(t_tree *tree, t_token *list,	t_token *tk_to_cut)
 {
 	t_token	*right_tk;
-	
+
 	if (!tree || !list || !tk_to_cut)
 		return ;
 	tree->token = tk_to_cut;

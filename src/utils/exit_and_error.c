@@ -32,7 +32,7 @@ int	exit_status(int set)
 
 int	cleanup_and_exit(int status)
 {
-	char **env;
+	char	**env;
 
 	env = get_envp(NULL);
 	delete_heredoc();
@@ -44,7 +44,7 @@ int	cleanup_and_exit(int status)
 	exit(exit_status(-1));
 }
 
-int	print_exec_exit_msg(const char *msg, int res)
+int	handle_err_exec(const char *msg, int res)
 {
 	if (res == -3)
 	{

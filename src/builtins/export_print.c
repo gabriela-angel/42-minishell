@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_print.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 12:00:10 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/11 12:03:23 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/15 22:53:08 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void	print_sorted_env(char **env, int count)
 		if (eq && eq == env[i] + 1 && env[i][0] == '_')
 		{
 			i++;
-			continue;
+			continue ;
 		}
 		if (eq)
 		{
