@@ -6,7 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:13:30 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/22 17:33:16 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/22 19:40:31 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	handle_sigint(int signum)
 	rl_redisplay();
 }
 
-void setup_signals_prompt(void)
+void	setup_signals_prompt(void)
 {
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);

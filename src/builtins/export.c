@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:42:53 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/15 22:52:12 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/22 19:25:43 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,40 +68,42 @@ static t_bool	valid_key(const char *s)
 	return (TRUE);
 }
 
+static void	process_export_arg(char *arg, char ***env, int *status)
+{
+	if (ft_strchr(arg, '='))
+	{
+		if (valid_assignment(arg))
+			*env = get_envp(extend_env_array(arg, *env));
+		else
+		{
+			ft_printf_fd(2,
+				"export: `%s': not a valid identifier\n", arg);
+			*status = 1;
+		}
+	}
+	else if (!valid_key(arg))
+	{
+		ft_printf_fd(2,
+			"export: `%s': not a valid identifier\n", arg);
+		*status = 1;
+	}
+}
+
 int	exec_export(char **args)
 {
 	int		i;
 	int		status;
-	char	**new_env;
 	char	**env;
 
 	env = get_envp(NULL);
 	if (!args[1])
 		return (print_export_list(env));
 	status = 0;
-	i = 0;
-	while (args[++i])
+	i = 1;
+	while (args[i])
 	{
-		if (ft_strchr(args[i], '='))
-		{
-			if (valid_assignment(args[i]))
-			{
-				new_env = extend_env_array(args[i], env);
-				env = get_envp(new_env);
-			}
-			else
-			{
-				ft_printf_fd(2, "export: `%s': not a valid identifier\n",
-					args[i]);
-				status = 1;
-			}
-		}
-		else if (!valid_key(args[i]))
-		{
-			ft_printf_fd(2, "export: `%s': not a valid identifier\n",
-				args[i]);
-			status = 1;
-		}
+		process_export_arg(args[i], &env, &status);
+		i++;
 	}
 	return (status);
 }

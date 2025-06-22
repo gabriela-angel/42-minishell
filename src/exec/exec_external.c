@@ -6,13 +6,12 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:41 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/22 18:24:31 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/22 19:39:14 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//Checa para ver se 'e um comando valido
 static char	*verify_cmd(char *cmd, int *res)
 {
 	struct stat	info;
@@ -40,7 +39,6 @@ static char	*verify_cmd(char *cmd, int *res)
 	return (NULL);
 }
 
-// Concatena um descritor e um comando para formar um caminho completo
 static char	*join_path_cmd(char *dir, char *cmd)
 {
 	char	*tmp;
@@ -89,25 +87,35 @@ static void	exec_child_process(char *cmd_path, char **argv)
 	ft_gc_exit();
 }
 
+static int	prepare_external(char **argv, char **cmd_path)
+{
+	int	res;
+
+	if (!argv[0] || argv[0][0] == '\0')
+		return (0);
+	res = 0;
+	*cmd_path = verify_cmd(argv[0], &res);
+	if (!*cmd_path)
+	{
+		if (res != 0)
+			return (handle_err_exec(argv[0], res));
+		*cmd_path = find_cmd_path(argv[0]);
+		if (!*cmd_path)
+			return (handle_err_exec(argv[0], -2));
+	}
+	return (1);
+}
+
 int	exec_external(char **argv)
 {
 	pid_t	pid;
 	int		status;
 	char	*cmd_path;
-	int		res;
+	int		ready;
 
-	if (!argv[0] || argv[0][0] == '\0')
-		return (0);
-	res = 0;
-	cmd_path = verify_cmd(argv[0], &res);
-	if (!cmd_path)
-	{
-		if (res != 0)
-			return (handle_err_exec(argv[0], res));
-		cmd_path = find_cmd_path(argv[0]);
-		if (!cmd_path)
-			return (handle_err_exec(argv[0], -2));
-	}
+	ready = prepare_external(argv, &cmd_path);
+	if (ready != 1)
+		return (ready);
 	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == 0)

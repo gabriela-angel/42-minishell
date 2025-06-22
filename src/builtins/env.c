@@ -6,7 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:28:47 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/22 18:06:17 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/22 19:36:39 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,9 @@ int	exec_env(char **args)
 	i = 0;
 	while (env[i])
 	{
-		if (ft_strchr(env[i], '=') 
-		 && !(env[i][0] == '_' && env[i][1] == '=') 
-		 && ft_strncmp(env[i], "OLDPWD=", 7) != 0)
-		{
+		if (ft_strchr(env[i], '=') \
+		&& !(env[i][0] == '_' && env[i][1] == '='))
 			ft_printf_fd(1, "%s\n", env[i]);
-		}
 		i++;
 	}
 	return (SUCCESS);
