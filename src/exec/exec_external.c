@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_external.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:41 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/15 23:25:45 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/22 18:24:31 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,8 @@ static char	*find_cmd_path(char *cmd)
 	char	*full;
 	int		i;
 
-	// if (ft_strchr(cmd, '/'))
-	// 	return (ft_strdup(cmd));
-	path_env = getenv("PATH");
-	if (!path_env)
+	path_env = get_var_from_env("PATH", get_envp(NULL));
+	if (!path_env || *path_env == '\0')
 		return (NULL);
 	paths = ft_split(path_env, ':');
 	i = 0;

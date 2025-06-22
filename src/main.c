@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 23:59:42 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/06/15 23:07:09 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/22 17:45:46 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,12 @@ static void	shell_loop(void)
 		setup_signals_prompt();
 		input = readline("minishell$ ");
 		if (!input)
-			break ;
+		{
+			ft_printf_fd(1, "exit\n");
+			cleanup_and_exit(EXIT_SUCCESS);
+		}
 		ft_gc_add(input);
-		if (exit_status(-1) == 130 && input[0] == '\0')
-			exit_status(0);
-		else if (input[0])
+		if (input[0])
 			add_history(input);
 		tokens = get_token_list(input);
 		if (tokens)
@@ -60,6 +61,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	signal(SIGTSTP, SIG_IGN);
 	env = get_envp(envp);
 	(void)env;
 	shell_loop();
