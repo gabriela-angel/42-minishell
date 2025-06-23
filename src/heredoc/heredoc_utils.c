@@ -52,8 +52,7 @@ static char	*hd_readline(int *save_out)
 	return (line);
 }
 
-static int	hd_process_line(char *line, char *end_condition,
-						int is_expandable, char **env, int fd)
+static int	hd_process_line(char *line, t_here *ctx)
 {
 	char	*expanded;
 
@@ -61,23 +60,23 @@ static int	hd_process_line(char *line, char *end_condition,
 	{
 		ft_printf_fd(STDERR_FILENO,
 			"minishell: warning: here-document at line 1 "
-			"delimited by end-of-file (wanted `%s`)\n", end_condition);
+			"delimited by end-of-file (wanted `%s`)\n", ctx->end_condition);
 		return (SUCCESS);
 	}
 	ft_gc_add(line);
-	if (ft_strcmp(line, end_condition) == SUCCESS)
+	if (ft_strcmp(line, ctx->end_condition) == SUCCESS)
 	{
 		ft_gc_free(line);
 		return (SUCCESS);
 	}
-	if (is_expandable && ft_strchr(line, '$'))
+	if (ctx->is_expandable && ft_strchr(line, '$'))
 	{
-		expanded = expand_var(line, env);
+		expanded = expand_var(line, ctx->env);
 		ft_gc_free(line);
 		line = expanded;
 		ft_gc_add(line);
 	}
-	ft_printf_fd(fd, "%s\n", line);
+	ft_printf_fd(ctx->fd, "%s\n", line);
 	ft_gc_free(line);
 	return (FAILURE);
 }
@@ -87,10 +86,15 @@ int	write_to_heredoc(int fd, char *end_condition, int is_expandable)
 	char	*line;
 	char	**env;
 	int		save_out;
+	t_here	ctx;
 
 	env = get_envp(NULL);
 	line = hd_readline(&save_out);
-	return (hd_process_line(line, end_condition, is_expandable, env, fd));
+	ctx.end_condition = end_condition;
+	ctx.is_expandable = is_expandable;
+	ctx.env = env;
+	ctx.fd = fd;
+	return (hd_process_line(line, &ctx));
 }
 
 int	*get_heredoc_counter(void)

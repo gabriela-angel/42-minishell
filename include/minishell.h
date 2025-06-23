@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:30:39 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/06/15 23:55:43 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/23 14:48:43 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,14 @@ typedef enum e_value_type
 	TK_REDIR_OUT,
 	TK_WORD
 }	t_value_type;
+
+typedef struct s_hd_context
+{
+	char	*end_condition;
+	int		is_expandable;
+	char	**env;
+	int		fd;
+}	t_here;
 
 typedef struct s_token
 {
