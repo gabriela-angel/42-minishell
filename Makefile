@@ -9,6 +9,7 @@ LIBFT_DIR = libft/
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g3
 INCLUDES = -Iinclude
+B_INCLUDES = -Ibonus/include
 LIB_PATHS = -L$(LIBFT_DIR) -lft -lreadline
 
 # PATHS
@@ -23,6 +24,21 @@ SIG_DIR = src/signals/
 UTL_DIR = src/utils/
 OBJ_DIR = obj/
 
+# BONUS PATHS
+B_SRC_DIR = bonus/src/
+B_BTIN_DIR = bonus/src/builtins/
+B_EXC_DIR = bonus/src/exec/
+B_EXP_DIR = bonus/src/expansion/
+B_HDOC_DIR = bonus/src/heredoc/
+B_LXR_DIR = bonus/src/lexer/
+B_PRS_DIR = bonus/src/parser/
+B_SIG_DIR = bonus/src/signals/
+B_UTL_DIR = bonus/src/utils/
+B_OBJ_DIR = bonus/obj/
+
+# BONUS NAME
+B_NAME = minishell_bonus
+
 # FILES AND OBJECTS
 SRC := $(addprefix $(SRC_DIR), main.c) \
 		$(addprefix $(BTIN_DIR), builtins.c cd.c echo.c env.c exit.c export.c export_print.c pwd.c unset.c) \
@@ -35,6 +51,19 @@ SRC := $(addprefix $(SRC_DIR), main.c) \
 		$(addprefix $(UTL_DIR), exit_and_error.c token_utils.c ft_malloc/ft_malloc.c ft_malloc/ft_malloc_utils.c)
 
 OBJ := $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
+
+# BONUS FILES AND OBJECTS
+B_SRC := $(addprefix $(B_SRC_DIR), main_bonus.c) \
+		$(addprefix $(B_BTIN_DIR), builtins_bonus.c cd_bonus.c echo_bonus.c env_bonus.c exit_bonus.c export_bonus.c export_print_bonus.c pwd_bonus.c unset_bonus.c) \
+		$(addprefix $(B_EXC_DIR), executor_bonus.c exec_simple_bonus.c exec_pipe_bonus.c exec_redirs_bonus.c exec_external_bonus.c convert_argv_bonus.c) \
+		$(addprefix $(B_EXP_DIR), expand_bonus.c expand_utils_bonus.c wildcard_bonus.c wildcard_utils_bonus.c) \
+		$(addprefix $(B_HDOC_DIR), heredoc_bonus.c heredoc_utils_bonus.c) \
+		$(addprefix $(B_LXR_DIR), lexer_bonus.c lexer_validator_bonus.c) \
+		$(addprefix $(B_PRS_DIR), parser_bonus.c parser_validator_bonus.c) \
+		$(addprefix $(B_SIG_DIR), signals_bonus.c) \
+		$(addprefix $(B_UTL_DIR), exit_and_error_bonus.c token_utils_bonus.c ft_malloc/ft_malloc_bonus.c ft_malloc/ft_malloc_utils_bonus.c)
+B_OBJ := $(patsubst $(B_SRC_DIR)%.c, $(B_OBJ_DIR)%.o, $(B_SRC))
+
 
 # VALGRIND
 VALGRIND = valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all --suppressions=readline.supp
@@ -56,9 +85,10 @@ RESET		=	\033[0m
 # ------------------------------ RULES ------------------------------
 
 all: $(NAME)
+bonus: $(B_NAME)
 
 $(LIBFT):
-	@make -C $(LIBFT_DIR) --no-print-directory
+	@make -C $(LIBFT_DIR) gnl --no-print-directory
 	@printf "$(GREEN_BOLD)Libft compiled.$(RESET)\n"
 
 $(OBJ_DIR):
@@ -76,6 +106,21 @@ $(NAME): $(OBJ) $(LIBFT)
 	$(CC) $(CFLAGS) $(INCLUDES) $(OBJ) $(LIB_PATHS) -o $@
 	@printf "$(GREEN_BOLD) => Success!$(RESET)\n"
 
+$(B_OBJ_DIR):
+	@mkdir -p $@
+
+$(B_OBJ_DIR)%.o: $(B_SRC_DIR)%.c | $(B_OBJ_DIR)
+	@mkdir -p $(dir $@)
+	@printf "$(BLUE)$@: $(RESET)\n"
+	@$(CC) $(CFLAGS) $(B_INCLUDES) -c $< -o $@
+	@printf "$(GREEN_BOLD)Bonus object compiled.$(RESET)\n"
+
+$(B_NAME): $(B_OBJ) $(LIBFT)
+	@printf "$(GREEN_BOLD) => 100%%$(RESET)\n"
+	@printf "$(MAGENTA_BOLD)[minishell_bonus]:\t$(RESET)"
+	$(CC) $(CFLAGS) $(B_INCLUDES) $(B_OBJ) $(LIB_PATHS) -o $@
+	@printf "$(GREEN_BOLD) => Success!$(RESET)\n"
+
 norm:
 	@echo "\n$(CYAN_BOLD)======= LIBFT =======$(RESET)"
 	@norminette libft | sed 's/OK/\x1b[1;32m&\x1b[0m/g' | sed 's/Error/\x1b[1;31m&\x1b[0m/g'
@@ -83,6 +128,10 @@ norm:
 	@norminette src | sed 's/OK/\x1b[1;32m&\x1b[0m/g' | sed 's/Error/\x1b[1;31m&\x1b[0m/g'
 	@echo "\n$(MAGENTA_BOLD)======= INCLUDES =======$(RESET)"
 	@norminette include | sed 's/OK/\x1b[1;32m&\x1b[0m/g' | sed 's/Error/\x1b[1;31m&\x1b[0m/g'
+	@echo "\n$(YELLOW_BOLD)======= BONUS =======$(RESET)"
+	@norminette bonus/src | sed 's/OK/\x1b[1;32m&\x1b[0m/g' | sed 's/Error/\x1b[1;31m&\x1b[0m/g'
+	@echo "\n$(MAGENTA_BOLD)======= BONUS INCLUDE =======$(RESET)"
+	@norminette bonus/include | sed 's/OK/\x1b[1;32m&\x1b[0m/g' | sed 's/Error/\x1b[1;31m&\x1b[0m/g'
 	@echo "\n"
 
 val: re
@@ -91,14 +140,19 @@ val: re
 clean:
 	@make -C $(LIBFT_DIR) clean --no-print-directory
 	@rm -rf $(OBJ_DIR)
-	@printf "$(MAGENTA_BOLD)[minishell]:\tobject files$(RESET)$(GREEN_BOLD)  => Cleaned!$(RESET)\n"
+	@rm -rf $(B_OBJ_DIR)
+	@printf "$(MAGENTA_BOLD)[LIBFT]:\t\tobject files$(RESET)$(GREEN_BOLD)  => Cleaned!$(RESET)\n"
+	@printf "$(MAGENTA_BOLD)[minishell]:\t\tobject files$(RESET)$(GREEN_BOLD)  => Cleaned!$(RESET)\n"
+	@printf "$(MAGENTA_BOLD)[minishell_bonus]:\tobject files$(RESET)$(GREEN_BOLD)  => Cleaned!$(RESET)\n"
 
 fclean: clean
 	@make -C $(LIBFT_DIR) fclean --no-print-directory
 	@rm -f $(NAME)
-	@printf "$(MAGENTA_BOLD)[LIBFT]:\texec. files$(RESET)$(GREEN_BOLD) => Cleaned!$(RESET)\n"
-	@printf "$(MAGENTA_BOLD)[minishell]:\texec. files$(RESET)$(GREEN_BOLD)  => Cleaned!$(RESET)\n"
+	@rm -f $(B_NAME)
+	@printf "$(MAGENTA_BOLD)[LIBFT]:\t\texec. files$(RESET)$(GREEN_BOLD) => Cleaned!$(RESET)\n"
+	@printf "$(MAGENTA_BOLD)[minishell]:\t\texec. files$(RESET)$(GREEN_BOLD)  => Cleaned!$(RESET)\n"
+	@printf "$(MAGENTA_BOLD)[minishell_bonus]:\texec. files$(RESET)$(GREEN_BOLD)  => Cleaned!$(RESET)\n"
 
 re: fclean all
 
-.PHONY: all clean fclean re norm
+.PHONY: all clean fclean re norm bonus
