@@ -6,7 +6,7 @@
 /*   By: gangel-a <gangel-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:33:24 by acesar-m          #+#    #+#             */
-/*   Updated: 2025/06/15 22:30:57 by gangel-a         ###   ########.fr       */
+/*   Updated: 2025/06/23 17:05:42 by gangel-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,19 +64,14 @@ static int	exec_redirection_node(t_tree *node)
 		err = handle_heredoc(node->token);
 	else
 		err = process_heredoc_and_redirections(node->token, saved_stdin);
-	if (err)
-	{
-		dup2(saved_stdin, STDIN_FILENO);
-		dup2(saved_stdout, STDOUT_FILENO);
-		close(saved_stdin);
-		close(saved_stdout);
-		return (FAILURE);
-	}
-	execute_tree(node->left);
+	if (!err && node->left && node->left->token)
+		execute_tree(node->left);
 	dup2(saved_stdin, STDIN_FILENO);
 	dup2(saved_stdout, STDOUT_FILENO);
 	close(saved_stdin);
 	close(saved_stdout);
+	if (err)
+		return (FAILURE);
 	return (SUCCESS);
 }
 
