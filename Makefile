@@ -42,7 +42,7 @@ B_NAME = minishell_bonus
 # FILES AND OBJECTS
 SRC := $(addprefix $(SRC_DIR), main.c) \
 		$(addprefix $(BTIN_DIR), builtins.c cd.c echo.c env.c exit.c export.c export_print.c pwd.c unset.c) \
-		$(addprefix $(EXC_DIR), executor.c exec_simple.c exec_pipe.c exec_redirs.c exec_external.c convert_argv.c) \
+		$(addprefix $(EXC_DIR), executor.c exec_simple.c exec_pipe.c exec_redirs.c exec_external.c exec_external_utils.c convert_argv.c) \
 		$(addprefix $(EXP_DIR), expand.c expand_utils.c wildcard.c wildcard_utils.c) \
 		$(addprefix $(HDOC_DIR), heredoc.c heredoc_utils.c) \
 		$(addprefix $(LXR_DIR), lexer.c lexer_validator.c) \
@@ -55,7 +55,7 @@ OBJ := $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
 # BONUS FILES AND OBJECTS
 B_SRC := $(addprefix $(B_SRC_DIR), main_bonus.c) \
 		$(addprefix $(B_BTIN_DIR), builtins_bonus.c cd_bonus.c echo_bonus.c env_bonus.c exit_bonus.c export_bonus.c export_print_bonus.c pwd_bonus.c unset_bonus.c) \
-		$(addprefix $(B_EXC_DIR), executor_bonus.c exec_simple_bonus.c exec_pipe_bonus.c exec_redirs_bonus.c exec_external_bonus.c convert_argv_bonus.c) \
+		$(addprefix $(B_EXC_DIR), executor_bonus.c exec_simple_bonus.c exec_pipe_bonus.c exec_redirs_bonus.c exec_external_bonus.c exec_external_bonus_utils.c convert_argv_bonus.c) \
 		$(addprefix $(B_EXP_DIR), expand_bonus.c expand_utils_bonus.c wildcard_bonus.c wildcard_utils_bonus.c) \
 		$(addprefix $(B_HDOC_DIR), heredoc_bonus.c heredoc_utils_bonus.c) \
 		$(addprefix $(B_LXR_DIR), lexer_bonus.c lexer_validator_bonus.c) \

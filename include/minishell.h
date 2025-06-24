@@ -6,7 +6,7 @@
 /*   By: acesar-m <acesar-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:30:39 by gangel-a          #+#    #+#             */
-/*   Updated: 2025/06/23 14:48:43 by acesar-m         ###   ########.fr       */
+/*   Updated: 2025/06/24 10:52:07 by acesar-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ void		exec_simple_command(t_token *token);
 char		**get_envp(char **envp);
 t_bool		process_heredoc_and_redirections(t_token *token, int saved_stdin);
 void		wait_for_child(pid_t pid, int *status);
+char		*join_path_cmd(char *dir, char *cmd);
+char		*verify_cmd(char *cmd, int *res);
 
 // EXPANSION -------------
 char		*expand_var(char *str, char **env);
