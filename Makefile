@@ -88,7 +88,7 @@ all: $(NAME)
 bonus: $(B_NAME)
 
 $(LIBFT):
-	@make -C $(LIBFT_DIR) gnl --no-print-directory
+	@make -C $(LIBFT_DIR) --no-print-directory
 	@printf "$(GREEN_BOLD)Libft compiled.$(RESET)\n"
 
 $(OBJ_DIR):
