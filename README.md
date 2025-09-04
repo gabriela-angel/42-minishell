@@ -74,7 +74,7 @@ Fazendo a descrição
 ### Clone o repositório
 Para clonar use:
 ``` bash
-git clone [https://github.com/gbriela-angel/42-minishell.git](https://github.com/gabriela-angel/42-minishell.git); cd 42-minishell
+git clone https://github.com/gabriela-angel/42-minishell.git; cd 42-minishell
 ```
 Compile o código utilizando o comando ```make```.
 
