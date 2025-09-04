@@ -72,20 +72,18 @@ Fazendo a descrição
 ## Como testar o projeto
 
 ### Clone o repositório
-
+Para clonar use:
 ``` bash
-$ git clone [https://github.com/augustocesar99/42-minishell.git](https://github.com/augustocesar99/42-minishell.git)
-$ cd minishell
-$ make
+git clone [https://github.com/gbriela-angel/42-minishell.git](https://github.com/gabriela-angel/42-minishell.git); cd 42-minishell
 ```
+Compile o código utilizando o comando ```make```.
 
 ## Execute o shell
-
 ```
  ./minishell 
 ```
 - Você verá algo como:
-- minishell$
+- ```minishell$```
 
 ## 3. Exemplos de comandos
 
