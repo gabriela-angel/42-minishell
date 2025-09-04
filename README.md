@@ -97,9 +97,9 @@ Para executar o projeto com a parte bonus inclusa:
 - echo $USER
 - ls -l | grep .c
 - cat << EOF
-- linha 1
-- linha 2
-- EOF
+  - linha 1
+  - linha 2
+  - EOF
 - export TEST=42
 - echo $TEST
 
