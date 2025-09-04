@@ -106,6 +106,7 @@ Compile o código utilizando o comando ```make```.
 
 ## 5. Verificando vazamentos de memória
 Use o seguinte comando para rodar o valgrind e ja suprimir a lib readline:
-
-- valgrind --leak-check=full --show-leak-kinds=all --gen-suppressions=all ./minishell
+```
+valgrind --leak-check=full --show-leak-kinds=all --gen-suppressions=all ./minishell
+```
 Observação: a função readline() pode gerar falsos positivos. Temos que certificar que nosso código próprio esteja livre de vazamentos e a lib readline() podemos apenas ignorar.
