@@ -73,14 +73,17 @@ Fazendo a descrição
 
 ### Clone o repositório
 
-- bash
-- git clone [https://github.com/augustocesar99/42-minishell.git](https://github.com/augustocesar99/42-minishell.git)
-- cd minishell
-- make
+``` bash
+$ git clone [https://github.com/augustocesar99/42-minishell.git](https://github.com/augustocesar99/42-minishell.git)
+$ cd minishell
+$ make
+```
 
 ## Execute o shell
 
-- ./minishell
+```
+ ./minishell 
+```
 - Você verá algo como:
 - minishell$
 
