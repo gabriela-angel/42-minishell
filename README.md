@@ -61,7 +61,7 @@ Fazendo a descrição
 - `env`
 - `exit`
 
-### Bônus (se aplicável)
+### Bônus
 
 - Execução condicional com `&&` e `||`
 - Agrupamento com `()`
@@ -76,11 +76,17 @@ Para clonar use:
 ``` bash
 git clone https://github.com/gabriela-angel/42-minishell.git; cd 42-minishell
 ```
-Compile o código utilizando o comando ```make```.
+Compile o código utilizando o comando ```make``` para checar a parte mandatória do projeto.
+Caso queira verificar o projeto com a parte bônus incluída, utilize o comando ```make bonus```.
 
 ## Execute o shell
+Para executar somente o pprojeto mandatorio:
 ```
  ./minishell 
+```
+Para executar o projeto com a parte bonus inclusa:
+```
+./minishell_bonus
 ```
 - Você verá algo como:
 - ```minishell$```
