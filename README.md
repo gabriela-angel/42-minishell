@@ -32,8 +32,6 @@ Seu principal objetivo é aprofundar os conhecimentos sobre:
 
 ## Como resolvemos o problema
 
-Fazendo a descrição
-
 ### Funcionalidades implementadas
 
 - Prompt interativo com histórico (`readline`)
